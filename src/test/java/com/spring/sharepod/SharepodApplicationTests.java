@@ -1,0 +1,13 @@
+package com.spring.sharepod;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class SharepodApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
