@@ -43,7 +43,6 @@ public class Board extends Timestamped {
     // 원가
     @Column(nullable = false)
     private int originprice;
-
     // 하루대여 가격
     @Column(nullable = false)
     private int dailyrentalfee;
