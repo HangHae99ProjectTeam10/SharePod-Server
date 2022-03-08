@@ -10,4 +10,15 @@ class SharepodApplicationTests {
     void contextLoads() {
     }
 
+
+    @Test
+    void Test(){
+
+    }
+
+    @Test
+    void thridTest(){
+
+    }
+
 }
