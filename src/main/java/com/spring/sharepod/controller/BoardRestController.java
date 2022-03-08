@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardRestController {
     private final BoardService boardService;
 
+    //게시판 수정
     @PatchMapping("/board/{boardid}")
     public BasicResponseDTO basicResponse(@PathVariable Long boardid, @RequestBody BoardPatchRequestDTO patchRequestDTO){
-        System.out.println(boardid);
         return boardService.updateboard(boardid,patchRequestDTO);
     }
 }

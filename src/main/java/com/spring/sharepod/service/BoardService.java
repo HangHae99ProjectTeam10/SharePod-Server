@@ -19,13 +19,18 @@ public class BoardService {
 
     @Transactional
     public BasicResponseDTO updateboard(Long boardid, BoardPatchRequestDTO patchRequestDTO){
-        BasicResponseDTO basicResponseDTO = new BasicResponseDTO();
 
+        //수정할 게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardid).orElseThrow(
                 () ->new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
         );
 
+        //게시판 업데이트
+        board.update(patchRequestDTO);
 
-        return basicResponseDTO;
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg("수정 완료")
+                .build();
     }
 }
