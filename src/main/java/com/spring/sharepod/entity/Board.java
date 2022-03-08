@@ -26,7 +26,6 @@ public class Board extends Timestamped {
     @Column(nullable = false , unique = true)
     private String videourl;
 
-
     //게시물 사진 1 url
     @Column(nullable = false, unique = true)
     private String imgurl1;
@@ -44,7 +43,6 @@ public class Board extends Timestamped {
     // 원가
     @Column(nullable = false)
     private int originprice;
-
     // 하루대여 가격
     @Column(nullable = false)
     private int dailyrentalfee;
@@ -53,10 +51,16 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String category;
 
+    //상품 등록
+    @Column(nullable = false)
+    private String mapdata;
+
+    //상품 품질
+    @Column(nullable = false)
+    private String boardquility;
+
     //Board : User => N: 1 엔티티에서 userid 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERID")
     private User user;
-
-
 }
