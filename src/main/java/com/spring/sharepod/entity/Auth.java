@@ -20,7 +20,7 @@ public class Auth extends Timestamped{
 
     //인증 확인 변수
     @Column(nullable = false)
-    private boolean check;
+    private boolean checkorder;
 
     //인증 사진 url
     @Column(nullable = false, unique = true)

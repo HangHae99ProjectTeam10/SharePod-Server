@@ -19,7 +19,7 @@ public class Notice extends Timestamped {
 
     //알림 종류
     @Column(nullable = false)
-    private String type;
+    private String noticetype;
 
     //Notice : User => N: 1 buyer 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)

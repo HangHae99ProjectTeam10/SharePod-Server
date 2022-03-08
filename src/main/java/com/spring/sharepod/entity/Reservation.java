@@ -20,7 +20,7 @@ public class Reservation {
 
     //예약 확인 변수
     @Column(nullable = false)
-    private boolean check;
+    private boolean resercheck;
 
     //대여 시작 날짜
     @Column(nullable = false)
