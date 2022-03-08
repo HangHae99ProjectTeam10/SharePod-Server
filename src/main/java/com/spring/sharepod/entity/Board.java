@@ -18,26 +18,44 @@ public class Board extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 게시물 제목
     @Column(nullable = false)
-    private String title; // 게시물 제목
+    private String title;
 
+    // 게시물 영상 url
     @Column(nullable = false , unique = true)
-    private String videourl; // 게시물 영상 url
+    private String videourl;
 
+    //게시물 사진 1 url
     @Column(nullable = false, unique = true)
-    private  String imgurl1; //게시물 사진 1 url
+    private String imgurl1;
+    //게시물 사진 2 url
     @Column(nullable = false, unique = true)
-    private  String imgurl2; //게시물 사진 2 url
+    private String imgurl2;
+    //게시물 사진 3 url
     @Column(nullable = false, unique = true)
-    private  String imgurl3; //게시물 사진 3 url
+    private String imgurl3;
 
+    // 게시물 내용
     @Column(nullable = false)
-    private  String contents; // 게시물 내용
+    private String contents;
 
-    @Column
-    private String userimg; // 유저 프로필 이미지
+    // 원가
+    @Column(nullable = false)
+    private int originprice;
 
-    @Column
-    private String mapdata; //유저 지역명
+    // 하루대여 가격
+    @Column(nullable = false)
+    private int dailyrentalfee;
+
+    // 카테고리
+    @Column(nullable = false)
+    private String category;
+
+    //Board : User => N: 1 엔티티에서 userid 외래키를 뜻함
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USERID")
+    private User user;
+
 
 }
