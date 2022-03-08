@@ -26,6 +26,7 @@ public class Board extends Timestamped {
     @Column(nullable = false , unique = true)
     private String videourl;
 
+
     //게시물 사진 1 url
     @Column(nullable = false, unique = true)
     private String imgurl1;
@@ -39,17 +40,11 @@ public class Board extends Timestamped {
     // 게시물 내용
     @Column(nullable = false)
     private String contents;
-<<<<<<< HEAD
-    // 원가
-    @Column(nullable = false)
-    private int originprice;
-
-=======
 
     // 원가
     @Column(nullable = false)
     private int originprice;
->>>>>>> origin/thdals83
+
     // 하루대여 가격
     @Column(nullable = false)
     private int dailyrentalfee;
