@@ -39,10 +39,17 @@ public class Board extends Timestamped {
     // 게시물 내용
     @Column(nullable = false)
     private String contents;
+<<<<<<< HEAD
     // 원가
     @Column(nullable = false)
     private int originprice;
 
+=======
+
+    // 원가
+    @Column(nullable = false)
+    private int originprice;
+>>>>>>> origin/thdals83
     // 하루대여 가격
     @Column(nullable = false)
     private int dailyrentalfee;
