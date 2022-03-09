@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-@RequiredArgsConstructor
 @Service
-public class LikeService {
+@RequiredArgsConstructor
+public class LikedService {
     private final LikedRepository likedRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
@@ -53,7 +53,8 @@ public class LikeService {
 
         return BasicResponseDTO.builder()
                 .result("success")
-                .msg("수정 완료")
+                .msg("찜하기 처리 완료")
                 .build();
     }
+
 }
