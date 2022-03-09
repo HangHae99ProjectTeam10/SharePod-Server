@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -25,11 +26,11 @@ public class Auth{
 
     //대여 시작 날짜
     @Column(nullable = false)
-    private LocalDateTime rentalstart;
+    private LocalDate rentalstart;
 
     //대여 끝나는 날짜
     @Column(nullable = false)
-    private LocalDateTime rentalend;
+    private LocalDate rentalend;
 
     //Auth : User => N: 1 buyer 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)

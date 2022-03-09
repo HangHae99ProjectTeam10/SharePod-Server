@@ -181,6 +181,9 @@ public class BoardService {
                 .category(boardDetail.getCategory())
                 .boardquility(boardDetail.getBoardquility())
                 .isliked(isliked)
+                .likecount(boardDetail.getLikeNumber().size())
+                .userimg(boardDetail.getUser().getUserimg())
+                .modifiedat(String.valueOf(boardDetail.getModifiedAt()))
                 .build();
 
         return boardDetailResponseDto;
