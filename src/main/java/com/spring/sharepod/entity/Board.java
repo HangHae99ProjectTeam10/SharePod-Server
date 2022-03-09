@@ -51,6 +51,17 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String category;
 
+    //상품 등록
+    @Column(nullable = false)
+    private String mapdata;
+
+    //상품 품질
+    @Column(nullable = false)
+    private String boardquility;
+
+    @Column(nullable = false)
+    private Boolean appear;
+
     //Board : User => N: 1 엔티티에서 userid 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERID")

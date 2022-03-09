@@ -7,13 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
 @Entity
-public class Auth extends Timestamped{
+public class Auth{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,6 +26,14 @@ public class Auth extends Timestamped{
     //인증 사진 url
     @Column(nullable = false, unique = true)
     private String imgurl;
+
+    //대여 시작 날짜
+    @Column(nullable = false)
+    private LocalDateTime rentalstart;
+
+    //대여 끝나는 날짜
+    @Column(nullable = false)
+    private LocalDateTime rentalend;
 
     //Auth : User => N: 1 buyer 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
