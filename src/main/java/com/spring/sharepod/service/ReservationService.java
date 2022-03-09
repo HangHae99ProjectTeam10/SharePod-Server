@@ -60,7 +60,7 @@ public class ReservationService {
 
         return BasicResponseDTO.builder()
                 .result("success")
-                .msg("수정 완료")
+                .msg("거래 요청 완료")
                 .build();
     }
 

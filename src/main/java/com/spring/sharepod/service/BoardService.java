@@ -1,11 +1,15 @@
 package com.spring.sharepod.service;
 
 import com.spring.sharepod.dto.request.BoardFilterAndCategoryRequestDto;
+import com.spring.sharepod.dto.request.BoardPatchRequestDTO;
 import com.spring.sharepod.dto.request.SearchRequestDto;
+import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.dto.response.BoardAllResponseDto;
 import com.spring.sharepod.dto.response.BoardDetailResponseDto;
 import com.spring.sharepod.dto.response.VideoAllResponseDto;
 import com.spring.sharepod.entity.Board;
+import com.spring.sharepod.entity.Liked;
+import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
@@ -16,8 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.spring.sharepod.exception.ErrorCode.BOARD_NOT_FOUND;
+import static com.spring.sharepod.exception.ErrorCode.BOARD_NOT_FOUND2;
 
 @Service
 @RequiredArgsConstructor
@@ -151,7 +157,13 @@ public class BoardService {
         if (userid  == null){
             isliked = false;
         }else{
-            isliked = likedRepository.findByLiked(boardid, userid);
+            Liked liked = likedRepository.findByLiked(boardid, userid);
+
+            if (liked == null){
+                isliked = false;
+            }else{
+                isliked = true;
+            }
         }
         Board boardDetail = boardRepository.findById(boardid).orElseThrow(()-> new ErrorCodeException(BOARD_NOT_FOUND));
 
@@ -214,7 +226,7 @@ public class BoardService {
         );
         //받아온 userid와 boardid의 작성자가 다를때
         if (!Objects.equals(patchRequestDTO.getUserid(),board.getUser().getId())){
-            throw new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND2);
+            throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
 
         //게시판 업데이트
@@ -232,11 +244,11 @@ public class BoardService {
 
         //삭제할 게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardid).orElseThrow(
-                () ->new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
+                () ->new ErrorCodeException(BOARD_NOT_FOUND)
         );
         //받아온 userid와 boardid의 작성자가 다를때
         if (!Objects.equals(userid,board.getUser().getId())){
-            throw new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND2);
+            throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
 
         //게시글 삭제
@@ -244,7 +256,7 @@ public class BoardService {
 
         return BasicResponseDTO.builder()
                 .result("success")
-                .msg("수정 완료")
+                .msg("삭제 완료")
                 .build();
 
     }

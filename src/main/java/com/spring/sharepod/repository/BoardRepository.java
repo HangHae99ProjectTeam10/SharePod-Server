@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    @Query("select b from Board b where b.appear = true order by b.createdAt asc")
+    @Query("select b from Board b where b.appear = true order by b.modifiedAt asc")
     List<Board> findAllByOrderByCreatedAtDesc();
 
 
@@ -24,7 +24,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("select b from Board b where b.mapdata=:mapdata and b.category=:category and b.appear = true order by b.dailyrentalfee desc")
     List<Board> findByAndMapAndCategoryByCost(String mapdata, String category);
 
-    @Query("select b from Board b where b.mapdata=:mapdata and b.category=:category and b.appear = true order by b.createdAt desc")
+    @Query("select b from Board b where b.mapdata=:mapdata and b.category=:category and b.appear = true order by b.modifiedAt desc")
     List<Board> findByAndMapAndCategoryByCreatedAt(String mapdata, String category);
 
 
@@ -34,7 +34,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("select b from Board b where b.mapdata=:mapdata and b.appear = true and b.title like %:searchtitle% order by b.dailyrentalfee desc")
     List<Board> findByAndMapAndSearchByCost(String mapdata, @Param("searchtitle")String searchtitle);
 
-    @Query("select b from Board b where b.mapdata=:mapdata and b.appear = true and b.title like %:searchtitle% order by b.createdAt desc")
+    @Query("select b from Board b where b.mapdata=:mapdata and b.appear = true and b.title like %:searchtitle% order by b.modifiedAt desc")
     List<Board> findByAndMapAndSearchByCreatedAt(String mapdata, @Param("searchtitle")String searchtitle);
 
 
