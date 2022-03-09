@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BoardPatchRequestDTO {
+    private Long userid;
     private String title;
     private String videourl;
     private String imgurl1;

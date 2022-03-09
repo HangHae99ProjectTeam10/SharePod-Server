@@ -35,6 +35,7 @@ public enum ErrorCode {
 
     // 게시판 관련 에러 모음
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "404_Board_1", "해당 게시글이 존재하지 않습니다."),
+    BOARD_NOT_FOUND2(HttpStatus.NOT_FOUND, "404_Board_4", "아이디가 일치하지 않습니다.."),
     BOARD_EDIT_OR_DELETE_NOT_MATCH(HttpStatus.FORBIDDEN, "403_Board_2", "게시글의 생성자만 게시글을 수정 혹은 삭제할 수 있습니다."),
     BOARD_IMG_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_3", "게시하려는 이미지의 주소가 없습니다."),
 
