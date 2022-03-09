@@ -1,6 +1,7 @@
 package com.spring.sharepod.entity;
 
 
+import com.spring.sharepod.dto.request.BoardPatchRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,6 +60,7 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String boardquility;
 
+    //게시판 활성화 변수
     @Column(nullable = false)
     private Boolean appear;
 
@@ -67,5 +69,18 @@ public class Board extends Timestamped {
     @JoinColumn(name = "USERID")
     private User user;
 
-
+    //게시판 업데이트
+    public void update(BoardPatchRequestDTO patchRequestDTO){
+        this.title = patchRequestDTO.getTitle();
+        this.videourl = patchRequestDTO.getVideourl();
+        this.imgurl1 = patchRequestDTO.getImgurl1();
+        this.imgurl2 = patchRequestDTO.getImgurl2();
+        this.imgurl3 = patchRequestDTO.getImgurl3();
+        this.contents = patchRequestDTO.getContents();
+        this.originprice = patchRequestDTO.getOriginprice();
+        this.dailyrentalfee = patchRequestDTO.getDailyrentalfee();
+        this.mapdata = patchRequestDTO.getMapdata();
+        this.category = patchRequestDTO.getCategory();
+        this.boardquility = patchRequestDTO.getBoardquility();
+    }
 }

@@ -23,10 +23,6 @@ public class Auth{
     @Column(nullable = false)
     private boolean checkorder;
 
-    //인증 사진 url
-    @Column(nullable = false, unique = true)
-    private String imgurl;
-
     //대여 시작 날짜
     @Column(nullable = false)
     private LocalDateTime rentalstart;

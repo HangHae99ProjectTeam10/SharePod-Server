@@ -1,5 +1,6 @@
 package com.spring.sharepod.exception;
 
+
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;

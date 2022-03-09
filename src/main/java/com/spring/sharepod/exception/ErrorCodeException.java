@@ -8,4 +8,3 @@ import lombok.RequiredArgsConstructor;
 public class ErrorCodeException extends RuntimeException{
     private final ErrorCode errorCode;
 }
-

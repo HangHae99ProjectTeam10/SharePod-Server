@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+
 @Slf4j // 콘솔에 에러 로그 찍기!
 @RestControllerAdvice
 public class ErrorCodeExceptionHandler extends ResponseEntityExceptionHandler {
