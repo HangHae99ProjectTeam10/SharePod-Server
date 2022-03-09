@@ -202,7 +202,6 @@ public class BoardService {
         }
 
         return videoAllResponseDtos;
-
     }
 
     // 게시판 수정
@@ -247,5 +246,6 @@ public class BoardService {
                 .result("success")
                 .msg("수정 완료")
                 .build();
+
     }
 }
