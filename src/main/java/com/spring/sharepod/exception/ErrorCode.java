@@ -41,7 +41,11 @@ public enum ErrorCode {
 
     // 좋아요 관련 에러 모음
     LIKE_EXIST(HttpStatus.BAD_REQUEST, "400_Like_1", "이미 좋아요를 눌렀습니다."),
-    LIKE_NOT_EXIST(HttpStatus.BAD_REQUEST, "400_Like_2", "삭제하려는 좋아요가 존재하지 않습니다.")
+    LIKE_NOT_EXIST(HttpStatus.BAD_REQUEST, "400_Like_2", "삭제하려는 좋아요가 존재하지 않습니다."),
+
+
+    // 거래 요청 관련 에러 모음
+    RESERVATION_NOT_EXIST(HttpStatus.BAD_REQUEST, "400_Reservation_1", "이미 거래 요청이 존재합합니다.")
     ;
 
     private final HttpStatus httpStatus;

@@ -60,6 +60,10 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String boardquility;
 
+    //게시판 활성화 변수
+    @Column(nullable = false)
+    private Boolean appear;
+
     //Board : User => N: 1 엔티티에서 userid 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERID")
