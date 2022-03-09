@@ -31,14 +31,6 @@ public class Auth{
     @Column(nullable = false)
     private LocalDateTime rentalend;
 
-    //대여 시작 날짜
-    @Column(nullable = false)
-    private LocalDateTime rentalstart;
-
-    //대여 끝나는 날짜
-    @Column(nullable = false)
-    private LocalDateTime rentalend;
-
     //Auth : User => N: 1 buyer 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BUYER")
