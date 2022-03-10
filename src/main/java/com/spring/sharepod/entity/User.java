@@ -23,7 +23,7 @@ public class User extends Timestamped {
     private String username;
 
     // 유저 비밀번호
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
 
     //유저 닉네임

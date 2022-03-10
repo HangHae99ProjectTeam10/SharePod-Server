@@ -1,6 +1,7 @@
 package com.spring.sharepod.service;
 
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
+import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.repository.UserRepository;
 import com.spring.sharepod.validator.RegisterValidator;
@@ -11,12 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final RegisterValidator registerValidator;
-//    private final PasswordEncoder passwordEncoder;
+    //    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     // 회원가입

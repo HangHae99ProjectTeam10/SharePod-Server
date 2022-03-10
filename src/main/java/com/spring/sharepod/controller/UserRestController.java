@@ -2,16 +2,13 @@ package com.spring.sharepod.controller;
 
 
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
-import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.service.S3Service;
 import com.spring.sharepod.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,9 +24,9 @@ public class UserRestController {
 
     // 유저 생성하기 (JSON)
     @PostMapping("/user/register")
-    public ResponseEntity<Success> createUser(@RequestPart UserRegisterRequestDto userRegisterRequestDto, @RequestPart MultipartFile imgFile) throws IOException {
+    public ResponseEntity<Success> createUser(@RequestPart UserRegisterRequestDto userRegisterRequestDto, @RequestPart MultipartFile imgfile) throws IOException {
         System.out.println("여긴 들어와짐?");
-         String userimg = s3Service.upload(userRegisterRequestDto, imgFile);
+         String userimg = s3Service.upload(userRegisterRequestDto, imgfile);
          userRegisterRequestDto.setUserimg(userimg);
 
         Long userId = userService.createUser(userRegisterRequestDto);
