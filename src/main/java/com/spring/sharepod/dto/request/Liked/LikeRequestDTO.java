@@ -1,5 +1,4 @@
-package com.spring.sharepod.dto.request;
-
+package com.spring.sharepod.dto.request.Liked;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +8,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class ReservationRequestDTO {
+public class LikeRequestDTO {
     private Long userid;
-    private String rentalstart;
-    private String rentalend;
+    private LocalDateTime rentalstart;
+    private LocalDateTime rentalend;
 }

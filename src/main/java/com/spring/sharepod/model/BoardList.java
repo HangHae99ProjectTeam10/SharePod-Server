@@ -1,6 +1,6 @@
 package com.spring.sharepod.model;
 
-import com.spring.sharepod.dto.response.BoardAllResponseDto;
+import com.spring.sharepod.dto.response.Board.BoardAllResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

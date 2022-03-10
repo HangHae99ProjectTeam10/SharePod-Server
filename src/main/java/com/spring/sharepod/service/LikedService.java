@@ -1,7 +1,7 @@
 package com.spring.sharepod.service;
 
 
-import com.spring.sharepod.dto.request.LikeRequestDTO;
+import com.spring.sharepod.dto.request.Liked.LikeRequestDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
