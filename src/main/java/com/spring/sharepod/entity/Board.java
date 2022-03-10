@@ -1,7 +1,7 @@
 package com.spring.sharepod.entity;
 
 
-import com.spring.sharepod.dto.request.BoardPatchRequestDTO;
+import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

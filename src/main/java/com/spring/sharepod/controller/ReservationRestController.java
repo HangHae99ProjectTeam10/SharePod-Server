@@ -1,6 +1,6 @@
 package com.spring.sharepod.controller;
 
-import com.spring.sharepod.dto.request.ReservationRequestDTO;
+import com.spring.sharepod.dto.request.Reservation.ReservationRequestDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.service.ReservationService;
 import lombok.RequiredArgsConstructor;

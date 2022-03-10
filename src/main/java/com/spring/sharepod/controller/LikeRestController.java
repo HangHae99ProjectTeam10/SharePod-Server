@@ -1,7 +1,7 @@
 package com.spring.sharepod.controller;
 
 
-import com.spring.sharepod.dto.request.LikeRequestDTO;
+import com.spring.sharepod.dto.request.Liked.LikeRequestDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.service.LikedService;
 import lombok.RequiredArgsConstructor;

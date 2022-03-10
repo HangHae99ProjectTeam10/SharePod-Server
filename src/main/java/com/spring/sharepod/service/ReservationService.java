@@ -1,6 +1,6 @@
 package com.spring.sharepod.service;
 
-import com.spring.sharepod.dto.request.ReservationRequestDTO;
+import com.spring.sharepod.dto.request.Reservation.ReservationRequestDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.entity.*;
 import com.spring.sharepod.exception.ErrorCode;
