@@ -33,7 +33,6 @@ public class S3Service {
 
     private AmazonS3 s3Client;
 
-
     @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
 
@@ -46,7 +45,6 @@ public class S3Service {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    //기본적 구성
     @PostConstruct
     public void setS3Client() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
@@ -57,37 +55,19 @@ public class S3Service {
                 .build();
     }
 
-    //파일 업로드
+    //유저 프로필 사진 업로드
     public String upload(UserRegisterRequestDto userRegisterRequestDto, MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
         fileName = userRegisterRequestDto.getNickname() + fileName;
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return s3Client.getUrl(bucket, fileName).toString();
     }
 
-
-    //파일 삭제
-    public void fileDelete(List<String> fileName) {
-        try {
-            for (int i=0; i <=fileName.size(); i++){
-                //s3Client.deleteObject(bucket, (fileName.get(i)).replace(File.separatorChar, '/'));
-
-                System.out.println("1");
-                DeleteObjectRequest request = new DeleteObjectRequest(bucket, fileName.get(i));
-
-                System.out.println("2");
-                s3Client.deleteObject(request);
-            }
-        } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
-        }
-    }
-
     //게시판 사진 3개, 영상 1개 업로드
     public BoardWriteRequestDTO boardupload (BoardWriteRequestDTO boardWriteRequestDTO,
-                                             MultipartFile[] imgfiles,
-                                             MultipartFile videofile) throws IOException {
+                                                            MultipartFile[] imgfiles,
+                                                            MultipartFile videofile) throws IOException {
         //이미지 3개 처리
         User user = userRepository.findById(boardWriteRequestDTO.getUserid()).orElseThrow(
                 ()-> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
@@ -113,6 +93,23 @@ public class S3Service {
         boardWriteRequestDTO.setVideourl(s3Client.getUrl(bucket,videoname).toString());
 
         return boardWriteRequestDTO;
+    }
+
+    //파일 삭제
+    public void fileDelete(List<String> fileName) {
+        try {
+            for (int i=0; i <=fileName.size(); i++){
+                //s3Client.deleteObject(bucket, (fileName.get(i)).replace(File.separatorChar, '/'));
+
+                System.out.println("1");
+                DeleteObjectRequest request = new DeleteObjectRequest(bucket, fileName.get(i));
+
+                System.out.println("2");
+                s3Client.deleteObject(request);
+            }
+        } catch (AmazonServiceException e) {
+            System.err.println(e.getErrorMessage());
+        }
     }
 }
 

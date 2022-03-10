@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 public class BoardPatchRequestDTO {
     private Long userid;
     private String title;
-    private String videourl;
-    private String imgurl1;
-    private String imgurl2;
-    private String imgurl3;
+//    private String videourl;
+//    private String imgurl1;
+//    private String imgurl2;
+//    private String imgurl3;
     private String contents;
     private int originprice;
     private int dailyrentalfee;
