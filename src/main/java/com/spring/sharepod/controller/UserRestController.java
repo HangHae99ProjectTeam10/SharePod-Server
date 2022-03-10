@@ -24,8 +24,8 @@ public class UserRestController {
 
     // 유저 생성하기 (JSON)
     @PostMapping("/user/register")
-    public ResponseEntity<Success> createUser(@RequestPart UserRegisterRequestDto userRegisterRequestDto, @RequestPart MultipartFile imgfile) throws IOException {
-        System.out.println("여긴 들어와짐?");
+    public ResponseEntity<Success> createUser(@RequestPart UserRegisterRequestDto userRegisterRequestDto,
+                                              @RequestPart MultipartFile imgfile) throws IOException {
          String userimg = s3Service.upload(userRegisterRequestDto, imgfile);
          userRegisterRequestDto.setUserimg(userimg);
 
