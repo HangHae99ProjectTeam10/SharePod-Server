@@ -23,8 +23,6 @@ public class UserRestController {
     @PostMapping("/user/register")
     public BasicResponseDTO createUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
 
-
-
         return BasicResponseDTO.builder()
                 .result("success")
                 .msg("삭제 완료")
