@@ -1,6 +1,7 @@
 package com.spring.sharepod.service;
 
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
+import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.repository.UserRepository;
 import com.spring.sharepod.validator.RegisterValidator;
@@ -22,7 +23,7 @@ public class UserService {
 
     // 회원가입
     @Transactional
-    public Long createUser(UserRegisterRequestDto userRegisterRequestDto) {
+    public BasicResponseDTO createUser(UserRegisterRequestDto userRegisterRequestDto) {
         //회원가입 유효성 검사 validator 통해서 검증한다. 중간에 이상하거 있으면 바로 거기서 메시지 반환하도록
         registerValidator.validateUserRegisterData(userRegisterRequestDto);
 
@@ -41,7 +42,11 @@ public class UserService {
 
         // 유저 저장하기
         userRepository.save(user);
-        return user.getId();
+
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg("회원가입 완료")
+                .build();
     }
 
 }

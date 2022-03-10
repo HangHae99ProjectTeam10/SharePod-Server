@@ -3,11 +3,13 @@ package com.spring.sharepod.dto.request.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@ToString
 public class UserRegisterRequestDto {
 //    {
 //  “userimg : “이미지 파일”,
