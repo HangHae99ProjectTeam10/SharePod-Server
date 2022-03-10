@@ -44,6 +44,12 @@ public class BoardRestController {
         return boardService.wirteboard(boardWriteRequestDTOadd);
     }
 
+
+    //게시판 생성
+
+
+
+
     //게시판 수정
     @PatchMapping("/board/{boardid}")
     public BasicResponseDTO updateboardcontroll(@PathVariable Long boardid, @RequestBody BoardPatchRequestDTO patchRequestDTO) {
