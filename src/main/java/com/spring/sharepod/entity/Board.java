@@ -72,16 +72,16 @@ public class Board extends Timestamped {
     private User user;
 
     //Board : Liked => 해당 boardid를 좋아요 누른 목록을 가져오기 위한 양방향 설정
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Liked> likeNumber = new ArrayList<>();
 
     //게시판 업데이트
     public void update(BoardPatchRequestDTO patchRequestDTO){
         this.title = patchRequestDTO.getTitle();
-        this.videourl = patchRequestDTO.getVideourl();
-        this.imgurl1 = patchRequestDTO.getImgurl1();
-        this.imgurl2 = patchRequestDTO.getImgurl2();
-        this.imgurl3 = patchRequestDTO.getImgurl3();
+//        this.videourl = patchRequestDTO.getVideourl();
+//        this.imgurl1 = patchRequestDTO.getImgurl1();
+//        this.imgurl2 = patchRequestDTO.getImgurl2();
+//        this.imgurl3 = patchRequestDTO.getImgurl3();
         this.contents = patchRequestDTO.getContents();
         this.originprice = patchRequestDTO.getOriginprice();
         this.dailyrentalfee = patchRequestDTO.getDailyrentalfee();

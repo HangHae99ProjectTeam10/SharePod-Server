@@ -1,5 +1,6 @@
 package com.spring.sharepod.service;
 
+import com.amazonaws.AmazonServiceException;
 import com.spring.sharepod.dto.request.Board.BoardFilterAndCategoryRequestDto;
 import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import com.spring.sharepod.dto.request.Board.SearchRequestDto;
@@ -17,9 +18,13 @@ import com.spring.sharepod.repository.UserRepository;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +37,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final LikedRepository likedRepository;
+    private final S3Service s3Service;
 
     @Transactional
     public List<BoardAllResponseDto> getAllBoard(int limitcount) {
@@ -64,7 +70,7 @@ public class BoardService {
 
     //
     @Transactional
-    public List<BoardAllResponseDto> getSortedBoard(String filtertype,String category, String mapdata,int limitcount) {
+    public List<BoardAllResponseDto> getSortedBoard(String filtertype, String category, String mapdata, int limitcount) {
         List<Board> boardList = new ArrayList<>();
 
         switch (filtertype) {
@@ -106,7 +112,7 @@ public class BoardService {
 
     //검색한 내용에 대한 정보
     @Transactional
-    public List<BoardAllResponseDto> getSearchBoard(String filtertype,String searchtitle, String mapdata, int limitcount) {
+    public List<BoardAllResponseDto> getSearchBoard(String filtertype, String searchtitle, String mapdata, int limitcount) {
         List<Board> boardList = new ArrayList<>();
 
         switch (filtertype) {
@@ -147,7 +153,7 @@ public class BoardService {
 
     @Transactional
     public BoardDetailResponseDto getDetailBoard(Long boardid, Boolean isliked) {
-        Board boardDetail = boardRepository.findById(boardid).orElseThrow(()-> new ErrorCodeException(BOARD_NOT_FOUND));
+        Board boardDetail = boardRepository.findById(boardid).orElseThrow(() -> new ErrorCodeException(BOARD_NOT_FOUND));
 
         BoardDetailResponseDto boardDetailResponseDto = BoardDetailResponseDto.builder()
                 .title(boardDetail.getTitle())
@@ -204,14 +210,14 @@ public class BoardService {
 
     // 게시판 수정
     @Transactional
-    public BasicResponseDTO updateboard(Long boardid, BoardPatchRequestDTO patchRequestDTO){
+    public BasicResponseDTO updateboard(Long boardid, BoardPatchRequestDTO patchRequestDTO) {
 
         //수정할 게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardid).orElseThrow(
-                () ->new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
+                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
         );
         //받아온 userid와 boardid의 작성자가 다를때
-        if (!Objects.equals(patchRequestDTO.getUserid(),board.getUser().getId())){
+        if (!Objects.equals(patchRequestDTO.getUserid(), board.getUser().getId())) {
             throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
 
@@ -226,16 +232,34 @@ public class BoardService {
 
     //게시판 삭제
     @Transactional
-    public BasicResponseDTO deleteboard(Long boardid, Long userid){
+
+    public BasicResponseDTO deleteboard(Long boardid, Long userid) {
 
         //삭제할 게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardid).orElseThrow(
-                () ->new ErrorCodeException(BOARD_NOT_FOUND)
+                () -> new ErrorCodeException(BOARD_NOT_FOUND)
         );
+
         //받아온 userid와 boardid의 작성자가 다를때
-        if (!Objects.equals(userid,board.getUser().getId())){
+        if (!Objects.equals(userid, board.getUser().getId())) {
             throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
+
+        String boardimg1 = board.getImgurl1().substring(board.getImgurl1().lastIndexOf("/")+1);
+        System.out.println(boardimg1);
+        String boardimg2 = board.getImgurl2().substring(board.getImgurl2().lastIndexOf("/")+1);
+        System.out.println(boardimg2);
+        String boardimg3 = board.getImgurl3().substring(board.getImgurl3().lastIndexOf("/")+1);
+        System.out.println(boardimg3);
+
+        String videourl = board.getVideourl().substring(board.getImgurl3().lastIndexOf("/")+1);
+        System.out.println(videourl);
+
+        String[] imgs = {videourl,boardimg1,boardimg2,boardimg3};
+        List<String> fileName = Arrays.asList(imgs);
+
+        s3Service.fileDelete(fileName);
+        //log.info("file name : " + fileName);
 
         //게시글 삭제
         boardRepository.deleteById(boardid);
