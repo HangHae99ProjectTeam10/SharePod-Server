@@ -7,7 +7,6 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.io.InputStream;
 
 @Service
 @NoArgsConstructor
@@ -48,7 +46,7 @@ public class S3Service {
 
     public String upload(UserRegisterRequestDto userRegisterRequestDto, MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
-        fileName += userRegisterRequestDto.getNickname();
+        fileName = userRegisterRequestDto.getNickname() + fileName;
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return s3Client.getUrl(bucket, fileName).toString();
