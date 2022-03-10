@@ -54,4 +54,3 @@ public class S3Service {
         return s3Client.getUrl(bucket, fileName).toString();
     }
 }
-
