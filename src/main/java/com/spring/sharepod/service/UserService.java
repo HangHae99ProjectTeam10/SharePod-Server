@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class UserService {
 
     private final RegisterValidator registerValidator;
@@ -32,6 +31,7 @@ public class UserService {
 
         // 유저 생성
         User user = User.builder()
+                .userimg(userRegisterRequestDto.getUserimg())
                 .username(userRegisterRequestDto.getUsername())
                 .password(userRegisterRequestDto.getPassword())
                 .mapdata(userRegisterRequestDto.getMapdata())
@@ -43,5 +43,6 @@ public class UserService {
         userRepository.save(user);
         return user.getId();
     }
+
 
 }

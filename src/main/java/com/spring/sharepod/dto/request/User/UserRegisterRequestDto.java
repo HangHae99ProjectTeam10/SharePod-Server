@@ -3,11 +3,13 @@ package com.spring.sharepod.dto.request.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class UserRegisterRequestDto {
 //    {
 //  “userimg : “이미지 파일”,
@@ -18,7 +20,7 @@ public class UserRegisterRequestDto {
 //  “mapdata” : “지역”
 //    }
 
-    //private MultipartFile userimg;
+    private String userimg;
     private String username;
     private String nickname;
     private String password;
