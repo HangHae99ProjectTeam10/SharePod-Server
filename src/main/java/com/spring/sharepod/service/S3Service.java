@@ -1,12 +1,14 @@
 package com.spring.sharepod.service;
 
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
@@ -14,6 +16,7 @@ import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.UserRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,6 +33,7 @@ public class S3Service {
     private final UserRepository userRepository;
 
     private AmazonS3 s3Client;
+
 
     @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
@@ -52,19 +57,35 @@ public class S3Service {
                 .build();
     }
 
-    //유저 프로필 사진 업로드
     public String upload(UserRegisterRequestDto userRegisterRequestDto, MultipartFile file) throws IOException {
-        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        String fileName = file.getOriginalFilename();
         fileName = userRegisterRequestDto.getNickname() + fileName;
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return s3Client.getUrl(bucket, fileName).toString();
     }
 
+    // delete file
+    public void fileDelete(List<String> fileName) {
+        try {
+            for (int i=0; i <=fileName.size(); i++){
+                //s3Client.deleteObject(bucket, (fileName.get(i)).replace(File.separatorChar, '/'));
+
+                System.out.println("1");
+                DeleteObjectRequest request = new DeleteObjectRequest(bucket, fileName.get(i));
+
+                System.out.println("2");
+                s3Client.deleteObject(request);
+            }
+        } catch (AmazonServiceException e) {
+            System.err.println(e.getErrorMessage());
+        }
+    }
+
     //게시판 사진 3개, 영상 1개 업로드
     public BoardWriteRequestDTO boardupload (BoardWriteRequestDTO boardWriteRequestDTO,
-                                                            MultipartFile[] imgfiles,
-                                                            MultipartFile videofile) throws IOException {
+                                             MultipartFile[] imgfiles,
+                                             MultipartFile videofile) throws IOException {
         //이미지 3개 처리
         User user = userRepository.findById(boardWriteRequestDTO.getUserid()).orElseThrow(
                 ()-> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
@@ -92,3 +113,4 @@ public class S3Service {
         return boardWriteRequestDTO;
     }
 }
+

@@ -44,6 +44,12 @@ public class BoardRestController {
         return boardService.wirteboard(boardWriteRequestDTOadd);
     }
 
+
+    //게시판 생성
+
+
+
+
     //게시판 수정
     @PatchMapping("/board/{boardid}")
     public BasicResponseDTO updateboardcontroll(@PathVariable Long boardid, @RequestBody BoardPatchRequestDTO patchRequestDTO) {
@@ -81,7 +87,7 @@ public class BoardRestController {
         }else{
             System.out.println(userid.get().longValue());
             Liked liked = likedRepository.findByLiked(boardid, userid.get().longValue());
-            if (liked == null){
+             if (liked == null){
                 isliked = false;
             }else{
                 isliked = true;

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,6 +36,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final LikedRepository likedRepository;
+    private final S3Service s3Service;
 
     @Transactional
     public List<BoardAllResponseDto> getAllBoard(int limitcount) {
@@ -239,6 +241,22 @@ public class BoardService {
         if (!Objects.equals(userid, board.getUser().getId())) {
             throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
+
+        String boardimg1 = board.getImgurl1().substring(board.getImgurl1().lastIndexOf("/")+1);
+        System.out.println(boardimg1);
+        String boardimg2 = board.getImgurl2().substring(board.getImgurl2().lastIndexOf("/")+1);
+        System.out.println(boardimg2);
+        String boardimg3 = board.getImgurl3().substring(board.getImgurl3().lastIndexOf("/")+1);
+        System.out.println(boardimg3);
+
+        String videourl = board.getVideourl().substring(board.getImgurl3().lastIndexOf("/")+1);
+        System.out.println(videourl);
+
+        String[] imgs = {videourl,boardimg1,boardimg2,boardimg3};
+        List<String> fileName = Arrays.asList(imgs);
+
+        s3Service.fileDelete(fileName);
+        //log.info("file name : " + fileName);
 
         //게시글 삭제
         boardRepository.deleteById(boardid);
