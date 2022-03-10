@@ -13,6 +13,7 @@ import com.spring.sharepod.model.BoardDetail;
 import com.spring.sharepod.model.BoardList;
 import com.spring.sharepod.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,16 +40,16 @@ public class BoardRestController {
 
     //메인 전체 상품 최신순 보여주기
     @GetMapping("/board")
-    public ResponseEntity<BoardList> getBoardList(){
-        List<BoardAllResponseDto> boardResponseDtos = boardService.getAllBoard();
+    public ResponseEntity<BoardList> getBoardList(@RequestParam(value="limit") int limitcount){
+        List<BoardAllResponseDto> boardResponseDtos = boardService.getAllBoard(limitcount);
         return new ResponseEntity<>(new BoardList("success","리스트 최신순 성공",boardResponseDtos), HttpStatus.OK);
     }
 
 
     //상품 카테고리 클릭 시, 상세 리스트 페이지로 이동
     @GetMapping("/board/sort")
-    public ResponseEntity<BoardList> getSortedBoardList(@RequestBody BoardFilterAndCategoryRequestDto boardFilterAndCategoryRequestDto){
-        List<BoardAllResponseDto> bordResponseDtos = boardService.getSortedBoard(boardFilterAndCategoryRequestDto);
+    public ResponseEntity<BoardList> getSortedBoardList(@RequestBody BoardFilterAndCategoryRequestDto boardFilterAndCategoryRequestDto,@RequestParam(value="limit") int limitcount ){
+        List<BoardAllResponseDto> bordResponseDtos = boardService.getSortedBoard(boardFilterAndCategoryRequestDto,limitcount);
         return new ResponseEntity<>(new BoardList("success","리스트" + boardFilterAndCategoryRequestDto.getFiltertype() +"정렬 성공", bordResponseDtos),HttpStatus.OK);
     }
 
@@ -63,8 +64,8 @@ public class BoardRestController {
 
     //직접 사용자 검색 기능
     @GetMapping("/search")
-    public ResponseEntity<BoardList> getSearchBoardList(@RequestBody SearchRequestDto searchRequestDto){
-        List<BoardAllResponseDto> boardResponseDtos = boardService.getSearchBoard(searchRequestDto);
+    public ResponseEntity<BoardList> getSearchBoardList(@RequestBody SearchRequestDto searchRequestDto, @RequestParam(value="limit") int limitcount ){
+        List<BoardAllResponseDto> boardResponseDtos = boardService.getSearchBoard(searchRequestDto,limitcount);
         return new ResponseEntity<>(new BoardList("success","검색 "+ searchRequestDto.getFiltertype() +" 성공",boardResponseDtos), HttpStatus.OK);
     }
 
@@ -72,8 +73,8 @@ public class BoardRestController {
 
     //릴스 동영상 get
     @GetMapping("/board/video")
-    public ResponseEntity<AllVideo> getVideo(){
-        List<VideoAllResponseDto> videoAllResponseDtos = boardService.getAllVideo();
+    public ResponseEntity<AllVideo> getVideo(@RequestParam(value="limit") int limitcount){
+        List<VideoAllResponseDto> videoAllResponseDtos = boardService.getAllVideo(limitcount);
         return new ResponseEntity<>(new AllVideo("success","영상 전송 성공",videoAllResponseDtos),HttpStatus.OK);
 
     }

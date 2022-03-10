@@ -15,9 +15,9 @@ import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,9 +33,10 @@ public class BoardService {
     private final LikedRepository likedRepository;
 
     @Transactional
-    public List<BoardAllResponseDto> getAllBoard() {
+    public List<BoardAllResponseDto> getAllBoard(int limitcount) {
+
         // 모든 게시글 가져오기
-        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
+        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc(limitcount);
 
         // 게시글을 반환해서 저장할 리스트
         List<BoardAllResponseDto> boardResponseDtos = new ArrayList<>();
@@ -62,7 +63,7 @@ public class BoardService {
 
     //
     @Transactional
-    public List<BoardAllResponseDto> getSortedBoard(BoardFilterAndCategoryRequestDto boardFilterAndCategoryRequestDto) {
+    public List<BoardAllResponseDto> getSortedBoard(BoardFilterAndCategoryRequestDto boardFilterAndCategoryRequestDto, int limitcount) {
         String mapdata = boardFilterAndCategoryRequestDto.getMapdata();
         String filtertype = boardFilterAndCategoryRequestDto.getFiltertype();
         String category = boardFilterAndCategoryRequestDto.getCategory();
@@ -71,15 +72,15 @@ public class BoardService {
 
         switch (filtertype) {
             case "quility":
-                boardList = boardRepository.findByAndMapAndCategoryByQuility(mapdata, category);
+                boardList = boardRepository.findByAndMapAndCategoryByQuility(mapdata, category, limitcount);
                 break;
 
             case "cost":
-                boardList = boardRepository.findByAndMapAndCategoryByCost(mapdata, category);
+                boardList = boardRepository.findByAndMapAndCategoryByCost(mapdata, category, limitcount);
                 break;
 
             default:
-                boardList = boardRepository.findByAndMapAndCategoryByCreatedAt(mapdata, category);
+                boardList = boardRepository.findByAndMapAndCategoryByCreatedAt(mapdata, category, limitcount);
 
         }
         // 게시글을 반환해서 저장할 리스트
@@ -108,7 +109,7 @@ public class BoardService {
 
     //검색한 내용에 대한 정보
     @Transactional
-    public List<BoardAllResponseDto> getSearchBoard(SearchRequestDto searchRequestDto) {
+    public List<BoardAllResponseDto> getSearchBoard(SearchRequestDto searchRequestDto, int limitcount) {
         String mapdata = searchRequestDto.getMapdata();
         String filtertype = searchRequestDto.getFiltertype();
         String searchtitle = searchRequestDto.getSearchtitle();
@@ -117,15 +118,15 @@ public class BoardService {
 
         switch (filtertype) {
             case "quility":
-                boardList = boardRepository.findByAndMapAndSearchByQuility(mapdata, searchtitle);
+                boardList = boardRepository.findByAndMapAndSearchByQuility(mapdata, searchtitle, limitcount);
                 break;
 
             case "cost":
-                boardList = boardRepository.findByAndMapAndSearchByCost(mapdata, searchtitle);
+                boardList = boardRepository.findByAndMapAndSearchByCost(mapdata, searchtitle, limitcount);
                 break;
 
             default:
-                boardList = boardRepository.findByAndMapAndSearchByCreatedAt(mapdata, searchtitle);
+                boardList = boardRepository.findByAndMapAndSearchByCreatedAt(mapdata, searchtitle, limitcount);
 
         }
         // 게시글을 반환해서 저장할 리스트
@@ -190,9 +191,9 @@ public class BoardService {
     }
 
     @Transactional
-    public List<VideoAllResponseDto> getAllVideo() {
+    public List<VideoAllResponseDto> getAllVideo(int limitcount) {
         // 모든 게시글 가져오기
-        List<Board> boardList = boardRepository.findAllByVideoUrlRan();
+        List<Board> boardList = boardRepository.findAllByVideoUrlRan(limitcount);
 
         // 게시글을 반환해서 저장할 리스트
         List<VideoAllResponseDto> videoAllResponseDtos = new ArrayList<>();
@@ -218,6 +219,7 @@ public class BoardService {
 
         return videoAllResponseDtos;
     }
+
 
     // 게시판 수정
     @Transactional
