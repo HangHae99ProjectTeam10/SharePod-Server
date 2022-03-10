@@ -14,6 +14,7 @@ import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.repository.UserRepository;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -63,11 +64,7 @@ public class BoardService {
 
     //
     @Transactional
-    public List<BoardAllResponseDto> getSortedBoard(BoardFilterAndCategoryRequestDto boardFilterAndCategoryRequestDto, int limitcount) {
-        String mapdata = boardFilterAndCategoryRequestDto.getMapdata();
-        String filtertype = boardFilterAndCategoryRequestDto.getFiltertype();
-        String category = boardFilterAndCategoryRequestDto.getCategory();
-
+    public List<BoardAllResponseDto> getSortedBoard(String filtertype,String category, String mapdata,int limitcount) {
         List<Board> boardList = new ArrayList<>();
 
         switch (filtertype) {
@@ -109,11 +106,7 @@ public class BoardService {
 
     //검색한 내용에 대한 정보
     @Transactional
-    public List<BoardAllResponseDto> getSearchBoard(SearchRequestDto searchRequestDto, int limitcount) {
-        String mapdata = searchRequestDto.getMapdata();
-        String filtertype = searchRequestDto.getFiltertype();
-        String searchtitle = searchRequestDto.getSearchtitle();
-
+    public List<BoardAllResponseDto> getSearchBoard(String filtertype,String searchtitle, String mapdata, int limitcount) {
         List<Board> boardList = new ArrayList<>();
 
         switch (filtertype) {
@@ -153,19 +146,7 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardDetailResponseDto getDetailBoard(Long boardid, Long userid) {
-        Boolean isliked = null;
-        if (userid  == null){
-            isliked = false;
-        }else{
-            Liked liked = likedRepository.findByLiked(boardid, userid);
-
-            if (liked == null){
-                isliked = false;
-            }else{
-                isliked = true;
-            }
-        }
+    public BoardDetailResponseDto getDetailBoard(Long boardid, Boolean isliked) {
         Board boardDetail = boardRepository.findById(boardid).orElseThrow(()-> new ErrorCodeException(BOARD_NOT_FOUND));
 
         BoardDetailResponseDto boardDetailResponseDto = BoardDetailResponseDto.builder()
