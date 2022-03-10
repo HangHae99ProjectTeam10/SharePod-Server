@@ -12,17 +12,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final RegisterValidator registerValidator;
-//    private final PasswordEncoder passwordEncoder;
+    //    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     // 회원가입
     @Transactional
-    public BasicResponseDTO createUser(UserRegisterRequestDto userRegisterRequestDto) {
+    public Long createUser(UserRegisterRequestDto userRegisterRequestDto) {
         //회원가입 유효성 검사 validator 통해서 검증한다. 중간에 이상하거 있으면 바로 거기서 메시지 반환하도록
         registerValidator.validateUserRegisterData(userRegisterRequestDto);
 
@@ -42,11 +43,7 @@ public class UserService {
 
         // 유저 저장하기
         userRepository.save(user);
-
-        return BasicResponseDTO.builder()
-                .result("success")
-                .msg("회원가입 완료")
-                .build();
+        return user.getId();
     }
 
 
