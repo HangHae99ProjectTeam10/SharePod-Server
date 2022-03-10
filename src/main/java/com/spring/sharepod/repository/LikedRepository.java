@@ -13,10 +13,7 @@ public interface LikedRepository extends JpaRepository<Liked, Long> {
 
     Liked findByUserAndBoard(User user, Board board);
 
-//    @Query("select c from Liked c where exists (select c from c where c.board.id=:boardid and c.user.id=:userid)")
-//    Liked findByLiked(Long boardid, Long userid);
-
-
+    //userid와 boardid를 통한
     @Query("select c from Liked c where c.board.id=:boardid and c.user.id=:userid")
     Liked findByLiked(Long boardid, Long userid);
 }

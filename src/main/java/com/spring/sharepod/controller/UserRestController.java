@@ -26,9 +26,12 @@ public class UserRestController {
     @PostMapping("/user/register")
     public ResponseEntity<Success> createUser(@RequestPart UserRegisterRequestDto userRegisterRequestDto,
                                               @RequestPart MultipartFile imgfile) throws IOException {
-         String userimg = s3Service.upload(userRegisterRequestDto, imgfile);
-         userRegisterRequestDto.setUserimg(userimg);
 
+        //유저 프로필 업로드
+        String userimg = s3Service.upload(userRegisterRequestDto, imgfile);
+        userRegisterRequestDto.setUserimg(userimg);
+
+        //회원가입 완료
         Long userId = userService.createUser(userRegisterRequestDto);
         return new ResponseEntity<>(new Success("success", "회원 가입 성공하였습니다."), HttpStatus.OK);
     }

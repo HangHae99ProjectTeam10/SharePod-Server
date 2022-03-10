@@ -38,6 +38,8 @@ public class BoardService {
     private final LikedRepository likedRepository;
     private final S3Service s3Service;
 
+
+    //메인 페이지 전체 게시글 불러오기
     @Transactional
     public List<BoardAllResponseDto> getAllBoard(int limitcount) {
 
@@ -67,7 +69,7 @@ public class BoardService {
         return boardResponseDtos;
     }
 
-    //
+    //정렬한 board, GET 방식
     @Transactional
     public List<BoardAllResponseDto> getSortedBoard(String filtertype, String category, String mapdata, int limitcount) {
         List<Board> boardList = new ArrayList<>();
@@ -127,6 +129,7 @@ public class BoardService {
                 boardList = boardRepository.findByAndMapAndSearchByCreatedAt(mapdata, searchtitle, limitcount);
 
         }
+
         // 게시글을 반환해서 저장할 리스트
         List<BoardAllResponseDto> boardResponseDtos = new ArrayList<>();
 
@@ -146,10 +149,11 @@ public class BoardService {
             // 반환할 리스트에 저장하기
             boardResponseDtos.add(boardResponseDto);
         }
-
+        // 반환되는 DTO
         return boardResponseDtos;
     }
 
+    // 상세 페이지 board GET
     @Transactional
     public BoardDetailResponseDto getDetailBoard(Long boardid, Boolean isliked) {
         Board boardDetail = boardRepository.findById(boardid).orElseThrow(() -> new ErrorCodeException(BOARD_NOT_FOUND));
@@ -176,6 +180,7 @@ public class BoardService {
         return boardDetailResponseDto;
     }
 
+    //릴스 video 전체 GET(Limit)
     @Transactional
     public List<VideoAllResponseDto> getAllVideo(int limitcount) {
         // 모든 게시글 가져오기

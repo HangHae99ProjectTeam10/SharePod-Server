@@ -16,7 +16,6 @@ import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,6 +46,7 @@ public class S3Service {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    //기본적 구성
     @PostConstruct
     public void setS3Client() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
@@ -57,6 +57,7 @@ public class S3Service {
                 .build();
     }
 
+    //파일 업로드
     public String upload(UserRegisterRequestDto userRegisterRequestDto, MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         fileName = userRegisterRequestDto.getNickname() + fileName;
@@ -65,7 +66,8 @@ public class S3Service {
         return s3Client.getUrl(bucket, fileName).toString();
     }
 
-    // delete file
+
+    //파일 삭제
     public void fileDelete(List<String> fileName) {
         try {
             for (int i=0; i <=fileName.size(); i++){

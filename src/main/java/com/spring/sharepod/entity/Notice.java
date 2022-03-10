@@ -30,5 +30,4 @@ public class Notice extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SELLER")
     private User seller;
-
 }

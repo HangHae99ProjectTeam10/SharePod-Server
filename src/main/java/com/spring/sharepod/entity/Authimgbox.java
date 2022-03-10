@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Builder
 @Entity
 public class Authimgbox {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -41,5 +41,4 @@ public class Reservation {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARDID")
     private Board board;
-
 }
