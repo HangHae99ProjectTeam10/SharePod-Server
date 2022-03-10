@@ -1,7 +1,7 @@
 package com.spring.sharepod.controller;
 
 
-import com.spring.sharepod.dto.request.UserRegisterRequestDto;
+import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.service.UserService;
 import lombok.RequiredArgsConstructor;

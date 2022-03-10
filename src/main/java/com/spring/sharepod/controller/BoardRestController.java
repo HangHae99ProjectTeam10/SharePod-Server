@@ -1,19 +1,18 @@
 package com.spring.sharepod.controller;
 
 
-import com.spring.sharepod.dto.request.BoardFilterAndCategoryRequestDto;
-import com.spring.sharepod.dto.request.BoardPatchRequestDTO;
-import com.spring.sharepod.dto.request.SearchRequestDto;
+import com.spring.sharepod.dto.request.Board.BoardFilterAndCategoryRequestDto;
+import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
+import com.spring.sharepod.dto.request.Board.SearchRequestDto;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
-import com.spring.sharepod.dto.response.BoardAllResponseDto;
-import com.spring.sharepod.dto.response.BoardDetailResponseDto;
-import com.spring.sharepod.dto.response.VideoAllResponseDto;
+import com.spring.sharepod.dto.response.Board.BoardAllResponseDto;
+import com.spring.sharepod.dto.response.Board.BoardDetailResponseDto;
+import com.spring.sharepod.dto.response.Board.VideoAllResponseDto;
 import com.spring.sharepod.model.AllVideo;
 import com.spring.sharepod.model.BoardDetail;
 import com.spring.sharepod.model.BoardList;
 import com.spring.sharepod.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

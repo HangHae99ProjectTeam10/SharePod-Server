@@ -1,4 +1,4 @@
-package com.spring.sharepod.dto.request;
+package com.spring.sharepod.dto.response.Board;
 
 
 import lombok.AllArgsConstructor;
@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BoardPatchRequestDTO {
-    private Long userid;
+public class BoardDetailResponseDto {
     private String title;
     private String videourl;
     private String imgurl1;
@@ -20,7 +19,13 @@ public class BoardPatchRequestDTO {
     private String contents;
     private int originprice;
     private int dailyrentalfee;
+    private String nickname;
     private String mapdata;
     private String category;
     private String boardquility;
+    private boolean isliked;
+    private int likecount;
+    private String modifiedat;
+    private String userimg;
+
 }

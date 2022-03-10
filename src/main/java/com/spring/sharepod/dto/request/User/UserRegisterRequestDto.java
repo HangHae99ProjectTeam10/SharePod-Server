@@ -1,4 +1,4 @@
-package com.spring.sharepod.dto.request;
+package com.spring.sharepod.dto.request.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

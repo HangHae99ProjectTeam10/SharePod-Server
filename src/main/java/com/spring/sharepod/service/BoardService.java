@@ -1,12 +1,12 @@
 package com.spring.sharepod.service;
 
-import com.spring.sharepod.dto.request.BoardFilterAndCategoryRequestDto;
-import com.spring.sharepod.dto.request.BoardPatchRequestDTO;
-import com.spring.sharepod.dto.request.SearchRequestDto;
+import com.spring.sharepod.dto.request.Board.BoardFilterAndCategoryRequestDto;
+import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
+import com.spring.sharepod.dto.request.Board.SearchRequestDto;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
-import com.spring.sharepod.dto.response.BoardAllResponseDto;
-import com.spring.sharepod.dto.response.BoardDetailResponseDto;
-import com.spring.sharepod.dto.response.VideoAllResponseDto;
+import com.spring.sharepod.dto.response.Board.BoardAllResponseDto;
+import com.spring.sharepod.dto.response.Board.BoardDetailResponseDto;
+import com.spring.sharepod.dto.response.Board.VideoAllResponseDto;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.exception.ErrorCode;
