@@ -2,6 +2,7 @@ package com.spring.sharepod.controller;
 
 
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
+import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,14 @@ public class UserRestController {
 
     // 유저 생성하기 (JSON)
     @PostMapping("/user/register")
-    public ResponseEntity<Success> createUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto){
-        Long userId = userService.createUser(userRegisterRequestDto);
-        return new ResponseEntity<>(new Success("success", "회원 가입 성공하였습니다."), HttpStatus.OK);
+    public BasicResponseDTO createUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
+
+
+
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg("삭제 완료")
+                .build();
+
     }
 }

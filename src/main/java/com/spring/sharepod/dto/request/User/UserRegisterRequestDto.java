@@ -18,7 +18,6 @@ public class UserRegisterRequestDto {
 //  “mapdata” : “지역”
 //    }
 
-
     //private MultipartFile userimg;
     private String username;
     private String nickname;
