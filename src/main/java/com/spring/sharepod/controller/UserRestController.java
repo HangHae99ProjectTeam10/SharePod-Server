@@ -24,5 +24,8 @@ public class UserRestController {
         Long userId = userService.createUser(userRegisterRequestDto);
         return new ResponseEntity<>(new Success("success", "회원 가입 성공하였습니다."), HttpStatus.OK);
 
+
+
+
     }
 }
