@@ -53,7 +53,7 @@ public class BoardRestController {
     @GetMapping("/board/sort")
     public ResponseEntity<BoardList> getSortedBoardList(@RequestParam(value = "limit") int limitcount, @RequestParam(value = "filtertype") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "mapdata") String mapdata) {
         List<BoardAllResponseDto> bordResponseDtos = boardService.getSortedBoard(filtertype, category, mapdata, limitcount);
-        return new ResponseEntity<>(new BoardList("success", "리스트" + filtertype + "정렬 성공", bordResponseDtos), HttpStatus.OK);
+        return new ResponseEntity<>(new BoardList("success", "리스트 " + filtertype + " 정렬 성공", bordResponseDtos), HttpStatus.OK);
     }
 
 
@@ -72,7 +72,7 @@ public class BoardRestController {
                 isliked = true;
             }
         }
-        BoardDetailResponseDto boardDetailResponseDto = boardService.getDetailBoard(boardid,isliked);
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getDetailBoard(boardid, isliked);
         return new ResponseEntity<>(new BoardDetail("success", "게시글 상세 불러오기 성공", boardDetailResponseDto), HttpStatus.OK);
 
     }
@@ -84,12 +84,10 @@ public class BoardRestController {
         return new ResponseEntity<>(new BoardList("success", "검색 " + filtertype + " 성공", boardResponseDtos), HttpStatus.OK);
     }
 
-
     //릴스 동영상 get
     @GetMapping("/board/video")
     public ResponseEntity<AllVideo> getVideo(@RequestParam(value = "limit") int limitcount) {
         List<VideoAllResponseDto> videoAllResponseDtos = boardService.getAllVideo(limitcount);
         return new ResponseEntity<>(new AllVideo("success", "영상 전송 성공", videoAllResponseDtos), HttpStatus.OK);
-
     }
 }
