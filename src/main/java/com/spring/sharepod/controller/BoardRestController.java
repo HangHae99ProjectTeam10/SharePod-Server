@@ -1,9 +1,8 @@
 package com.spring.sharepod.controller;
 
 
-import com.spring.sharepod.dto.request.Board.BoardFilterAndCategoryRequestDto;
 import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
-import com.spring.sharepod.dto.request.Board.SearchRequestDto;
+import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.dto.response.Board.BoardAllResponseDto;
 import com.spring.sharepod.dto.response.Board.BoardDetailResponseDto;
@@ -14,11 +13,14 @@ import com.spring.sharepod.model.BoardDetail;
 import com.spring.sharepod.model.BoardList;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.service.BoardService;
+import com.spring.sharepod.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +30,19 @@ import java.util.Optional;
 public class BoardRestController {
     private final BoardService boardService;
     private final LikedRepository likedRepository;
+    private final S3Service s3Service;
+
+    //게시판 작성
+    @PostMapping("/board")
+    public BasicResponseDTO writeBoard(@RequestPart BoardWriteRequestDTO boardWriteRequestDTO,
+                                       @RequestPart MultipartFile[] imgfiles,
+                                       @RequestPart MultipartFile videofile) throws IOException {
+        //게시판 업로드
+        BoardWriteRequestDTO boardWriteRequestDTOadd = s3Service.boardupload(boardWriteRequestDTO,imgfiles,videofile);
+
+        //DB저장 및 리턴
+        return boardService.wirteboard(boardWriteRequestDTOadd);
+    }
 
     //게시판 수정
     @PatchMapping("/board/{boardid}")

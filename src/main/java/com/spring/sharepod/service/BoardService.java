@@ -2,6 +2,7 @@ package com.spring.sharepod.service;
 
 import com.spring.sharepod.dto.request.Board.BoardFilterAndCategoryRequestDto;
 import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
+import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
 import com.spring.sharepod.dto.request.Board.SearchRequestDto;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.dto.response.Board.BoardAllResponseDto;
@@ -9,6 +10,7 @@ import com.spring.sharepod.dto.response.Board.BoardDetailResponseDto;
 import com.spring.sharepod.dto.response.Board.VideoAllResponseDto;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
+import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.BoardRepository;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -64,7 +67,7 @@ public class BoardService {
 
     //
     @Transactional
-    public List<BoardAllResponseDto> getSortedBoard(String filtertype,String category, String mapdata,int limitcount) {
+    public List<BoardAllResponseDto> getSortedBoard(String filtertype, String category, String mapdata, int limitcount) {
         List<Board> boardList = new ArrayList<>();
 
         switch (filtertype) {
@@ -106,7 +109,7 @@ public class BoardService {
 
     //검색한 내용에 대한 정보
     @Transactional
-    public List<BoardAllResponseDto> getSearchBoard(String filtertype,String searchtitle, String mapdata, int limitcount) {
+    public List<BoardAllResponseDto> getSearchBoard(String filtertype, String searchtitle, String mapdata, int limitcount) {
         List<Board> boardList = new ArrayList<>();
 
         switch (filtertype) {
@@ -147,7 +150,7 @@ public class BoardService {
 
     @Transactional
     public BoardDetailResponseDto getDetailBoard(Long boardid, Boolean isliked) {
-        Board boardDetail = boardRepository.findById(boardid).orElseThrow(()-> new ErrorCodeException(BOARD_NOT_FOUND));
+        Board boardDetail = boardRepository.findById(boardid).orElseThrow(() -> new ErrorCodeException(BOARD_NOT_FOUND));
 
         BoardDetailResponseDto boardDetailResponseDto = BoardDetailResponseDto.builder()
                 .title(boardDetail.getTitle())
@@ -204,14 +207,14 @@ public class BoardService {
 
     // 게시판 수정
     @Transactional
-    public BasicResponseDTO updateboard(Long boardid, BoardPatchRequestDTO patchRequestDTO){
+    public BasicResponseDTO updateboard(Long boardid, BoardPatchRequestDTO patchRequestDTO) {
 
         //수정할 게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardid).orElseThrow(
-                () ->new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
+                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
         );
         //받아온 userid와 boardid의 작성자가 다를때
-        if (!Objects.equals(patchRequestDTO.getUserid(),board.getUser().getId())){
+        if (!Objects.equals(patchRequestDTO.getUserid(), board.getUser().getId())) {
             throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
 
@@ -226,14 +229,14 @@ public class BoardService {
 
     //게시판 삭제
     @Transactional
-    public BasicResponseDTO deleteboard(Long boardid, Long userid){
+    public BasicResponseDTO deleteboard(Long boardid, Long userid) {
 
         //삭제할 게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardid).orElseThrow(
-                () ->new ErrorCodeException(BOARD_NOT_FOUND)
+                () -> new ErrorCodeException(BOARD_NOT_FOUND)
         );
         //받아온 userid와 boardid의 작성자가 다를때
-        if (!Objects.equals(userid,board.getUser().getId())){
+        if (!Objects.equals(userid, board.getUser().getId())) {
             throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
 
@@ -245,5 +248,36 @@ public class BoardService {
                 .msg("삭제 완료")
                 .build();
 
+    }
+
+    //게시판 작성
+    @Transactional
+    public BasicResponseDTO wirteboard(BoardWriteRequestDTO boardWriteRequestDTO) {
+
+        User user = userRepository.findById(boardWriteRequestDTO.getUserid()).orElseThrow(
+                () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
+
+
+        //보드 저장
+        boardRepository.save(Board.builder()
+                .user(user)
+                .title(boardWriteRequestDTO.getTitle())
+                .videourl(boardWriteRequestDTO.getVideourl())
+                .imgurl1(boardWriteRequestDTO.getImgurl1())
+                .imgurl2(boardWriteRequestDTO.getImgurl2())
+                .imgurl3(boardWriteRequestDTO.getImgurl3())
+                .contents(boardWriteRequestDTO.getContents())
+                .originprice(boardWriteRequestDTO.getOriginprice())
+                .dailyrentalfee(boardWriteRequestDTO.getDailyrentalfee())
+                .mapdata(boardWriteRequestDTO.getMapdata())
+                .category(boardWriteRequestDTO.getCategory())
+                .boardquility(boardWriteRequestDTO.getBoardquility())
+                .appear(true)
+                .build()).getId();
+
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg("이미지 저장 완료")
+                .build();
     }
 }
