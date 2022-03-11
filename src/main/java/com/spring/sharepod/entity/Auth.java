@@ -34,8 +34,13 @@ public class Auth{
 
     //Auth : User => N: 1 buyer 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BUYER")
-    private User user;
+    @JoinColumn(name = "AUTHBUYER")
+    private User authbuyer;
+
+    //Auth : User => N: 1 buyer 외래키를 뜻함
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "AUTHSELLER")
+    private User authseller;
 
 
 
