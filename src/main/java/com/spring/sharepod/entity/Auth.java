@@ -37,6 +37,8 @@ public class Auth{
     @JoinColumn(name = "BUYER")
     private User user;
 
+
+
     //Auth : Board => N: 1 boardid 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARDID")

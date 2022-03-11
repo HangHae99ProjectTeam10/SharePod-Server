@@ -42,4 +42,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query(nativeQuery = true, value = "select *  from board b where b.mapdata=:mapdata and b.appear = true and b.title like %:searchtitle% order by b.modified_at desc LIMIT :limitcount")
     List<Board> findByAndMapAndSearchByCreatedAt(String mapdata, @Param("searchtitle") String searchtitle, int limitcount);
+
+
+    //마이페이지 등록한 목록을 보기 위한 쿼리
+    @Query("select b from Board b where b.user.id =:userid")
+    List<Board> findByUserId(Long userid);
 }
