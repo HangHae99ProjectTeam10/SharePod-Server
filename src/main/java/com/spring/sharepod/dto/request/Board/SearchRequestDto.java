@@ -12,5 +12,4 @@ public class SearchRequestDto {
     private String filtertype;
     private String searchtitle;
     private String mapdata;
-
 }

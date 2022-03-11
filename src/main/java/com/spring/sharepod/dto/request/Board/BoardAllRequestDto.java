@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class BoardAllRequestDto {
-
     private String filtering;
     private String category;
     private String mapdata;
-
-
-
 }
