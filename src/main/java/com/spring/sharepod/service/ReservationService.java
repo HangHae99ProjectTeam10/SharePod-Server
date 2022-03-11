@@ -8,10 +8,7 @@ import com.spring.sharepod.dto.response.Reservation.ReservationGetFinalDTO;
 import com.spring.sharepod.entity.*;
 import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
-import com.spring.sharepod.repository.BoardRepository;
-import com.spring.sharepod.repository.NoticeRepository;
-import com.spring.sharepod.repository.ReservationRepository;
-import com.spring.sharepod.repository.UserRepository;
+import com.spring.sharepod.repository.*;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +25,8 @@ public class ReservationService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final NoticeRepository noticeRepository;
+    private final AuthRepository authRepository;
+    private final AuthimgboxRepository authimgboxRepository;
 
     //거래 요청
     @Transactional
@@ -99,7 +98,7 @@ public class ReservationService {
 
     //거래요청 수락/거절
     @Transactional
-    public BasicResponseDTO resResponseService(Long boardid, ReservationAcceptNotDTO acceptNotDTO){
+    public BasicResponseDTO resResponseService(Long boardid, ReservationAcceptNotDTO acceptNotDTO) {
         //buyer
         User buyer = userRepository.findByNickname(acceptNotDTO.getNickname()).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
@@ -108,12 +107,15 @@ public class ReservationService {
                 () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
         Board board = boardRepository.findById(boardid).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
-        );;
-        Reservation reservation = reservationRepository.findByBuyerAndBoard(buyer,board);
-        if(reservation == null){throw new ErrorCodeException(ErrorCode.RESERVATION_NOT_EXIST);}
+        );
+        ;
+        Reservation reservation = reservationRepository.findByBuyerAndBoard(buyer, board);
+        if (reservation == null) {
+            throw new ErrorCodeException(ErrorCode.RESERVATION_NOT_EXIST);
+        }
 
         //거래 거절 시
-        if(!acceptNotDTO.isCheck()){
+        if (!acceptNotDTO.isCheck()) {
             //거래 내역 DB에서 삭제
             reservationRepository.deleteById(reservation.getId());
 
@@ -132,8 +134,21 @@ public class ReservationService {
 
 
         //거래 수락시
+        //보드 테이블 appear - false변경
+        board.setAppear(false);
 
+        //Auth 테이블 만들기
+        Long authid = authRepository.save(Auth.builder()
+                .authbuyer(buyer)
+                .authseller(seller)
+                .boardid(board)
+                .checkorder(false)
+                .rentalstart(LocalDate.parse(acceptNotDTO.getRentalstart()))
+                .rentalend(LocalDate.parse(acceptNotDTO.getRentalend()))
+                .build()).getId();
+        Auth auth = authRepository.getById(authid);
 
+        //Authimgbox 테이블 날짜 만큼 갯수 만들기
 
 
         //거래 내역 DB에서 삭제

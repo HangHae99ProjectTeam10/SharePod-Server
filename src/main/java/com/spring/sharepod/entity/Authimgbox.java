@@ -19,7 +19,7 @@ public class Authimgbox {
     private Long id;
 
     // 사진 url
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String imgurl;
 
     // 사진 인증 확인
