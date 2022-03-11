@@ -1,5 +1,6 @@
 package com.spring.sharepod.controller;
 
+import com.spring.sharepod.dto.request.Reservation.ReservationAcceptNotDTO;
 import com.spring.sharepod.dto.request.Reservation.ReservationRequestDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.dto.response.Reservation.ReservationGetFinalDTO;
@@ -22,5 +23,12 @@ public class ReservationRestController {
     @GetMapping("/reservation/{userid}")
     public ReservationGetFinalDTO reservationGetControll(@PathVariable Long userid){
         return reservationService.reservationGetService(userid);
+    }
+
+    //거래 요청 수락/거절
+    @PostMapping("/reservation/response/{boardid}")
+    public BasicResponseDTO resResponse(@PathVariable Long boardid, @RequestBody ReservationAcceptNotDTO reservationAcceptNotDTO){
+        return reservationService.resResponseService(boardid,reservationAcceptNotDTO);
+
     }
 }

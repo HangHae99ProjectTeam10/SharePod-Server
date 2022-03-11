@@ -1,5 +1,6 @@
 package com.spring.sharepod.service;
 
+import com.spring.sharepod.dto.request.Reservation.ReservationAcceptNotDTO;
 import com.spring.sharepod.dto.request.Reservation.ReservationRequestDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.dto.response.Reservation.ReservationGetDTO;
@@ -60,13 +61,13 @@ public class ReservationService {
         noticeRepository.save(Notice.builder()
                 .buyer(buyer)
                 .seller(board.getUser())
-                .noticetype("거래 요청을 하였습니다.")
+                .noticeinfo("거래 요청을 하였습니다.")
                 .build()).getId();
 
 
         return BasicResponseDTO.builder()
                 .result("success")
-                .msg("거래 요청 완료")
+                .msg("거래 요청완료")
                 .build();
     }
 
@@ -85,7 +86,7 @@ public class ReservationService {
                     .nickname(user.getReservation().get(i).getBuyer().getNickname())
                     .rentalstart(user.getReservation().get(i).getRentalstart())
                     .rentalend(user.getReservation().get(i).getRentalend())
-                    
+                    .boardid(user.getReservation().get(i).getBoard().getId())
                     .boardtitle(user.getReservation().get(i).getBoard().getTitle())
                     .build());
         }
@@ -95,4 +96,30 @@ public class ReservationService {
                 .reservation(reservationGetDTOList)
                 .build();
     }
+
+    //거래요청 수락/거절
+    @Transactional
+    public BasicResponseDTO resResponseService(Long boardid, ReservationAcceptNotDTO acceptNotDTO){
+
+        if(!acceptNotDTO.isCheck()){
+            return BasicResponseDTO.builder()
+                    .result("success")
+                    .msg("거래 거절완료")
+                    .build();
+        }
+
+
+
+
+
+
+
+
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg("거래 수락완료")
+                .build();
+    }
+
+
 }
