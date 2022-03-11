@@ -100,8 +100,30 @@ public class ReservationService {
     //거래요청 수락/거절
     @Transactional
     public BasicResponseDTO resResponseService(Long boardid, ReservationAcceptNotDTO acceptNotDTO){
+        //buyer
+        User buyer = userRepository.findByNickname(acceptNotDTO.getNickname()).orElseThrow(
+                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
+        //seller
+        User seller = userRepository.findById(acceptNotDTO.getSeller()).orElseThrow(
+                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
+        Board board = boardRepository.findById(boardid).orElseThrow(
+                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
+        );;
+        Reservation reservation = reservationRepository.findByBuyerAndBoard(buyer,board);
+        if(reservation == null){throw new ErrorCodeException(ErrorCode.RESERVATION_NOT_EXIST);}
 
+        //거래 거절 시
         if(!acceptNotDTO.isCheck()){
+            //거래 내역 DB에서 삭제
+            reservationRepository.deleteById(reservation.getId());
+
+            //거래 거절 알림 보내기 => 알림 추가(ooo님이 거래 요청을 하였습니다)
+            noticeRepository.save(Notice.builder()
+                    .buyer(buyer)
+                    .seller(seller)
+                    .noticeinfo("거래 거절을 하였습니다.")
+                    .build()).getId();
+
             return BasicResponseDTO.builder()
                     .result("success")
                     .msg("거래 거절완료")
@@ -109,12 +131,20 @@ public class ReservationService {
         }
 
 
+        //거래 수락시
 
 
 
 
+        //거래 내역 DB에서 삭제
+        reservationRepository.deleteById(reservation.getId());
 
-
+        //거래 수락 알림 보내기 => 알림 추가(ooo님이 거래 요청을 하였습니다)
+        noticeRepository.save(Notice.builder()
+                .buyer(buyer)
+                .seller(seller)
+                .noticeinfo("거래 수락을 하였습니다.")
+                .build()).getId();
         return BasicResponseDTO.builder()
                 .result("success")
                 .msg("거래 수락완료")
