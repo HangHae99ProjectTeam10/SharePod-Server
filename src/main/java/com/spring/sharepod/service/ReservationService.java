@@ -85,6 +85,7 @@ public class ReservationService {
                     .nickname(user.getReservation().get(i).getBuyer().getNickname())
                     .rentalstart(user.getReservation().get(i).getRentalstart())
                     .rentalend(user.getReservation().get(i).getRentalend())
+                    
                     .boardtitle(user.getReservation().get(i).getBoard().getTitle())
                     .build());
         }
@@ -94,5 +95,4 @@ public class ReservationService {
                 .reservation(reservationGetDTOList)
                 .build();
     }
-
 }

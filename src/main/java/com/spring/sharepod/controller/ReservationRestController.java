@@ -20,7 +20,7 @@ public class ReservationRestController {
 
     //거래 요청 목록(현재 접속한 사람에게 온 요청 목록)
     @GetMapping("/reservation/{userid}")
-    public BasicResponseDTO reservationGetControll(@PathVariable Long userid, @RequestBody ReservationRequestDTO requestDTO){
-        return reservationService.reserRequestService(userid,requestDTO);
+    public ReservationGetFinalDTO reservationGetControll(@PathVariable Long userid){
+        return reservationService.reservationGetService(userid);
     }
 }
