@@ -27,5 +27,4 @@ public class BoardDetailResponseDto {
     private int likecount;
     private String modifiedat;
     private String userimg;
-
 }

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +39,19 @@ public class User extends Timestamped {
     //유저 지역명
     @Column
     private String mapdata;
+
+    //Reservation : User => 해당 userid의 요청 목록을 가져오기 위한 양방향 설정
+    @OneToMany(mappedBy = "seller")
+    private List<Reservation> reservation = new ArrayList<>();
+
+    //Auth : User => 해당 authbuyer 요청 목록을 가져오기 위한 양방향 설정
+    @OneToMany(mappedBy = "authbuyer")
+    private List<Auth> authbuyerlist  = new ArrayList<>();
+
+    //Auth : User => 해당 authseller 요청 목록을 가져오기 위한 양방향 설정
+    @OneToMany(mappedBy = "authseller")
+    private List<Auth> authsellerlist = new ArrayList<>();
+
 
 }
 

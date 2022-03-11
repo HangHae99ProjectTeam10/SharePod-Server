@@ -1,12 +1,14 @@
 package com.spring.sharepod.service;
 
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -91,4 +94,22 @@ public class S3Service {
 
         return boardWriteRequestDTO;
     }
+
+    //파일 삭제
+    public void fileDelete(List<String> fileName) {
+        try {
+            for (int i=0; i <=fileName.size(); i++){
+                //s3Client.deleteObject(bucket, (fileName.get(i)).replace(File.separatorChar, '/'));
+
+                System.out.println("1");
+                DeleteObjectRequest request = new DeleteObjectRequest(bucket, fileName.get(i));
+
+                System.out.println("2");
+                s3Client.deleteObject(request);
+            }
+        } catch (AmazonServiceException e) {
+            System.err.println(e.getErrorMessage());
+        }
+    }
 }
+

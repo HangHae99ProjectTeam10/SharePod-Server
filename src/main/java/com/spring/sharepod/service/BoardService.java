@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,7 +36,10 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final LikedRepository likedRepository;
+    private final S3Service s3Service;
 
+
+    //메인 페이지 전체 게시글 불러오기
     @Transactional
     public List<BoardAllResponseDto> getAllBoard(int limitcount) {
 
@@ -65,7 +69,7 @@ public class BoardService {
         return boardResponseDtos;
     }
 
-    //
+    //정렬한 board, GET 방식
     @Transactional
     public List<BoardAllResponseDto> getSortedBoard(String filtertype, String category, String mapdata, int limitcount) {
         List<Board> boardList = new ArrayList<>();
@@ -125,6 +129,7 @@ public class BoardService {
                 boardList = boardRepository.findByAndMapAndSearchByCreatedAt(mapdata, searchtitle, limitcount);
 
         }
+
         // 게시글을 반환해서 저장할 리스트
         List<BoardAllResponseDto> boardResponseDtos = new ArrayList<>();
 
@@ -144,10 +149,11 @@ public class BoardService {
             // 반환할 리스트에 저장하기
             boardResponseDtos.add(boardResponseDto);
         }
-
+        // 반환되는 DTO
         return boardResponseDtos;
     }
 
+    // 상세 페이지 board GET
     @Transactional
     public BoardDetailResponseDto getDetailBoard(Long boardid, Boolean isliked) {
         Board boardDetail = boardRepository.findById(boardid).orElseThrow(() -> new ErrorCodeException(BOARD_NOT_FOUND));
@@ -174,6 +180,7 @@ public class BoardService {
         return boardDetailResponseDto;
     }
 
+    //릴스 video 전체 GET(Limit)
     @Transactional
     public List<VideoAllResponseDto> getAllVideo(int limitcount) {
         // 모든 게시글 가져오기
@@ -239,6 +246,22 @@ public class BoardService {
         if (!Objects.equals(userid, board.getUser().getId())) {
             throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
+
+        String boardimg1 = board.getImgurl1().substring(board.getImgurl1().lastIndexOf("/")+1);
+        System.out.println(boardimg1);
+        String boardimg2 = board.getImgurl2().substring(board.getImgurl2().lastIndexOf("/")+1);
+        System.out.println(boardimg2);
+        String boardimg3 = board.getImgurl3().substring(board.getImgurl3().lastIndexOf("/")+1);
+        System.out.println(boardimg3);
+
+        String videourl = board.getVideourl().substring(board.getImgurl3().lastIndexOf("/")+1);
+        System.out.println(videourl);
+
+        String[] imgs = {videourl,boardimg1,boardimg2,boardimg3};
+        List<String> fileName = Arrays.asList(imgs);
+
+        s3Service.fileDelete(fileName);
+        //log.info("file name : " + fileName);
 
         //게시글 삭제
         boardRepository.deleteById(boardid);

@@ -63,7 +63,6 @@ public class BoardRestController {
         return new ResponseEntity<>(new BoardList("success", "리스트 최신순 성공", boardResponseDtos), HttpStatus.OK);
     }
 
-
     //상품 카테고리 클릭 시, 상세 리스트 페이지로 이동
     @GetMapping("/board/sort")
     public ResponseEntity<BoardList> getSortedBoardList(@RequestParam(value = "limit") int limitcount, @RequestParam(value = "filtertype") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "mapdata") String mapdata) {
@@ -71,22 +70,23 @@ public class BoardRestController {
         return new ResponseEntity<>(new BoardList("success", "리스트 " + filtertype + " 정렬 성공", bordResponseDtos), HttpStatus.OK);
     }
 
-
     //게시글 상세 페이지 불러오기   (여기서 토큰이랑 받아온 userdata랑 일치해야함)
     @GetMapping("/board/{boardid}")
     public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardid, @RequestParam(value = "userid") Optional<Long> userid) {
+        // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.
         Boolean isliked = null;
         if (!userid.isPresent()){
             isliked = false;
         }else{
-            System.out.println(userid.get().longValue());
+            //userid.get().longValue()이 존재하므로
             Liked liked = likedRepository.findByLiked(boardid, userid.get().longValue());
-            if (liked == null){
+             if (liked == null){
                 isliked = false;
             }else{
                 isliked = true;
             }
         }
+        // userService boardid, isliked
         BoardDetailResponseDto boardDetailResponseDto = boardService.getDetailBoard(boardid, isliked);
         return new ResponseEntity<>(new BoardDetail("success", "게시글 상세 불러오기 성공", boardDetailResponseDto), HttpStatus.OK);
 
@@ -99,7 +99,7 @@ public class BoardRestController {
         return new ResponseEntity<>(new BoardList("success", "검색 " + filtertype + " 성공", boardResponseDtos), HttpStatus.OK);
     }
 
-    //릴스 동영상 get
+    //릴스 동영상 get 하는 방식
     @GetMapping("/board/video")
     public ResponseEntity<AllVideo> getVideo(@RequestParam(value = "limit") int limitcount) {
         List<VideoAllResponseDto> videoAllResponseDtos = boardService.getAllVideo(limitcount);

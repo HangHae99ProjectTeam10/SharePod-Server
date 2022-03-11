@@ -12,6 +12,4 @@ public class BoardFilterAndCategoryRequestDto {
     private String filtertype;
     private String category;
     private String mapdata;
-
-
 }
