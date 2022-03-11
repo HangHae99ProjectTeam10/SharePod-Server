@@ -8,6 +8,8 @@ import com.spring.sharepod.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 @RequiredArgsConstructor //DI 형태, IoC 컨테이너 생성
 @RestController
 public class ReservationRestController {
@@ -27,7 +29,7 @@ public class ReservationRestController {
 
     //거래 요청 수락/거절
     @PostMapping("/reservation/response/{boardid}")
-    public BasicResponseDTO resResponse(@PathVariable Long boardid, @RequestBody ReservationAcceptNotDTO reservationAcceptNotDTO){
+    public BasicResponseDTO resResponse(@PathVariable Long boardid, @RequestBody ReservationAcceptNotDTO reservationAcceptNotDTO) throws ParseException {
         return reservationService.resResponseService(boardid,reservationAcceptNotDTO);
 
     }

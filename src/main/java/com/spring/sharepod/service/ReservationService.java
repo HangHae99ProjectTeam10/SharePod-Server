@@ -14,8 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -98,7 +101,7 @@ public class ReservationService {
 
     //거래요청 수락/거절
     @Transactional
-    public BasicResponseDTO resResponseService(Long boardid, ReservationAcceptNotDTO acceptNotDTO) {
+    public BasicResponseDTO resResponseService(Long boardid, ReservationAcceptNotDTO acceptNotDTO) throws ParseException {
         //buyer
         User buyer = userRepository.findByNickname(acceptNotDTO.getNickname()).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
@@ -141,7 +144,7 @@ public class ReservationService {
         Long authid = authRepository.save(Auth.builder()
                 .authbuyer(buyer)
                 .authseller(seller)
-                .boardid(board)
+                .board(board)
                 .checkorder(false)
                 .rentalstart(LocalDate.parse(acceptNotDTO.getRentalstart()))
                 .rentalend(LocalDate.parse(acceptNotDTO.getRentalend()))
@@ -149,6 +152,20 @@ public class ReservationService {
         Auth auth = authRepository.getById(authid);
 
         //Authimgbox 테이블 날짜 만큼 갯수 만들기
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        Date startDate = format.parse(acceptNotDTO.getRentalstart());
+        Date endDate = format.parse(acceptNotDTO.getRentalend());
+        long calDate = endDate.getTime() - startDate.getTime();
+        long calDateDays = calDate / (24 * 60 * 60 * 1000);
+        calDateDays = Math.abs(calDateDays);
+
+        for (int i = 0; i < calDateDays + 1; i++) {
+            authimgboxRepository.save(Authimgbox.builder()
+                    .auth(auth)
+                    .imgboxcheck(false)
+                    .imgurl(null)
+                    .build()).getId();
+        }
 
 
         //거래 내역 DB에서 삭제
