@@ -50,7 +50,7 @@ public class User extends Timestamped {
 
     //Auth : User => 해당 authseller 요청 목록을 가져오기 위한 양방향 설정
     @OneToMany(mappedBy = "authseller")
-    private List<Reservation> authsellerlist = new ArrayList<>();
+    private List<Auth> authsellerlist = new ArrayList<>();
 
 
 }
