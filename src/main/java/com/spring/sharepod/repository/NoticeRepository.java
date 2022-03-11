@@ -2,7 +2,9 @@ package com.spring.sharepod.repository;
 
 import com.spring.sharepod.entity.Notice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,9 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
     @Query("select n from Notice n where n.buyer.id=:userid or n.seller.id=:userid")
     List<Notice> findByBuyerOrSellerId(Long userid);
 
+
+    @Modifying
+    @Transactional
     @Query("delete from Notice n where n.id=:noticeid")
     void deleteByNoticeId(Long noticeid);
 }

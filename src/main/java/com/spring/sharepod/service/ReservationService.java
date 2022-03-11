@@ -60,7 +60,7 @@ public class ReservationService {
         noticeRepository.save(Notice.builder()
                 .buyer(buyer)
                 .seller(board.getUser())
-                .noticetype("거래 요청을 하였습니다.")
+                .noticeinfo("거래 요청을 하였습니다.")
                 .build()).getId();
 
 
