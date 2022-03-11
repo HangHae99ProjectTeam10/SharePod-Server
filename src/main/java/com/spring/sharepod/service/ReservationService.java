@@ -78,7 +78,7 @@ public class ReservationService {
                 () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND)
         );
         List<ReservationGetDTO> reservationGetDTOList = new ArrayList<>();
-//        List<Reservation> reservations = user.getReservation();
+
         //ReservationGetDTO에 데이터 담아주기
         for (int i = 0; i < user.getReservation().size(); i++) {
             reservationGetDTOList.add(ReservationGetDTO.builder()

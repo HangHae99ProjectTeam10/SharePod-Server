@@ -21,6 +21,4 @@ public interface LikedRepository extends JpaRepository<Liked, Long> {
     @Query("select c from Liked c where c.user.id =: userid")
     List<Liked> findByUserId(Long userid);
 
-    @Query("select Board from Liked c where c.board.id=:bordid")
-    Board findByBoardId(Long boardid);
 }

@@ -42,15 +42,15 @@ public class UserRestController {
     }
 
 
-    //마이페이지 불러오기
-    @GetMapping("/user/{userid}")
-    public ResponseEntity<UserInfo> getBoardList(@PathVariable Long userid) {
-        UserInfoResponseDto userinfo = userService.getUserInfo(userid);
-        List<LikedResponseDto> userlikeboard = userService.getUserLikeBoard(userid);
-        List<MyBoardResponseDto> usermyboard = userService.getMyBoard(userid);
-        List<RentBuyerResponseDto> rentbuyer = userService.getBuyList(userid);
-        List<RentSellerResponseDto> rentseller = userService.getSellList(userid);
-        return new ResponseEntity<>(new UserInfo("success", "내 정보 불러오기 성공", userinfo,userlikeboard,usermyboard,rentbuyer,rentseller), HttpStatus.OK);
-    }
+//    //마이페이지 불러오기
+//    @GetMapping("/user/{userid}")
+//    public ResponseEntity<UserInfo> getBoardList(@PathVariable Long userid) {
+//        UserInfoResponseDto userinfo = userService.getUserInfo(userid);
+//        List<LikedResponseDto> userlikeboard = userService.getUserLikeBoard(userid);
+//        List<MyBoardResponseDto> usermyboard = userService.getMyBoard(userid);
+//        List<RentBuyerResponseDto> rentbuyer = userService.getBuyList(userid);
+//        List<RentSellerResponseDto> rentseller = userService.getSellList(userid);
+//        return new ResponseEntity<>(new UserInfo("success", "내 정보 불러오기 성공", userinfo,userlikeboard,usermyboard,rentbuyer,rentseller), HttpStatus.OK);
+//    }
 
 }

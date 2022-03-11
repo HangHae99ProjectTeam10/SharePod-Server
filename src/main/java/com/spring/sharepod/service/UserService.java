@@ -80,29 +80,29 @@ public class UserService {
         return userInfoResponseDto;
     }
 
-    //찜목록 불러오기
-    @Transactional
-    public List<LikedResponseDto> getUserLikeBoard(Long userid){
-        //해당하는 유저가 존재하는 like 테이블에서 boardid를 받아오고 그 boardid를 통해
-        // boardtitle과 userid category를 찾아낸다.
-
-        List<LikedResponseDto> likedResponseDtoList = new ArrayList<>();
-
-        List<Liked> userlikeList = likedRepository.findByUserId(userid);
-        for (Liked userliked : userlikeList){
-            Board likedBoardList = likedRepository.findByBoardId(userliked.getBoard().getId());
-
-            LikedResponseDto likedResponseDto = LikedResponseDto.builder()
-                    .boardid(likedBoardList.getId())
-                    .boardtitle(likedBoardList.getTitle())
-                    .userid(likedBoardList.getUser().getId())
-                    .category(likedBoardList.getCategory())
-                    .build();
-
-            likedResponseDtoList.add(likedResponseDto);
-        }
-        return likedResponseDtoList;
-    }
+//    //찜목록 불러오기
+//    @Transactional
+//    public List<LikedResponseDto> getUserLikeBoard(Long userid){
+//        //해당하는 유저가 존재하는 like 테이블에서 boardid를 받아오고 그 boardid를 통해
+//        // boardtitle과 userid category를 찾아낸다.
+//
+//        List<LikedResponseDto> likedResponseDtoList = new ArrayList<>();
+//
+//        List<Liked> userlikeList = likedRepository.findByUserId(userid);
+//        for (Liked userliked : userlikeList){
+//            Board likedBoardList = likedRepository.findByBoardId(userliked.getBoard().getId());
+//
+//            LikedResponseDto likedResponseDto = LikedResponseDto.builder()
+//                    .boardid(likedBoardList.getId())
+//                    .boardtitle(likedBoardList.getTitle())
+//                    .userid(likedBoardList.getUser().getId())
+//                    .category(likedBoardList.getCategory())
+//                    .build();
+//
+//            likedResponseDtoList.add(likedResponseDto);
+//        }
+//        return likedResponseDtoList;
+//    }
 
     //내가 등록한 글 불러오기
     @Transactional
@@ -125,19 +125,19 @@ public class UserService {
         return myBoardResponseDtoList;
     }
 
-    //내가 대여한 목록 불러오기
-    @Transactional
-    public List<RentBuyerResponseDto> getBuyList(Long userid){
-
-
-    }
-
-
-    //내가 빌려준 목록 불러오기
-    @Transactional
-    public List<RentSellerResponseDto> getSellList(Long userid){
-
-    }
+//    //내가 대여한 목록 불러오기
+//    @Transactional
+//    public List<RentBuyerResponseDto> getBuyList(Long userid){
+//
+//
+//    }
+//
+//
+//    //내가 빌려준 목록 불러오기
+//    @Transactional
+//    public List<RentSellerResponseDto> getSellList(Long userid){
+//
+//    }
 
 
 
