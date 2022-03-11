@@ -12,5 +12,4 @@ public class MyBoardResponseDto {
     private String boardtitle;
     private String nickname;
     private String category;
-
 }

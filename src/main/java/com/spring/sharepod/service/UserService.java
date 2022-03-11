@@ -6,10 +6,12 @@ import com.spring.sharepod.dto.response.Board.RentBuyerResponseDto;
 import com.spring.sharepod.dto.response.Board.RentSellerResponseDto;
 import com.spring.sharepod.dto.response.Liked.LikedResponseDto;
 import com.spring.sharepod.dto.response.UserInfoResponseDto;
+import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.ErrorCodeException;
+import com.spring.sharepod.repository.AuthRepository;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.repository.UserRepository;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.spring.sharepod.exception.ErrorCode.USER_NOT_FOUND;
 
@@ -34,6 +37,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final LikedRepository likedRepository;
     private final BoardRepository boardRepository;
+    private final AuthRepository authRepository;
 
     // 회원가입
     @Transactional
@@ -89,14 +93,14 @@ public class UserService {
         List<LikedResponseDto> likedResponseDtoList = new ArrayList<>();
 
         List<Liked> userlikeList = likedRepository.findByUserId(userid);
-        for (Liked userliked : userlikeList){
-            Board likedBoardList = likedRepository.findByBoardId(userliked.getBoard().getId());
+        for (int i = 0; i<userlikeList.size();i++){
+            //Board likedBoardList = likedRepository.findByBoardId(userliked.getBoard().getId());
 
             LikedResponseDto likedResponseDto = LikedResponseDto.builder()
-                    .boardid(likedBoardList.getId())
-                    .boardtitle(likedBoardList.getTitle())
-                    .userid(likedBoardList.getUser().getId())
-                    .category(likedBoardList.getCategory())
+                    .boardid(userlikeList.get(i).getBoard().getId())
+                    .boardtitle(userlikeList.get(i).getBoard().getTitle())
+                    .userid(userlikeList.get(i).getUser().getId())
+                    .category(userlikeList.get(i).getBoard().getCategory())
                     .build();
 
             likedResponseDtoList.add(likedResponseDto);
@@ -127,8 +131,21 @@ public class UserService {
 
     //내가 대여한 목록 불러오기
     @Transactional
-    public List<RentBuyerResponseDto> getBuyList(Long userid){
+    public List<RentBuyerResponseDto> getBuyList(Long userid) {
+        List<RentBuyerResponseDto> rentBuyerResponseDtoList = new ArrayList<>();
 
+        List<Auth> authList = authRepository.findByBuyerId(userid);
+
+        for (int i = 0; i < authList.size(); i++) {
+            RentBuyerResponseDto rentBuyerResponseDto = RentBuyerResponseDto.builder()
+                    .boardid(authList.get(i).getBoard().getId())
+                    .boardtitle(authList.get(i).getBoard().getTitle())
+                    .userid(authList.get(i).getAuthseller().getId())
+                    .category(authList.get(i).getBoard().getCategory())
+                    .build();
+            rentBuyerResponseDtoList.add(rentBuyerResponseDto);
+        }
+        return rentBuyerResponseDtoList;
 
     }
 
@@ -136,6 +153,20 @@ public class UserService {
     //내가 빌려준 목록 불러오기
     @Transactional
     public List<RentSellerResponseDto> getSellList(Long userid){
+        List<RentSellerResponseDto> rentSellerResponseDtoList = new ArrayList<>();
+
+        List<Auth> authList = authRepository.findBySellerId(userid);
+
+        for (int i = 0; i < authList.size(); i++) {
+            RentSellerResponseDto rentSellerResponseDto = RentSellerResponseDto.builder()
+                    .boardid(authList.get(i).getBoard().getId())
+                    .boardtitle(authList.get(i).getBoard().getTitle())
+                    .userid(authList.get(i).getAuthbuyer().getId())
+                    .category(authList.get(i).getBoard().getCategory())
+                    .build();
+            rentSellerResponseDtoList.add(rentSellerResponseDto);
+        }
+        return rentSellerResponseDtoList;
 
     }
 
