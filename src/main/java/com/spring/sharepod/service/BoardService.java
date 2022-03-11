@@ -156,8 +156,10 @@ public class BoardService {
     // 상세 페이지 board GET
     @Transactional
     public BoardDetailResponseDto getDetailBoard(Long boardid, Boolean isliked) {
+        //보드가 존재하지 않을 시 메시지 호출
         Board boardDetail = boardRepository.findById(boardid).orElseThrow(() -> new ErrorCodeException(BOARD_NOT_FOUND));
 
+        // 존재한다면 받아온 내용들을 담아서 보내주기
         BoardDetailResponseDto boardDetailResponseDto = BoardDetailResponseDto.builder()
                 .title(boardDetail.getTitle())
                 .videourl(boardDetail.getVideourl())
@@ -183,19 +185,19 @@ public class BoardService {
     //릴스 video 전체 GET(Limit)
     @Transactional
     public List<VideoAllResponseDto> getAllVideo(int limitcount) {
-        // 모든 게시글 가져오기
+        // 모든 릴스 가져오기
         List<Board> boardList = boardRepository.findAllByVideoUrlRan(limitcount);
 
-        // 게시글을 반환해서 저장할 리스트
+        // 릴스를 반환해서 저장할 리스트
         List<VideoAllResponseDto> videoAllResponseDtos = new ArrayList<>();
 
-        // 게시글 덩어리 해쳐서 넣어주기
+        // 릴스 덩어리 해쳐서 넣어주기
         for (Board board : boardList) {
             String nickname = board.getUser().getNickname();
             String userimg = board.getUser().getUserimg();
 
 
-            // BoardResponseDto 생성
+            // videoAllResponseDto 생성
             VideoAllResponseDto videoAllResponseDto = VideoAllResponseDto.builder()
                     .boardid(board.getId())
                     .videourl(board.getVideourl())
@@ -224,7 +226,6 @@ public class BoardService {
         if (!Objects.equals(patchRequestDTO.getUserid(), board.getUser().getId())) {
             throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
-
         //게시판 업데이트
         board.update(patchRequestDTO);
 
@@ -247,6 +248,7 @@ public class BoardService {
             throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
 
+        //S3 상의 키 값을 얻기 위한 substring
         String boardimg1 = board.getImgurl1().substring(board.getImgurl1().lastIndexOf("/")+1);
         System.out.println(boardimg1);
         String boardimg2 = board.getImgurl2().substring(board.getImgurl2().lastIndexOf("/")+1);
@@ -257,11 +259,12 @@ public class BoardService {
         String videourl = board.getVideourl().substring(board.getImgurl3().lastIndexOf("/")+1);
         System.out.println(videourl);
 
+        // 리스트에 담에서 넣어주기
         String[] imgs = {videourl,boardimg1,boardimg2,boardimg3};
         List<String> fileName = Arrays.asList(imgs);
 
+        //S3 상 이미지 삭제 호출
         s3Service.fileDelete(fileName);
-        //log.info("file name : " + fileName);
 
         //게시글 삭제
         boardRepository.deleteById(boardid);
@@ -270,12 +273,13 @@ public class BoardService {
                 .result("success")
                 .msg("삭제 완료")
                 .build();
-
     }
+
 
     //게시판 작성
     @Transactional
     public BasicResponseDTO wirteboard(BoardWriteRequestDTO boardWriteRequestDTO) {
+
 
         User user = userRepository.findById(boardWriteRequestDTO.getUserid()).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
@@ -296,7 +300,7 @@ public class BoardService {
                 .category(boardWriteRequestDTO.getCategory())
                 .boardquility(boardWriteRequestDTO.getBoardquility())
                 .appear(true)
-                .build()).getId();
+                .build());
 
         return BasicResponseDTO.builder()
                 .result("success")

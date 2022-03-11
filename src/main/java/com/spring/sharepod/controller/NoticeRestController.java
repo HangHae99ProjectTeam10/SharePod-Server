@@ -29,7 +29,6 @@ public class NoticeRestController {
         int NoticeCount = noticeService.getNoticeCount(userid);
         return new ResponseEntity<>(new NoticeCount("success", "알림 개수 전송 성공", NoticeCount), HttpStatus.OK);
     }
-
     //알림 목록 띄우기
     @GetMapping("/notice/{userid}")
     public ResponseEntity<NoticeInfo> NoticeList(@PathVariable Long userid){
@@ -43,7 +42,4 @@ public class NoticeRestController {
         noticeService.DeleteNotice(noticeid);
         return new ResponseEntity<>(new Success("success", noticeid + "번 알림 목록 삭제 완료"),HttpStatus.OK);
     }
-
-
-
 }

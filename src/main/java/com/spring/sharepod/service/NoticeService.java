@@ -72,6 +72,7 @@ public class NoticeService {
     //알림 확인 삭제
     @Transactional
     public void DeleteNotice(Long noticeid){
+        //알림이 존재하지 않을 시 에러 메시지 호출
         Notice findNoticeId = noticeRepository.findById(noticeid).orElseThrow(()-> new ErrorCodeException(NOTICE_NOT_EXIST));
         noticeRepository.deleteByNoticeId(noticeid);
     }

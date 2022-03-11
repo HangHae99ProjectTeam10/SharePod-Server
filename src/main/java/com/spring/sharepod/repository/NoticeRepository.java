@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
+    //알림 갯수
     @Query(nativeQuery = true, value = "select COUNT(n.id) from notice n where n.buyer=:userid or n.seller=:userid")
     int findByCOUNTBuyerOrSellerId(Long userid);
 
+    //알림 목록
     @Query("select n from Notice n where n.buyer.id=:userid or n.seller.id=:userid")
     List<Notice> findByBuyerOrSellerId(Long userid);
 
