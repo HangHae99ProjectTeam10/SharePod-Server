@@ -18,12 +18,10 @@ public class ReservationRestController {
         return reservationService.reserRequestService(boardid,requestDTO);
     }
 
-
-
-
     //거래 요청 목록(현재 접속한 사람에게 온 요청 목록)
     @GetMapping("/reservation/{userid}")
     public ReservationGetFinalDTO reservationGetControll(@PathVariable Long userid){
-        return reservationService.reservationGetService();
+        System.out.println("Dd");
+        return reservationService.reservationGetService(userid);
     }
 }
