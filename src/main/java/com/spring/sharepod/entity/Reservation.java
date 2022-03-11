@@ -20,10 +20,6 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //예약 확인 변수
-    @Column(nullable = false)
-    private boolean resercheck;
-
     //대여 시작 날짜
     @Column(nullable = false)
     private LocalDate rentalstart;
@@ -32,10 +28,15 @@ public class Reservation {
     @Column(nullable = false)
     private LocalDate rentalend;
 
-    //Reservation : User => N: 1 userid 외래키를 뜻함
+    //Reservation : User => N: 1 buyer 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USERID")
-    private User user;
+    @JoinColumn(name = "BUYER")
+    private User buyer;
+
+    //Reservation : User => N: 1 seller 외래키를 뜻함
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SELLER")
+    private User seller;
 
     //Reservation : Board => N: 1 boardid 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
