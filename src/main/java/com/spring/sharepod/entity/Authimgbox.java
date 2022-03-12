@@ -1,6 +1,7 @@
 package com.spring.sharepod.entity;
 
 
+import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,4 +32,7 @@ public class Authimgbox {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AUTHID")
     private Auth auth;
+    public void update(String imgurl){
+        this.imgurl = imgurl;
+    }
 }
