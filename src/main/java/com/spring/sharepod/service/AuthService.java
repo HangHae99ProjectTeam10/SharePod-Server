@@ -1,6 +1,8 @@
 package com.spring.sharepod.service;
 
 import com.spring.sharepod.dto.request.Auth.AuthBoolRequestDto;
+import com.spring.sharepod.dto.response.Auth.AuthDataAllResponseDTO;
+import com.spring.sharepod.dto.response.Auth.AuthDataResponseDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Authimgbox;

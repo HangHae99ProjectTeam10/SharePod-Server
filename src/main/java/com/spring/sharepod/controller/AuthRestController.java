@@ -2,6 +2,7 @@ package com.spring.sharepod.controller;
 
 
 import com.spring.sharepod.dto.request.Auth.AuthBoolRequestDto;
+import com.spring.sharepod.dto.response.Auth.AuthDataAllResponseDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.model.AuthImg;
 import com.spring.sharepod.model.Success;
@@ -38,7 +39,7 @@ public class AuthRestController {
         return authService.dataAllResponseDTO(authid);
     }
 
-    private final AuthService authService;
+
     @PostMapping("/auth/img/bool")
     public ResponseEntity<Success> AuthBool(@RequestBody AuthBoolRequestDto authBoolRequestDto){
         authService.BoolAuth(authBoolRequestDto);
