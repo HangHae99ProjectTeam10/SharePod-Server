@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,4 +48,10 @@ public class Auth{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARDID")
     private Board board;
+
+    //Auth : Authimgbox => 해당 authid에 소속된 목록을 가져오기 위한 양방향 설정
+    @OneToMany(mappedBy = "auth")
+    private List<Authimgbox> authimgboxList = new ArrayList<>();
+
+
 }
