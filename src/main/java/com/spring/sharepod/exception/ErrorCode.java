@@ -45,8 +45,10 @@ public enum ErrorCode {
 
 
     // 거래 요청 관련 에러 모음
-    RESERVATION_NOT_EXIST(HttpStatus.BAD_REQUEST, "400_Reservation_1", "이미 거래 요청이 존재합합니다.")
-    ;
+    RESERVATION_NOT_EXIST(HttpStatus.BAD_REQUEST, "400_Reservation_1", "이미 거래 요청이 존재합합니다."),
+
+    //알림 삭제 관련 에러 모음
+    NOTICE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_Notice_1", "해당 알림는 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String errorCode;
