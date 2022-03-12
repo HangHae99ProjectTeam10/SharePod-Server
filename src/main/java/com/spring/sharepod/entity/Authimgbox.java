@@ -2,8 +2,6 @@ package com.spring.sharepod.entity;
 
 
 import com.spring.sharepod.dto.request.Auth.AuthBoolRequestDto;
-import com.spring.sharepod.dto.request.Auth.AuthImgUploadRequestDto;
-import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,5 +36,9 @@ public class Authimgbox {
     //인증 업데이트
     public void AuthBoolupdate(AuthBoolRequestDto authBoolRequestDto){
         this.imgboxcheck = authBoolRequestDto.getCheck();
+    }
+
+    public void update(String imgurl){
+        this.imgurl = imgurl;
     }
 }

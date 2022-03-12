@@ -14,9 +14,12 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
+import com.spring.sharepod.entity.Authimgbox;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
+import com.spring.sharepod.repository.AuthRepository;
+import com.spring.sharepod.repository.AuthimgboxRepository;
 import com.spring.sharepod.repository.UserRepository;
 import io.sentry.Sentry;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +31,14 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class S3Service {
     private final UserRepository userRepository;
+    private final AuthimgboxRepository authimgboxRepository;
 
     private AmazonS3 s3Client;
 
@@ -153,6 +158,24 @@ public class S3Service {
 //            e.printStackTrace();
 //        }
 //        }
+    }
+
+    //인증 이미지
+    public String authimgboxs3(Long userid, Long authimgboxid, MultipartFile authfile) throws IOException {
+
+        //구매자가 인증을 누르는 건지 확인
+        Authimgbox authimgbox = authimgboxRepository.findById(authimgboxid).orElseThrow(
+                ()-> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_EXIST));
+        if(!Objects.equals(userid, authimgbox.getAuth().getAuthbuyer().getId())){
+            throw new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_EXIST);
+        }
+
+        //이미지 s3 저장
+        String imgname = UUID.randomUUID() + "_" + authfile.getOriginalFilename();
+        s3Client.putObject(new PutObjectRequest(bucket, imgname, authfile.getInputStream(), null)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+
+        return s3Client.getUrl(bucket,imgname).toString();
     }
 }
 
