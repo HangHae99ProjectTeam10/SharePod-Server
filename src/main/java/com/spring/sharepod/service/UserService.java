@@ -140,7 +140,8 @@ public class UserService {
             RentBuyerResponseDto rentBuyerResponseDto = RentBuyerResponseDto.builder()
                     .boardid(authList.get(i).getBoard().getId())
                     .boardtitle(authList.get(i).getBoard().getTitle())
-                    .userid(authList.get(i).getAuthseller().getId())
+                    .nickname(authList.get(i).getAuthseller().getNickname())
+                    .authid(authList.get(i).getId())
                     .category(authList.get(i).getBoard().getCategory())
                     .build();
             rentBuyerResponseDtoList.add(rentBuyerResponseDto);
@@ -161,7 +162,8 @@ public class UserService {
             RentSellerResponseDto rentSellerResponseDto = RentSellerResponseDto.builder()
                     .boardid(authList.get(i).getBoard().getId())
                     .boardtitle(authList.get(i).getBoard().getTitle())
-                    .userid(authList.get(i).getAuthbuyer().getId())
+                    .nickname(authList.get(i).getAuthbuyer().getNickname())
+                    .authid(authList.get(i).getId())
                     .category(authList.get(i).getBoard().getCategory())
                     .build();
             rentSellerResponseDtoList.add(rentSellerResponseDto);
@@ -169,9 +171,4 @@ public class UserService {
         return rentSellerResponseDtoList;
 
     }
-
-
-
-
-
 }

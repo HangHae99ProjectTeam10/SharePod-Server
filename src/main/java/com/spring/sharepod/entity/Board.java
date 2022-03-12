@@ -75,6 +75,10 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Liked> likeNumber = new ArrayList<>();
 
+    public void setAppear(boolean appear){
+        this.appear = appear;
+    }
+
     //게시판 업데이트
     public void update(BoardPatchRequestDTO patchRequestDTO){
         this.title = patchRequestDTO.getTitle();

@@ -14,4 +14,5 @@ public class ReservationGetDTO {
     private LocalDate rentalstart;
     private LocalDate rentalend;
     private String boardtitle;
+    private Long boardid;
 }

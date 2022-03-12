@@ -1,5 +1,6 @@
 package com.spring.sharepod.exception;
 
+import com.spring.sharepod.entity.Authimgbox;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,8 +46,17 @@ public enum ErrorCode {
 
 
     // 거래 요청 관련 에러 모음
-    RESERVATION_NOT_EXIST(HttpStatus.BAD_REQUEST, "400_Reservation_1", "이미 거래 요청이 존재합합니다.")
-    ;
+    RESERVATION_NOT_EXIST(HttpStatus.BAD_REQUEST, "400_Reservation_1", "이미 거래 요청이 존재합니다."),
+
+
+    // 인증 관련 에러 모음
+    AUTHIMGBOX_NOT_EXIST(HttpStatus.BAD_REQUEST, "404_AuthImgBox_1", "이미 거래 요청이 존재합니다."),
+    AUTHIMGBOX_NOT_SELLER(HttpStatus.BAD_REQUEST, "400_AuthImgBox_2", "판매자가 아닙니다."),
+    //알림 삭제 관련 에러 모음
+    NOTICE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_Notice_1", "해당 알림는 존재하지 않습니다."),
+
+    //해당 물건의 구매자가 아닙니다.
+    AUTHIMGBOX_NOT_EXIST(HttpStatus.NOT_FOUND, "404_AUTHIMGBOX_1", "해당 물건의 구매자가 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String errorCode;
