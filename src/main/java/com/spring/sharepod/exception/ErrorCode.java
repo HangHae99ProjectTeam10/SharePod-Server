@@ -56,7 +56,7 @@ public enum ErrorCode {
     NOTICE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_Notice_1", "해당 알림는 존재하지 않습니다."),
 
     //해당 물건의 구매자가 아닙니다.
-    AUTHIMGBOX_NOT_EXIST(HttpStatus.NOT_FOUND, "404_AUTHIMGBOX_1", "해당 물건의 구매자가 아닙니다.");
+    AUTHIMGBOX_NOT_BUYER(HttpStatus.NOT_FOUND, "404_AUTHIMGBOX_1", "해당 물건의 구매자가 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String errorCode;

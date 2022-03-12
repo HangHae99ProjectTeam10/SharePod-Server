@@ -46,7 +46,7 @@ public class AuthService {
     @javax.transaction.Transactional
     public BasicResponseDTO authimguploadService(Long authimgboxid, String imgurl) {
         Authimgbox authimgbox = authimgboxRepository.findById(authimgboxid).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_EXIST));
+                () -> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_BUYER));
 
         //이미지 DB 넣어주기
         authimgbox.update(imgurl);
@@ -60,7 +60,7 @@ public class AuthService {
     @javax.transaction.Transactional
     public AuthDataAllResponseDTO dataAllResponseDTO(@PathVariable Long authid) {
         Auth auth = authRepository.findById(authid).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_EXIST));
+                () -> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_BUYER));
 
         boolean allauthcheck = true;
         //data[] 값 넣어주기
