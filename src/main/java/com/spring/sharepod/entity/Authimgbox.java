@@ -1,6 +1,9 @@
 package com.spring.sharepod.entity;
 
 
+import com.spring.sharepod.dto.request.Auth.AuthBoolRequestDto;
+import com.spring.sharepod.dto.request.Auth.AuthImgUploadRequestDto;
+import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,4 +34,9 @@ public class Authimgbox {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AUTHID")
     private Auth auth;
+
+    //인증 업데이트
+    public void AuthBoolupdate(AuthBoolRequestDto authBoolRequestDto){
+        this.imgboxcheck = authBoolRequestDto.getCheck();
+    }
 }

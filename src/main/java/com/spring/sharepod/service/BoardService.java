@@ -249,22 +249,25 @@ public class BoardService {
         }
 
         //S3 상의 키 값을 얻기 위한 substring
-        String boardimg1 = board.getImgurl1().substring(board.getImgurl1().lastIndexOf("/")+1);
-        System.out.println(boardimg1);
-        String boardimg2 = board.getImgurl2().substring(board.getImgurl2().lastIndexOf("/")+1);
-        System.out.println(boardimg2);
-        String boardimg3 = board.getImgurl3().substring(board.getImgurl3().lastIndexOf("/")+1);
-        System.out.println(boardimg3);
+//        String boardimg1 = board.getImgurl1().substring(board.getImgurl1().lastIndexOf("/")+1);
+//        System.out.println(boardimg1);
+//        String boardimg2 = board.getImgurl2().substring(board.getImgurl2().lastIndexOf("/")+1);
+//        System.out.println(boardimg2);
+//        String boardimg3 = board.getImgurl3().substring(board.getImgurl3().lastIndexOf("/")+1);
+//        System.out.println(boardimg3);
 
         String videourl = board.getVideourl().substring(board.getImgurl3().lastIndexOf("/")+1);
         System.out.println(videourl);
 
         // 리스트에 담에서 넣어주기
-        String[] imgs = {videourl,boardimg1,boardimg2,boardimg3};
-        List<String> fileName = Arrays.asList(imgs);
+//        String[] imgs = {videourl,boardimg1,boardimg2,boardimg3};
+//        List<String> fileName = Arrays.asList(imgs);
+
+        String fileName = videourl;
 
         //S3 상 이미지 삭제 호출
-        s3Service.fileDelete(fileName);
+//        s3Service.fileDelete(fileName);
+        s3Service.fileDeleteOne(fileName);
 
         //게시글 삭제
         boardRepository.deleteById(boardid);

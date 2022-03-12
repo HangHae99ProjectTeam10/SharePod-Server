@@ -10,6 +10,7 @@ import lombok.Getter;
 public class RentSellerResponseDto {
     private Long boardid;
     private String boardtitle;
-    private Long userid;
+    private String nickname;
     private String category;
+    private Long authid;
 }
