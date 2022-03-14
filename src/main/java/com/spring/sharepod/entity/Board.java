@@ -78,6 +78,7 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Liked> likeNumber = new ArrayList<>();
 
+
     public void setAppear(boolean appear){
         this.appear = appear;
     }

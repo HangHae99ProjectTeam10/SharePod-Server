@@ -2,9 +2,9 @@ package com.spring.sharepod.controller;
 
 
 import com.spring.sharepod.dto.request.Auth.AuthBoolRequestDto;
+import com.spring.sharepod.dto.request.Auth.AuthCheckReUploadRequestDto;
 import com.spring.sharepod.dto.response.Auth.AuthDataAllResponseDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
-import com.spring.sharepod.model.AuthImg;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.service.AuthService;
 import com.spring.sharepod.service.S3Service;
@@ -44,6 +44,20 @@ public class AuthRestController {
     public ResponseEntity<Success> AuthBool(@RequestBody AuthBoolRequestDto authBoolRequestDto){
         authService.BoolAuth(authBoolRequestDto);
         return new ResponseEntity<>(new Success("success"," 사진 인증 성공"), HttpStatus.OK);
+    }
+
+    @PostMapping("/auth/reupload")
+    public ResponseEntity<Success> AuthBool(@RequestBody AuthCheckReUploadRequestDto authCheckReUploadRequestDto){
+        Long id = authService.CheckReuploadBoard(authCheckReUploadRequestDto);
+
+        String result = "";
+        if (authCheckReUploadRequestDto.isAuthreupload()){
+            result = "게시글 재 업로드 성공";
+        }else{
+            result = "게시글 삭제 성공";
+        }
+
+        return new ResponseEntity<>(new Success("success",id +"번 "+ result), HttpStatus.OK);
     }
 
 }

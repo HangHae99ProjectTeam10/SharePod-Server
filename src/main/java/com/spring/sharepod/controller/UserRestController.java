@@ -56,6 +56,14 @@ public class UserRestController {
         return new ResponseEntity<>(new UserInfo("success", "내 정보 불러오기 성공", userinfo,userlikeboard,usermyboard,rentbuyer,rentseller), HttpStatus.OK);
     }
 
+
+    //회원 탈퇴하기
+    @DeleteMapping("/user/{userid}")
+    public ResponseEntity<Success> DeleteUser(@PathVariable Long userid){
+        String nickname = userService.UserDelete(userid);
+        return new ResponseEntity<>(new Success("success", nickname + " 님의 회원탈퇴 성공했습니다."),HttpStatus.OK);
+    }
+
     //회원 정보 수정하기
     @PatchMapping("/user/{userid}")
     public BasicResponseDTO usermodify(@PathVariable Long userid,
@@ -70,4 +78,5 @@ public class UserRestController {
 
         return userService.usermodifyService(userid, userModifyRequestDTO);
     }
+
 }

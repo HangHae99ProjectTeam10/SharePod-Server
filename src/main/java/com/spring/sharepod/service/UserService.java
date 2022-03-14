@@ -175,6 +175,18 @@ public class UserService {
 
     }
 
+
+    @Transactional
+    public String UserDelete(Long userid){
+        //여기서 userid랑 토큰 비교
+        // 다를 경우 에러 메시지 호출
+
+        User user = userRepository.findById(userid).orElseThrow(()-> new ErrorCodeException(USER_NOT_FOUND));
+        userRepository.deleteById(userid);
+
+        return user.getNickname();
+}
+
     //회원 정보 수정
     @Transactional
     public BasicResponseDTO usermodifyService(Long userid, UserModifyRequestDTO modifyRequestDTO){
@@ -194,6 +206,7 @@ public class UserService {
                 .result("success")
                 .msg("수정 성공")
                 .build();
+
 
     }
 }
