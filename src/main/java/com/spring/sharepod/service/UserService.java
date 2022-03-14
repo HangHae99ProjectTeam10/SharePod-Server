@@ -62,7 +62,7 @@ public class UserService {
         }
 
         String tokenDto = jwtTokenProvider.createToken(user.getUsername(), user.getRoles(),user.getId());
-        res.addHeader("Bearer ", tokenDto);
+        res.addHeader("Bearer", tokenDto);
 
         return LoginReturnResponseDTO.builder()
                 .result("success")
