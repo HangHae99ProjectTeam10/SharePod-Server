@@ -3,6 +3,10 @@ package com.spring.sharepod.validator;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.User;
+import com.spring.sharepod.dto.request.User.UserModifyRequestDTO;
+import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
+import com.spring.sharepod.entity.User;
+import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +25,7 @@ public class UserValidator {
     private final UserRepository userRepository;
 
     public void validateUserRegisterData(UserRegisterRequestDto userRegisterRequestDto) {
+
         //userRegisterRequestDto 중에 하나라도 빵구
         if(userRegisterRequestDto.getUsername() == null){
             throw new ErrorCodeException(REGISTER_NULL_USERNAME);
@@ -40,6 +45,7 @@ public class UserValidator {
         if(userRegisterRequestDto.getUserimg() == null){
             throw new ErrorCodeException(REGISTER_NULL_USERIMG);
         }
+
 
         // 유저네임(이메일) 중복 확인
         Optional<User> findEmail = userRepository.findByUsername(userRegisterRequestDto.getUsername());
@@ -86,5 +92,13 @@ public class UserValidator {
     public User ValidByUserId(Long userid) {
         return userRepository.findById(userid).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
+
+    }
+
+    public void validateUserChange(UserModifyRequestDTO modifyRequestDTO) {
+        // 유저네임(이메일) 유무 확인
+        userRepository.findByUsername(modifyRequestDTO.getUsername()).orElseThrow(
+                () -> new ErrorCodeException(USER_NOT_FOUND));
+
     }
 }

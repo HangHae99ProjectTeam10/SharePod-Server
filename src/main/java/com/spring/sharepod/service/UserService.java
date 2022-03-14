@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.spring.sharepod.exception.ErrorCode.USER_NOT_FOUND;
 
@@ -207,7 +206,6 @@ public class UserService {
                 .result("success")
                 .msg("수정 성공")
                 .build();
-
 
     }
 }

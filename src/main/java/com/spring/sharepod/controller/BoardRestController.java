@@ -16,6 +16,7 @@ import com.spring.sharepod.service.BoardService;
 import com.spring.sharepod.service.S3Service;
 import com.spring.sharepod.validator.BoardValidator;
 import com.spring.sharepod.validator.TokenValidator;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ public class BoardRestController {
     private final TokenValidator tokenValidator;
     private final BoardValidator boardValidator;
 
+
     //**게시판 작성
     @PostMapping("/board")
     public BasicResponseDTO writeBoard(@RequestPart BoardWriteRequestDTO boardWriteRequestDTO,
@@ -54,10 +56,11 @@ public class BoardRestController {
 
     //**게시판 수정
     @PatchMapping("/board/{boardid}")
+
     public BasicResponseDTO updateboardcontroll(@PathVariable Long boardid, @RequestBody BoardPatchRequestDTO patchRequestDTO) {
         //token과 patchRequestDTO의 userid와 비교
         tokenValidator.userIdCompareToken(patchRequestDTO.getUserid());
-
+        //게시판 수정 업로드
         return boardService.updateboard(boardid, patchRequestDTO);
     }
 
