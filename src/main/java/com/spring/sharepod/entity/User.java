@@ -1,6 +1,8 @@
 package com.spring.sharepod.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.spring.sharepod.dto.request.User.UserModifyRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -68,9 +70,19 @@ public class User extends Timestamped {
     private List<Notice> noticeSellerList = new ArrayList<>();
 
 
-
-
-
+    //유저 이미지가 변경 되었을 때
+    public void update1(UserModifyRequestDTO modifyRequestDTO){
+        this.username = modifyRequestDTO.getUsername();
+        this.nickname = modifyRequestDTO.getNickname();
+        this.mapdata = modifyRequestDTO.getMapdata();
+        this.userimg = modifyRequestDTO.getUserimg();
+    }
+    // 아닐때
+    public void update2(UserModifyRequestDTO modifyRequestDTO){
+        this.username = modifyRequestDTO.getUsername();
+        this.nickname = modifyRequestDTO.getNickname();
+        this.mapdata = modifyRequestDTO.getMapdata();
+    }
 
 
 
