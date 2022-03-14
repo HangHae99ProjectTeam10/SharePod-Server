@@ -13,6 +13,7 @@ import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.AuthRepository;
 import com.spring.sharepod.repository.AuthimgboxRepository;
 import com.spring.sharepod.repository.BoardRepository;
+import com.spring.sharepod.validator.AuthimgboxValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,11 +31,13 @@ public class AuthService {
     private final AuthRepository authRepository;
     private final AuthimgboxRepository authimgboxRepository;
     private final BoardRepository boardRepository;
+    private final AuthimgboxValidator authimgboxValidator;
+
     //빌려준 사람만의 기능, 인증 성공 or 실패
     @Transactional
     public void BoolAuth(AuthBoolRequestDto authBoolRequestDto) {
         //주어진 id에 대해서 imgbox가 존재하는지 확인
-        Authimgbox authimgbox = authimgboxRepository.findById(authBoolRequestDto.getImgboxcheckid()).orElseThrow(() -> new ErrorCodeException(AUTHIMGBOX_NOT_EXIST));
+        Authimgbox authimgbox = authimgboxValidator.ValidAuthImgBoxByCheckId(authBoolRequestDto.getImgboxcheckid());
 
         //해당에서 받아온 seller의 id와 보내준 seller의 id가 일치하는지 확인
         if (!Objects.equals(authimgbox.getAuth().getAuthseller().getId(), authBoolRequestDto.getSellerid())){

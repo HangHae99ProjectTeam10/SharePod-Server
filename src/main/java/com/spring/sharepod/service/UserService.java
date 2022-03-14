@@ -18,7 +18,9 @@ import com.spring.sharepod.repository.AuthRepository;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.repository.UserRepository;
-import com.spring.sharepod.validator.RegisterValidator;
+import com.spring.sharepod.validator.LikedValidator;
+import com.spring.sharepod.validator.TokenValidator;
+import com.spring.sharepod.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.spring.sharepod.exception.ErrorCode.USER_NOT_FOUND;
 
@@ -35,18 +36,19 @@ import static com.spring.sharepod.exception.ErrorCode.USER_NOT_FOUND;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final RegisterValidator registerValidator;
+    private final UserValidator userValidator;
     //    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final LikedRepository likedRepository;
     private final BoardRepository boardRepository;
     private final AuthRepository authRepository;
+    private final LikedValidator likedValidator;
 
     // 회원가입
     @Transactional
     public Long createUser(UserRegisterRequestDto userRegisterRequestDto) {
         //회원가입 유효성 검사 validator 통해서 검증한다. 중간에 이상하거 있으면 바로 거기서 메시지 반환하도록
-        registerValidator.validateUserRegisterData(userRegisterRequestDto);
+        userValidator.validateUserRegisterData(userRegisterRequestDto);
 
         // 여기서부터는 검증된 데이터들이기에 그냥 비밀번호 암호화하고 빌더 패턴으로 유저에 대한 정보를 생성한다.
         // 비밀번호 암호화
@@ -70,10 +72,7 @@ public class UserService {
     //userinfo 불러오기
     @Transactional
     public UserInfoResponseDto getUserInfo(Long userid) {
-        //로그인 되어 있는지 , 되어 있다면 위 userid가 존재하는지 알아야한다.
-
-        User user = userRepository.findById(userid).orElseThrow(
-                () -> new ErrorCodeException(USER_NOT_FOUND));
+        User user = userValidator.ValidByUserId(userid);
 
         //build해서 찾은 user의 내용 중 일부를 responseDto를 통해서 전달한다.
         UserInfoResponseDto userInfoResponseDto = UserInfoResponseDto.builder()
@@ -92,10 +91,11 @@ public class UserService {
     public List<LikedResponseDto> getUserLikeBoard(Long userid){
         //해당하는 유저가 존재하는 like 테이블에서 boardid를 받아오고 그 boardid를 통해
         // boardtitle과 userid category를 찾아낸다.
-
         List<LikedResponseDto> likedResponseDtoList = new ArrayList<>();
 
+        // 없으면 for문 안돌고 빈 list가 들어간다.
         List<Liked> userlikeList = likedRepository.findByUserId(userid);
+
         for (int i = 0; i<userlikeList.size();i++){
             //Board likedBoardList = likedRepository.findByBoardId(userliked.getBoard().getId());
 
@@ -117,6 +117,7 @@ public class UserService {
         // userid를 사용하여 board에서 있는 것들 다 찾아오고 그에 따른 내용들을 전달
         List<MyBoardResponseDto> myBoardResponseDtoList = new ArrayList<>();
 
+        // 없으면 for문 안돌고 빈 list가 들어간다.
         List<Board> boardList = boardRepository.findByUserId(userid);
 
         for (Board board : boardList){
@@ -137,6 +138,7 @@ public class UserService {
     public List<RentBuyerResponseDto> getBuyList(Long userid) {
         List<RentBuyerResponseDto> rentBuyerResponseDtoList = new ArrayList<>();
 
+        // 없으면 for문 안돌고 빈 list가 들어간다.
         List<Auth> authList = authRepository.findByBuyerId(userid);
 
         for (int i = 0; i < authList.size(); i++) {
@@ -159,6 +161,7 @@ public class UserService {
     public List<RentSellerResponseDto> getSellList(Long userid){
         List<RentSellerResponseDto> rentSellerResponseDtoList = new ArrayList<>();
 
+        // 없으면 for문 안돌고 빈 list가 들어간다.
         List<Auth> authList = authRepository.findBySellerId(userid);
 
         for (int i = 0; i < authList.size(); i++) {
@@ -172,20 +175,17 @@ public class UserService {
             rentSellerResponseDtoList.add(rentSellerResponseDto);
         }
         return rentSellerResponseDtoList;
-
     }
 
 
     @Transactional
     public String UserDelete(Long userid){
-        //여기서 userid랑 토큰 비교
-        // 다를 경우 에러 메시지 호출
+        //userid에 의한 user가 있는지 판단
+        User user = userValidator.ValidByUserId(userid);
 
-        User user = userRepository.findById(userid).orElseThrow(()-> new ErrorCodeException(USER_NOT_FOUND));
         userRepository.deleteById(userid);
-
         return user.getNickname();
-}
+    }
 
     //회원 정보 수정
     @Transactional
@@ -206,7 +206,6 @@ public class UserService {
                 .result("success")
                 .msg("수정 성공")
                 .build();
-
 
     }
 }

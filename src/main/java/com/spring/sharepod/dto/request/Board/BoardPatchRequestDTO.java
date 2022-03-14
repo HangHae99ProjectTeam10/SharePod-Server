@@ -1,15 +1,13 @@
 package com.spring.sharepod.dto.request.Board;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
 public class BoardPatchRequestDTO {
     private Long userid;
     private String title;

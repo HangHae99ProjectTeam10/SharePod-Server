@@ -18,30 +18,30 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     // 릴스를 limit 갯수만큼 랜덤으로 반환
     @Query(nativeQuery = true, value = "select * from board b ORDER BY RAND() LIMIT :limitcount")
-    List<Board> findAllByVideoUrlRan(int limitcount);
+    List<Board> findAllByVideoUrlRan(Long limitcount);
 
 
     //mapdata,category를 받아서 (appear) 보여주는 정보만 보여주면서 정렬한다. 기준 cost,quility,recent
     @Query(nativeQuery = true, value = "select * from board b where b.mapdata=:mapdata and b.category=:category and b.appear = true order by b.boardquility asc LIMIT :limitcount")
-    List<Board> findByAndMapAndCategoryByQuility(String mapdata, String category,int limitcount);
+    List<Board> findByAndMapAndCategoryByQuility(String mapdata, String category,Long limitcount);
 
     @Query(nativeQuery = true, value = "select * from board b where b.mapdata=:mapdata and b.category=:category and b.appear = true order by b.dailyrentalfee desc LIMIT :limitcount")
-    List<Board> findByAndMapAndCategoryByCost(String mapdata, String category,int limitcount);
+    List<Board> findByAndMapAndCategoryByCost(String mapdata, String category,Long limitcount);
 
     @Query(nativeQuery = true, value = "select *  from board b where b.mapdata=:mapdata and b.category=:category and b.appear = true order by b.modified_at desc LIMIT :limitcount")
-    List<Board> findByAndMapAndCategoryByCreatedAt(String mapdata, String category,int limitcount);
+    List<Board> findByAndMapAndCategoryByCreatedAt(String mapdata, String category,Long limitcount);
 
 
 
     //mapdata,검색(searchtitle)를 받아서 (appear) 보여주는 정보만 보여주면서 정렬한다. 기준 cost,quility,recent
     @Query(nativeQuery = true, value = "select *  from board b where b.mapdata=:mapdata and b.appear = true and b.title like %:searchtitle% order by b.boardquility asc LIMIT :limitcount")
-    List<Board> findByAndMapAndSearchByQuility(String mapdata, @Param("searchtitle")String searchtitle,int limitcount);
+    List<Board> findByAndMapAndSearchByQuility(String mapdata, @Param("searchtitle")String searchtitle,Long limitcount);
 
     @Query(nativeQuery = true, value = "select *  from board b where b.mapdata=:mapdata and b.appear = true and b.title like %:searchtitle% order by b.dailyrentalfee desc LIMIT :limitcount")
-    List<Board> findByAndMapAndSearchByCost(String mapdata, @Param("searchtitle")String searchtitle, int limitcount);
+    List<Board> findByAndMapAndSearchByCost(String mapdata, @Param("searchtitle")String searchtitle, Long limitcount);
 
     @Query(nativeQuery = true, value = "select *  from board b where b.mapdata=:mapdata and b.appear = true and b.title like %:searchtitle% order by b.modified_at desc LIMIT :limitcount")
-    List<Board> findByAndMapAndSearchByCreatedAt(String mapdata, @Param("searchtitle") String searchtitle, int limitcount);
+    List<Board> findByAndMapAndSearchByCreatedAt(String mapdata, @Param("searchtitle") String searchtitle, Long limitcount);
 
 
     //마이페이지 등록한 목록을 보기 위한 쿼리
