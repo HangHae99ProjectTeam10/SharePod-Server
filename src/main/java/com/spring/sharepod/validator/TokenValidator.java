@@ -13,13 +13,8 @@ import static com.spring.sharepod.exception.ErrorCode.USER_NOT_FOUND;
 @RequiredArgsConstructor
 public class TokenValidator {
     //userid와 토큰 비교
-    public void userIdCompareToken(Long userid) {
-//        if(userid != user.getid){
-//            throw new ErrorCodeException(USER_NOT_FOUND);
-//        }
-    }
-    public void likeIdCompareToken(Long userid, User user){
-        if(!Objects.equals(user.getId(), userid)){
+    public void userIdCompareToken(Long userid, Long tokenuserid) {
+        if(!Objects.equals(userid, tokenuserid)){
             throw new ErrorCodeException(USER_NOT_FOUND);
         }
     }

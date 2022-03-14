@@ -8,6 +8,7 @@ import com.spring.sharepod.dto.response.Board.BoardAllResponseDto;
 import com.spring.sharepod.dto.response.Board.BoardDetailResponseDto;
 import com.spring.sharepod.dto.response.Board.VideoAllResponseDto;
 import com.spring.sharepod.entity.Liked;
+import com.spring.sharepod.entity.User;
 import com.spring.sharepod.model.AllVideo;
 import com.spring.sharepod.model.BoardDetail;
 import com.spring.sharepod.model.BoardList;
@@ -20,6 +21,7 @@ import com.spring.sharepod.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,10 +44,10 @@ public class BoardRestController {
     @PostMapping("/board")
     public BasicResponseDTO writeBoard(@RequestPart BoardWriteRequestDTO boardWriteRequestDTO,
                                        @RequestPart MultipartFile[] imgfiles,
-                                       @RequestPart MultipartFile videofile) throws IOException {
+                                       @RequestPart MultipartFile videofile, @AuthenticationPrincipal User user) throws IOException {
 
         //token과 boardWriteRequestDto의 userid와 비교
-        tokenValidator.userIdCompareToken(boardWriteRequestDTO.getUserid());
+        tokenValidator.userIdCompareToken(boardWriteRequestDTO.getUserid(), user.getId());
 
         //게시판 업로드
         BoardWriteRequestDTO boardWriteRequestDTOadd = s3Service.boardupload(boardWriteRequestDTO,imgfiles,videofile);
@@ -56,19 +58,18 @@ public class BoardRestController {
 
     //** 10번 게시판 수정
     @PatchMapping("/board/{boardid}")
-
-    public BasicResponseDTO updateboardcontroll(@PathVariable Long boardid, @RequestBody BoardPatchRequestDTO patchRequestDTO) {
+    public BasicResponseDTO updateboardcontroll(@PathVariable Long boardid, @RequestBody BoardPatchRequestDTO patchRequestDTO, @AuthenticationPrincipal User user) {
         //token과 patchRequestDTO의 userid와 비교
-        tokenValidator.userIdCompareToken(patchRequestDTO.getUserid());
+        tokenValidator.userIdCompareToken(patchRequestDTO.getUserid(), user.getId());
         //게시판 수정 업로드
         return boardService.updateboard(boardid, patchRequestDTO);
     }
 
     //**게시판 삭제
     @DeleteMapping("/board/{boardid}")
-    public BasicResponseDTO deleteboardcontroll(@PathVariable Long boardid, @RequestBody Map<String, Long> user) {
+    public BasicResponseDTO deleteboardcontroll(@PathVariable Long boardid, @RequestBody Map<String, Long> user, @AuthenticationPrincipal User tokenUser) {
         //token과 user.get("userid")와 비교
-        tokenValidator.userIdCompareToken(user.get("userid"));
+        tokenValidator.userIdCompareToken(user.get("userid"),tokenUser.getId());
 
         return boardService.deleteboard(boardid, user.get("userid"));
     }
@@ -95,9 +96,9 @@ public class BoardRestController {
 
     //**게시글 상세 페이지 불러오기
     @GetMapping("/board/{boardid}")
-    public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardid, @RequestParam(value = "userid") Optional<Long> userid) {
+    public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardid, @RequestParam(value = "userid") Optional<Long> userid, @AuthenticationPrincipal User user) {
         // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.(로그인 안했을 때는 찜 그냥 false)
-        Boolean isliked = boardValidator.DefaultLiked(userid,boardid);
+        Boolean isliked = boardValidator.DefaultLiked(userid,boardid,user);
 
         // userService boardid, isliked
         BoardDetailResponseDto boardDetailResponseDto = boardService.getDetailBoard(boardid, isliked);

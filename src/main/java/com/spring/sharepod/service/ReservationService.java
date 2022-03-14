@@ -106,7 +106,7 @@ public class ReservationService {
         Board board = boardRepository.findById(boardid).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
         );
-        ;
+
         Reservation reservation = reservationRepository.findByBuyerAndBoard(buyer, board);
         if (reservation == null) {
             throw new ErrorCodeException(ErrorCode.RESERVATION_NOT_EXIST);

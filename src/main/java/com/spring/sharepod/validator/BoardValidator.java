@@ -2,6 +2,7 @@ package com.spring.sharepod.validator;
 
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
+import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
@@ -80,14 +81,14 @@ public class BoardValidator {
     }
 
     //상세 페이지 보여줄 시 로그인이 되어 있을 경우, 찜하기가 되어있는지에 대한 판단
-    public Boolean DefaultLiked(Optional<Long> userid, Long boardid) {
+    public Boolean DefaultLiked(Optional<Long> userid, Long boardid, User user) {
         // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.
         Boolean isliked = null;
         if (!userid.isPresent()) {
             return isliked = false;
         } else {
             //userid.get().longValue()이 존재하므로
-            tokenValidator.userIdCompareToken(userid.get().longValue());
+            tokenValidator.userIdCompareToken(userid.get().longValue(),user.getId());
             Liked liked = likedRepository.findByLiked(boardid, userid.get().longValue());
             if (liked == null) {
                 return isliked = false;
