@@ -9,6 +9,7 @@ import com.spring.sharepod.entity.*;
 import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.*;
+import com.spring.sharepod.validator.ReservationValidator;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,25 +31,19 @@ public class ReservationService {
     private final NoticeRepository noticeRepository;
     private final AuthRepository authRepository;
     private final AuthimgboxRepository authimgboxRepository;
-
+    private final ReservationValidator reservationValidator;
     //거래 요청
     @Transactional
     public BasicResponseDTO reserRequestService(Long boardid, ReservationRequestDTO requestDTO) {
+        //거래요청 validator
+        reservationValidator.validateReservationRequest(boardid,requestDTO);
+
         //게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardid).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
-        );
+                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND));
         //유저 userid로 검색해 가져오기
         User buyer = userRepository.findById(requestDTO.getUserid()).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND)
-        );
-        //해당 reservation 가져오기
-        Reservation reservation = reservationRepository.findByBuyerAndBoard(buyer, board);
-
-        //이미 거래 요청 DB에 존재하면 생성 거절
-        if (reservation != null) {
-            throw new ErrorCodeException(ErrorCode.RESERVATION_NOT_EXIST);
-        }
+                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
 
         //거래 요청 추가
         reservationRepository.save(Reservation.builder()

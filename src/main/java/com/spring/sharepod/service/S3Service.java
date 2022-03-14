@@ -12,15 +12,19 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
 import com.spring.sharepod.entity.Authimgbox;
+import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.AuthRepository;
 import com.spring.sharepod.repository.AuthimgboxRepository;
+import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.UserRepository;
+import com.spring.sharepod.validator.BoardValidator;
 import io.sentry.Sentry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,11 +38,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.spring.sharepod.exception.ErrorCode.VIDEOFILE_NOT_EXIST;
+
 @Service
 @RequiredArgsConstructor
 public class S3Service {
     private final UserRepository userRepository;
     private final AuthimgboxRepository authimgboxRepository;
+    private final BoardValidator boardValidator;
+    private final BoardRepository boardRepository;
 
     private AmazonS3 s3Client;
 
@@ -66,6 +74,8 @@ public class S3Service {
 
     //유저 프로필 사진 업로드
     public String upload(UserRegisterRequestDto userRegisterRequestDto, MultipartFile file) throws IOException {
+
+
         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
         fileName = userRegisterRequestDto.getNickname() + fileName;
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
@@ -77,6 +87,9 @@ public class S3Service {
     public BoardWriteRequestDTO boardupload(BoardWriteRequestDTO boardWriteRequestDTO,
                                             MultipartFile[] imgfiles,
                                             MultipartFile videofile) throws IOException {
+        //게시판 작성 validator
+        boardValidator.validateBoardWrite(boardWriteRequestDTO, imgfiles, videofile);
+
         //이미지 3개 처리
         User user = userRepository.findById(boardWriteRequestDTO.getUserid()).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
@@ -103,6 +116,61 @@ public class S3Service {
         boardWriteRequestDTO.setVideourl(s3Client.getUrl(bucket, videoname).toString());
 
         return boardWriteRequestDTO;
+    }
+
+    //게시판 사진 3개, 영상 1개 업로드
+    public BoardPatchRequestDTO boardupdate(Long boardid,
+                                            BoardPatchRequestDTO patchRequestDTO,
+                                            MultipartFile[] imgfiles,
+                                            MultipartFile videofile) throws IOException {
+        //수정할 게시판 boardid로 검색해 가져오기
+        Board board = boardRepository.findById(boardid).orElseThrow(
+                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND));
+        //게시판 작성 validator
+        boardValidator.validateBoardUpdate(patchRequestDTO);
+
+        //이미지 3개 처리
+        User user = userRepository.findById(patchRequestDTO.getUserid()).orElseThrow(
+                () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
+        String[] giveurl = new String[3];
+        for (int i = 0; i < imgfiles.length; i++) {
+            if (Objects.equals(imgfiles[i].getOriginalFilename(), "")) {
+                if (i == 0) { giveurl[i] = board.getImgurl1(); }
+                else if (i == 1) { giveurl[i] = board.getImgurl2(); }
+                else { giveurl[i] = board.getImgurl3(); }
+
+            }
+            else {
+                String filename = UUID.randomUUID() + "_" + imgfiles[i].getOriginalFilename();
+                filename = user.getUsername() + i + filename;
+                s3Client.putObject(new PutObjectRequest(bucket, filename, imgfiles[i].getInputStream(), null)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+                giveurl[i] = s3Client.getUrl(bucket, filename).toString();
+            }
+
+        }
+
+        patchRequestDTO.setImgurl1(giveurl[0]);
+        patchRequestDTO.setImgurl2(giveurl[1]);
+        patchRequestDTO.setImgurl3(giveurl[2]);
+
+
+        //비디오파일 있는지 확인
+        if(Objects.equals(videofile.getOriginalFilename(), "")){
+            patchRequestDTO.setVideourl(board.getVideourl());
+        }
+        else{
+            //비디오 처리
+            String videoname = UUID.randomUUID() + "_" + videofile.getOriginalFilename();
+            System.out.println(videoname);
+            //https://sharepod.s3.ap-northeast-2.amazonaws.com/be034d91-2265-4913-8d20-ffdf33d88961_new_profile.png
+            s3Client.putObject(new PutObjectRequest(bucket, videoname, videofile.getInputStream(), null)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            patchRequestDTO.setVideourl(s3Client.getUrl(bucket, videoname).toString());
+        }
+
+
+        return patchRequestDTO;
     }
 
 
@@ -136,10 +204,9 @@ public class S3Service {
                 System.out.println(fileName);
                 s3Client.deleteObject(bucket, fileName);
 
-            }catch (AmazonServiceException e){
+            } catch (AmazonServiceException e) {
                 System.out.println(e.getErrorMessage());
-            }
-            catch (SdkClientException e) {
+            } catch (SdkClientException e) {
                 e.printStackTrace();
             }
 
@@ -165,8 +232,8 @@ public class S3Service {
 
         //구매자가 인증을 누르는 건지 확인
         Authimgbox authimgbox = authimgboxRepository.findById(authimgboxid).orElseThrow(
-                ()-> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_EXIST));
-        if(!Objects.equals(userid, authimgbox.getAuth().getAuthbuyer().getId())){
+                () -> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_EXIST));
+        if (!Objects.equals(userid, authimgbox.getAuth().getAuthbuyer().getId())) {
             throw new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_EXIST);
         }
 
@@ -175,7 +242,7 @@ public class S3Service {
         s3Client.putObject(new PutObjectRequest(bucket, imgname, authfile.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
 
-        return s3Client.getUrl(bucket,imgname).toString();
+        return s3Client.getUrl(bucket, imgname).toString();
     }
 
     //유저 프로필 이미지 변경시

@@ -14,6 +14,7 @@ import com.spring.sharepod.model.BoardList;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.service.BoardService;
 import com.spring.sharepod.service.S3Service;
+import com.spring.sharepod.validator.BoardValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ public class BoardRestController {
     private final LikedRepository likedRepository;
     private final S3Service s3Service;
 
+
     //게시판 작성
     @PostMapping("/board")
     public BasicResponseDTO writeBoard(@RequestPart BoardWriteRequestDTO boardWriteRequestDTO,
@@ -46,8 +48,15 @@ public class BoardRestController {
 
     //게시판 수정
     @PatchMapping("/board/{boardid}")
-    public BasicResponseDTO updateboardcontroll(@PathVariable Long boardid, @RequestBody BoardPatchRequestDTO patchRequestDTO) {
-        return boardService.updateboard(boardid, patchRequestDTO);
+    public BasicResponseDTO updateboardcontroll(@PathVariable Long boardid,
+                                                @RequestPart BoardPatchRequestDTO patchRequestDTO,
+                                                @RequestPart MultipartFile[] imgfiles,
+                                                @RequestPart MultipartFile videofile) throws IOException {
+
+        //게시판 수정 업로드
+        BoardPatchRequestDTO boardPatchRequestDTOadd = s3Service.boardupdate(boardid,patchRequestDTO,imgfiles,videofile);
+
+        return boardService.updateboard(boardid, boardPatchRequestDTOadd);
     }
 
     //게시판 삭제
