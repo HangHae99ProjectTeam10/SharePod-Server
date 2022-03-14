@@ -177,6 +177,16 @@ public class S3Service {
 
         return s3Client.getUrl(bucket,imgname).toString();
     }
+
+    //유저 프로필 이미지 변경시
+    public String userprofileimgchange(MultipartFile userimgfile) throws IOException {
+        //추후 S3에서 기존 이미지를 삭제해주는 과정을 해야함
+
+        String userimg = UUID.randomUUID() + "_" + userimgfile.getOriginalFilename();
+        s3Client.putObject(new PutObjectRequest(bucket, userimg, userimgfile.getInputStream(), null)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        return s3Client.getUrl(bucket, userimg).toString();
+    }
 }
 
 
