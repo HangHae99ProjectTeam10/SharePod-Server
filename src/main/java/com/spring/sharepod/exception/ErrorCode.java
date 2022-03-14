@@ -33,12 +33,20 @@ public enum ErrorCode {
     // 유저 관련 에러 모음
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "404_User_1", "해당 유저는 존재하지 않습니다." ),
 
-
     // 게시판 관련 에러 모음
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "404_Board_1", "해당 게시글이 존재하지 않습니다."),
     BOARD_NOT_FOUND2(HttpStatus.NOT_FOUND, "404_Board_4", "아이디가 일치하지 않습니다.."),
     BOARD_EDIT_OR_DELETE_NOT_MATCH(HttpStatus.FORBIDDEN, "403_Board_2", "게시글의 생성자만 게시글을 수정 혹은 삭제할 수 있습니다."),
     BOARD_IMG_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_3", "게시하려는 이미지의 주소가 없습니다."),
+    BOARD_TITLE_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_5", "게시글 제목을 적지 않으셨습니다."),
+    BOARD_CONTENTS_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_6", "게시글 내용을 적지 않으셨습니다."),
+    BOARD_ORIGINPRICE_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_7", "원가가 0원보다 작습니다."),
+    BOARD_DAILYRENTALFEE_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_8", "정해진 가격이 0원보다 작습니다."),
+    BOARD_MAPDATA_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_9", "지역을 적지 않으셨습니다."),
+    BOARD_CATEGORY_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_10", "카테고리를 적지 않으셨습니다."),
+    BOARD_BOARDQUILITY_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_11", "보드 퀄리티를 적지 않으셨습니다."),
+    BOARD_IMGFILE3_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_12", "이미지가 3개 오지 않으셨습니다."),
+
 
     // 좋아요 관련 에러 모음
     LIKE_EXIST(HttpStatus.BAD_REQUEST, "400_Like_1", "이미 좋아요를 눌렀습니다."),
@@ -60,12 +68,10 @@ public enum ErrorCode {
 
     //인증 페이지 관련 에러 모음
     AUTH_NOT_EXIST(HttpStatus.NOT_FOUND, "404_AUTH_1", "해당 인증 페이지는 존재하지 않습니다."),
-    AUTH_NOT_SELLER(HttpStatus.NOT_FOUND, "400_AUTH_1", "해당 기능은 판매자만 가능합니다.");
+    AUTH_NOT_SELLER(HttpStatus.NOT_FOUND, "400_AUTH_1", "해당 기능은 판매자만 가능합니다."),
 
-    //해당 물건의 구매자가 아닙니다.
-    AUTHIMGBOX_NOT_BUYER(HttpStatus.NOT_FOUND, "404_AUTHIMGBOX_1", "해당 물건의 구매자가 아닙니다.");
-
-
+    //파일 관련 에러모음
+    VIDEOFILE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_FILE_1", "비디오 파일을 입력하지 않았습니다.");
     private final HttpStatus httpStatus;
     private final String errorCode;
     private final String errorMessage;

@@ -13,6 +13,7 @@ import com.spring.sharepod.model.Success;
 import com.spring.sharepod.model.UserInfo;
 import com.spring.sharepod.service.S3Service;
 import com.spring.sharepod.service.UserService;
+import com.spring.sharepod.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.Objects;
 public class UserRestController {
     private final UserService userService;
     private final S3Service s3Service;
+    private final UserValidator userValidator;
     //private final FileUploadService fileUploadService;
 
     // 유저 생성하기 (JSON)
@@ -69,6 +71,9 @@ public class UserRestController {
     public BasicResponseDTO usermodify(@PathVariable Long userid,
                                        @RequestPart UserModifyRequestDTO userModifyRequestDTO,
                                        @RequestPart MultipartFile userimgfile) throws IOException {
+
+        //해당 request vaildator 작동
+        userValidator.validateUserChange(userModifyRequestDTO);
 
         //이미지가 새롭게 들어왔으면
         if(!Objects.equals(userimgfile.getOriginalFilename(), "")){

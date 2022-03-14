@@ -11,4 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // 회원가입시 유저네임 중복 확인
     Optional<User> findByUsername(String username);
+
 }
