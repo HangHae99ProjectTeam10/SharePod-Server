@@ -49,14 +49,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
-                .antMatchers("/user/login").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/showpost").permitAll()
-                .anyRequest().authenticated()
+//                .antMatchers("/user/login").permitAll()
+//                .antMatchers(HttpMethod.POST,"/api/showpost").permitAll()
+//                .anyRequest().authenticated()
 //                .antMatchers(HttpMethod.GET, "/api/board").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/board/{id}").permitAll()
-////                .antMatchers("/admin/**").hasRole("ADMIN")
-//                .antMatchers("/like/**").hasRole("USER")
-//                .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
+//                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/like/**").hasRole("USER")
+                .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
