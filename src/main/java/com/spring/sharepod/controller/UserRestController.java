@@ -70,5 +70,4 @@ public class UserRestController {
 
         return userService.usermodifyService(userid, userModifyRequestDTO);
     }
-
 }

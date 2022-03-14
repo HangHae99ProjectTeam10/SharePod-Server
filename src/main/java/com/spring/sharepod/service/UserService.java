@@ -190,7 +190,6 @@ public class UserService {
             user.update2(modifyRequestDTO);
         }
 
-
         return BasicResponseDTO.builder()
                 .result("success")
                 .msg("수정 성공")
