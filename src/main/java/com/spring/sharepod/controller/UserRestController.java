@@ -1,6 +1,7 @@
 package com.spring.sharepod.controller;
 
 
+import com.spring.sharepod.dto.request.User.UserLoginRequest;
 import com.spring.sharepod.dto.request.User.UserModifyRequestDTO;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
@@ -8,6 +9,7 @@ import com.spring.sharepod.dto.response.Board.MyBoardResponseDto;
 import com.spring.sharepod.dto.response.Board.RentBuyerResponseDto;
 import com.spring.sharepod.dto.response.Board.RentSellerResponseDto;
 import com.spring.sharepod.dto.response.Liked.LikedResponseDto;
+import com.spring.sharepod.dto.response.User.LoginReturnResponseDTO;
 import com.spring.sharepod.dto.response.UserInfoResponseDto;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.model.UserInfo;
@@ -21,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +36,12 @@ public class UserRestController {
     private final TokenValidator tokenValidator;
     private final UserValidator userValidator;
     //private final FileUploadService fileUploadService;
+
+    //로그인 구현하기
+    @PostMapping("/user/login")
+    public LoginReturnResponseDTO loginControll(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse res){
+        return userService.loginReturnDTO(userLoginRequest,res);
+    }
 
     // 유저 생성하기 (JSON)
     @PostMapping("/user/register")

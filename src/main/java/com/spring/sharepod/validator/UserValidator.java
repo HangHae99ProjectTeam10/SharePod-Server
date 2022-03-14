@@ -101,4 +101,5 @@ public class UserValidator {
                 () -> new ErrorCodeException(USER_NOT_FOUND));
 
     }
+
 }
