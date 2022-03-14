@@ -1,31 +1,25 @@
 package com.spring.sharepod.service;
 
-import com.spring.sharepod.dto.request.Board.BoardFilterAndCategoryRequestDto;
 import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
-import com.spring.sharepod.dto.request.Board.SearchRequestDto;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.dto.response.Board.BoardAllResponseDto;
 import com.spring.sharepod.dto.response.Board.BoardDetailResponseDto;
 import com.spring.sharepod.dto.response.Board.VideoAllResponseDto;
 import com.spring.sharepod.entity.Board;
-import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.repository.UserRepository;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.spring.sharepod.validator.BoardValidator;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.spring.sharepod.exception.ErrorCode.BOARD_NOT_FOUND;
 import static com.spring.sharepod.exception.ErrorCode.BOARD_NOT_FOUND2;
@@ -37,6 +31,7 @@ public class BoardService {
     private final UserRepository userRepository;
     private final LikedRepository likedRepository;
     private final S3Service s3Service;
+    private final BoardValidator boardValidator;
 
 
     //메인 페이지 전체 게시글 불러오기
@@ -71,9 +66,8 @@ public class BoardService {
 
     //정렬한 board, GET 방식
     @Transactional
-    public List<BoardAllResponseDto> getSortedBoard(String filtertype, String category, String mapdata, int limitcount) {
+    public List<BoardAllResponseDto> getSortedBoard(String filtertype, String category, String mapdata, Long limitcount) {
         List<Board> boardList = new ArrayList<>();
-
         switch (filtertype) {
             case "quility":
                 boardList = boardRepository.findByAndMapAndCategoryByQuility(mapdata, category, limitcount);
@@ -113,7 +107,7 @@ public class BoardService {
 
     //검색한 내용에 대한 정보
     @Transactional
-    public List<BoardAllResponseDto> getSearchBoard(String filtertype, String searchtitle, String mapdata, int limitcount) {
+    public List<BoardAllResponseDto> getSearchBoard(String filtertype, String searchtitle, String mapdata, Long limitcount) {
         List<Board> boardList = new ArrayList<>();
 
         switch (filtertype) {
@@ -153,11 +147,12 @@ public class BoardService {
         return boardResponseDtos;
     }
 
+
     // 상세 페이지 board GET
     @Transactional
     public BoardDetailResponseDto getDetailBoard(Long boardid, Boolean isliked) {
         //보드가 존재하지 않을 시 메시지 호출
-        Board boardDetail = boardRepository.findById(boardid).orElseThrow(() -> new ErrorCodeException(BOARD_NOT_FOUND));
+        Board boardDetail = boardValidator.ValidByBoardId(boardid);
 
         // 존재한다면 받아온 내용들을 담아서 보내주기
         BoardDetailResponseDto boardDetailResponseDto = BoardDetailResponseDto.builder()
@@ -184,7 +179,7 @@ public class BoardService {
 
     //릴스 video 전체 GET(Limit)
     @Transactional
-    public List<VideoAllResponseDto> getAllVideo(int limitcount) {
+    public List<VideoAllResponseDto> getAllVideo(Long limitcount) {
         // 모든 릴스 가져오기
         List<Board> boardList = boardRepository.findAllByVideoUrlRan(limitcount);
 

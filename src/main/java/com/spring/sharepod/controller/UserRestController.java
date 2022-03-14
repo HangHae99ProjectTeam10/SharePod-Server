@@ -13,6 +13,7 @@ import com.spring.sharepod.model.Success;
 import com.spring.sharepod.model.UserInfo;
 import com.spring.sharepod.service.S3Service;
 import com.spring.sharepod.service.UserService;
+import com.spring.sharepod.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.Objects;
 public class UserRestController {
     private final UserService userService;
     private final S3Service s3Service;
+    private final TokenValidator tokenValidator;
     //private final FileUploadService fileUploadService;
 
     // 유저 생성하기 (JSON)
@@ -44,31 +46,13 @@ public class UserRestController {
         return new ResponseEntity<>(new Success("success", "회원 가입 성공하였습니다."), HttpStatus.OK);
     }
 
-
-    //마이페이지 불러오기
-    @GetMapping("/user/{userid}")
-    public ResponseEntity<UserInfo> getBoardList(@PathVariable Long userid) {
-        UserInfoResponseDto userinfo = userService.getUserInfo(userid);
-        List<LikedResponseDto> userlikeboard = userService.getUserLikeBoard(userid);
-        List<MyBoardResponseDto> usermyboard = userService.getMyBoard(userid);
-        List<RentBuyerResponseDto> rentbuyer = userService.getBuyList(userid);
-        List<RentSellerResponseDto> rentseller = userService.getSellList(userid);
-        return new ResponseEntity<>(new UserInfo("success", "내 정보 불러오기 성공", userinfo,userlikeboard,usermyboard,rentbuyer,rentseller), HttpStatus.OK);
-    }
-
-
-    //회원 탈퇴하기
-    @DeleteMapping("/user/{userid}")
-    public ResponseEntity<Success> DeleteUser(@PathVariable Long userid){
-        String nickname = userService.UserDelete(userid);
-        return new ResponseEntity<>(new Success("success", nickname + " 님의 회원탈퇴 성공했습니다."),HttpStatus.OK);
-    }
-
     //회원 정보 수정하기
     @PatchMapping("/user/{userid}")
     public BasicResponseDTO usermodify(@PathVariable Long userid,
                                        @RequestPart UserModifyRequestDTO userModifyRequestDTO,
                                        @RequestPart MultipartFile userimgfile) throws IOException {
+        //토큰과 userid 일치 확인
+        tokenValidator.userIdCompareToken(userid);
 
         //이미지가 새롭게 들어왔으면
         if(!Objects.equals(userimgfile.getOriginalFilename(), "")){
@@ -79,4 +63,28 @@ public class UserRestController {
         return userService.usermodifyService(userid, userModifyRequestDTO);
     }
 
+    //회원 탈퇴하기
+    @DeleteMapping("/user/{userid}")
+    public ResponseEntity<Success> DeleteUser(@PathVariable Long userid){
+        //토큰과 userid 일치 확인
+        tokenValidator.userIdCompareToken(userid);
+
+        String nickname = userService.UserDelete(userid);
+        return new ResponseEntity<>(new Success("success", nickname + " 님의 회원탈퇴 성공했습니다."),HttpStatus.OK);
+    }
+
+    //마이페이지 불러오기
+    @GetMapping("/user/{userid}")
+    public ResponseEntity<UserInfo> getBoardList(@PathVariable Long userid) {
+        //토큰과 userid 일치 확인
+        tokenValidator.userIdCompareToken(userid);
+
+        //각각의 데이터 받아오기
+        UserInfoResponseDto userinfo = userService.getUserInfo(userid);
+        List<LikedResponseDto> userlikeboard = userService.getUserLikeBoard(userid);
+        List<MyBoardResponseDto> usermyboard = userService.getMyBoard(userid);
+        List<RentBuyerResponseDto> rentbuyer = userService.getBuyList(userid);
+        List<RentSellerResponseDto> rentseller = userService.getSellList(userid);
+        return new ResponseEntity<>(new UserInfo("success", "내 정보 불러오기 성공", userinfo,userlikeboard,usermyboard,rentbuyer,rentseller), HttpStatus.OK);
+    }
 }

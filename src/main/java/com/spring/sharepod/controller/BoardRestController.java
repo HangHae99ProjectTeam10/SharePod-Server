@@ -14,6 +14,8 @@ import com.spring.sharepod.model.BoardList;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.service.BoardService;
 import com.spring.sharepod.service.S3Service;
+import com.spring.sharepod.validator.BoardValidator;
+import com.spring.sharepod.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +33,18 @@ public class BoardRestController {
     private final BoardService boardService;
     private final LikedRepository likedRepository;
     private final S3Service s3Service;
+    private final TokenValidator tokenValidator;
+    private final BoardValidator boardValidator;
 
-    //게시판 작성
+    //**게시판 작성
     @PostMapping("/board")
     public BasicResponseDTO writeBoard(@RequestPart BoardWriteRequestDTO boardWriteRequestDTO,
                                        @RequestPart MultipartFile[] imgfiles,
                                        @RequestPart MultipartFile videofile) throws IOException {
+
+        //token과 boardWriteRequestDto의 userid와 비교
+        tokenValidator.userIdCompareToken(boardWriteRequestDTO.getUserid());
+
         //게시판 업로드
         BoardWriteRequestDTO boardWriteRequestDTOadd = s3Service.boardupload(boardWriteRequestDTO,imgfiles,videofile);
 
@@ -44,15 +52,21 @@ public class BoardRestController {
         return boardService.wirteboard(boardWriteRequestDTOadd);
     }
 
-    //게시판 수정
+    //**게시판 수정
     @PatchMapping("/board/{boardid}")
     public BasicResponseDTO updateboardcontroll(@PathVariable Long boardid, @RequestBody BoardPatchRequestDTO patchRequestDTO) {
+        //token과 patchRequestDTO의 userid와 비교
+        tokenValidator.userIdCompareToken(patchRequestDTO.getUserid());
+
         return boardService.updateboard(boardid, patchRequestDTO);
     }
 
-    //게시판 삭제
+    //**게시판 삭제
     @DeleteMapping("/board/{boardid}")
     public BasicResponseDTO deleteboardcontroll(@PathVariable Long boardid, @RequestBody Map<String, Long> user) {
+        //token과 user.get("userid")와 비교
+        tokenValidator.userIdCompareToken(user.get("userid"));
+
         return boardService.deleteboard(boardid, user.get("userid"));
     }
 
@@ -65,27 +79,23 @@ public class BoardRestController {
 
     //상품 카테고리 클릭 시, 상세 리스트 페이지로 이동
     @GetMapping("/board/sort")
-    public ResponseEntity<BoardList> getSortedBoardList(@RequestParam(value = "limit") int limitcount, @RequestParam(value = "filtertype") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "mapdata") String mapdata) {
-        List<BoardAllResponseDto> bordResponseDtos = boardService.getSortedBoard(filtertype, category, mapdata, limitcount);
+    public ResponseEntity<BoardList> getSortedBoardList(@RequestParam(value = "limit") Long limitcount, @RequestParam(value = "filtertype") Optional<String> filtertype, @RequestParam(value = "category") Optional<String> category, @RequestParam(value = "mapdata") Optional<String> mapdata) {
+        // 각각의 변수에 대한 default값 설정
+        String validmapdata = boardValidator.DefaultMapData(mapdata);
+        String validFilterData = boardValidator.DefaultFilterData(filtertype);
+        String validCategoryData = boardValidator.DefaultCategoryData(category);
+        Long validLimitCount = boardValidator.DefaultLimitCount(limitcount);
+
+        List<BoardAllResponseDto> bordResponseDtos = boardService.getSortedBoard(validFilterData, validCategoryData, validmapdata, validLimitCount);
         return new ResponseEntity<>(new BoardList("success", "리스트 " + filtertype + " 정렬 성공", bordResponseDtos), HttpStatus.OK);
     }
 
-    //게시글 상세 페이지 불러오기   (여기서 토큰이랑 받아온 userdata랑 일치해야함)
+    //**게시글 상세 페이지 불러오기
     @GetMapping("/board/{boardid}")
     public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardid, @RequestParam(value = "userid") Optional<Long> userid) {
-        // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.
-        Boolean isliked = null;
-        if (!userid.isPresent()){
-            isliked = false;
-        }else{
-            //userid.get().longValue()이 존재하므로
-            Liked liked = likedRepository.findByLiked(boardid, userid.get().longValue());
-             if (liked == null){
-                isliked = false;
-            }else{
-                isliked = true;
-            }
-        }
+        // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.(로그인 안했을 때는 찜 그냥 false)
+        Boolean isliked = boardValidator.DefaultLiked(userid,boardid);
+
         // userService boardid, isliked
         BoardDetailResponseDto boardDetailResponseDto = boardService.getDetailBoard(boardid, isliked);
         return new ResponseEntity<>(new BoardDetail("success", "게시글 상세 불러오기 성공", boardDetailResponseDto), HttpStatus.OK);
@@ -94,15 +104,22 @@ public class BoardRestController {
 
     //직접 사용자 검색 기능
     @GetMapping("/search")
-    public ResponseEntity<BoardList> getSearchBoardList(@RequestParam(value = "limit") int limitcount, @RequestParam(value = "filtertype") String filtertype, @RequestParam(value = "searchtitle") String searchtitle, @RequestParam(value = "mapdata") String mapdata) {
-        List<BoardAllResponseDto> boardResponseDtos = boardService.getSearchBoard(filtertype, searchtitle, mapdata, limitcount);
+    public ResponseEntity<BoardList> getSearchBoardList(@RequestParam(value = "limit") Long limitcount, @RequestParam(value = "filtertype") Optional<String> filtertype, @RequestParam(value = "searchtitle") Optional<String> searchtitle, @RequestParam(value = "mapdata") Optional<String> mapdata) {
+        // 각각의 변수에 대한 default값 설정
+        String validmapdata = boardValidator.DefaultMapData(mapdata);
+        String validFilterData = boardValidator.DefaultFilterData(filtertype);
+        String validSearchData = boardValidator.DefaultSearchData(searchtitle);
+        Long validLimitCount = boardValidator.DefaultLimitCount(limitcount);
+
+        List<BoardAllResponseDto> boardResponseDtos = boardService.getSearchBoard(validFilterData, validSearchData, validmapdata, validLimitCount);
         return new ResponseEntity<>(new BoardList("success", "검색 " + filtertype + " 성공", boardResponseDtos), HttpStatus.OK);
     }
 
     //릴스 동영상 get 하는 방식
     @GetMapping("/board/video")
-    public ResponseEntity<AllVideo> getVideo(@RequestParam(value = "limit") int limitcount) {
-        List<VideoAllResponseDto> videoAllResponseDtos = boardService.getAllVideo(limitcount);
+    public ResponseEntity<AllVideo> getVideo(@RequestParam(value = "limit") Long limitcount) {
+        Long validLimitCount = boardValidator.DefaultLimitCount(limitcount);
+        List<VideoAllResponseDto> videoAllResponseDtos = boardService.getAllVideo(validLimitCount);
         return new ResponseEntity<>(new AllVideo("success", "영상 전송 성공", videoAllResponseDtos), HttpStatus.OK);
     }
 }
