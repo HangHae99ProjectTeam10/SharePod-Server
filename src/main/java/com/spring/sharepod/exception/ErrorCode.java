@@ -14,15 +14,24 @@ public enum ErrorCode {
     // 404 Not Found - 해당 RESOURECE 를 찾을 수 없음 (경로가 없거나 그런거임).
 
     // 회원가입 관련 에러 모음
+    //request 에러
+    REGISTER_NULL_NICKNAME(HttpStatus.BAD_REQUEST, "400_Register_Null_1", "닉네임을 입력해주세요."),
+    REGISTER_NULL_USERNAME(HttpStatus.BAD_REQUEST, "400_Register_Null_2", "이메일을 입력하세요."),
+    REGISTER_NULL_PASSWORD(HttpStatus.BAD_REQUEST, "400_Register_Null_3", "비밀번호를 입력하세요"),
+    REGISTER_NULL_PASSWORDCHECK(HttpStatus.BAD_REQUEST, "400_Register_Null_4", "비밀번호 검사를 입력하세요."),
+    REGISTER_NULL_MAPDATA(HttpStatus.BAD_REQUEST, "400_Register_Null_5", "지역을 입력하세요."),
+    REGISTER_NULL_USERIMG(HttpStatus.BAD_REQUEST, "400_Register_Null_6", "프로필 사진을 입력하세요."),
+
+    //형식이 틀렸을 시
     USERNAME_VALIDATE(HttpStatus.BAD_REQUEST, "400_Register_1", "유저네임은 최소 3자 이상, 알파벳 대소문자(a~z, A~Z), 숫자(0~9)로 구성해야 합니다." ),
     USERNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "400_Register_2", "이미 존재하는 유저네임 입니다."),
 
-    EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "400_Register_3", "이미 가입한 E-MAIL 입니다."),
-    EMAIL_VALIDATE(HttpStatus.BAD_REQUEST, "400_Register_4", "이메일 형식이 아닙니다."),
+    EMAIL_VALIDATE(HttpStatus.BAD_REQUEST, "400_Register_3", "이메일 형식이 아닙니다."),
+    EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "400_Register_4", "이미 가입한 E-MAIL 입니다."),
 
-    PASSWORD_INCLUDE_USERNAME(HttpStatus.BAD_REQUEST, "400_Register_4", "비밀번호는 닉네임을 포함하지 못합니다."),
-    PASSWORD_LENGTH(HttpStatus.BAD_REQUEST, "400_Register_5", "비밀번호는 최소 4자 이상입니다."),
-    PASSWORD_COINCIDE(HttpStatus.BAD_REQUEST, "400_Register_6", "비밀번호를 다시 한번 확인해주세요"),
+    PASSWORD_INCLUDE_USERNAME(HttpStatus.BAD_REQUEST, "400_Register_5", "비밀번호는 닉네임을 포함하지 못합니다."),
+    PASSWORD_LENGTH(HttpStatus.BAD_REQUEST, "400_Register_6", "비밀번호는 최소 4자 이상입니다."),
+    PASSWORD_COINCIDE(HttpStatus.BAD_REQUEST, "400_Register_7", "비밀번호를 다시 한번 확인해주세요"),
 
 
     // 로그인 관련 에러 모음
@@ -60,15 +69,20 @@ public enum ErrorCode {
     // 인증사진 관련 에러 모음
     AUTHIMGBOX_NOT_EXIST(HttpStatus.BAD_REQUEST, "404_AuthImgBox_1", "이미 거래 요청이 존재합니다."),
     AUTHIMGBOX_NOT_SELLER(HttpStatus.BAD_REQUEST, "400_AuthImgBox_2", "판매자가 아닙니다."),
-    AUTHIMGBOX_NOT_BUYER(HttpStatus.NOT_FOUND, "404_AUTHIMGBOX_1", "해당 물건의 구매자가 아닙니다."),
+    AUTHIMGBOX_NOT_BUYER(HttpStatus.NOT_FOUND, "404_AUTHImgBOX_1", "해당 물건의 구매자가 아닙니다."),
 
     //알림 삭제 관련 에러 모음
     NOTICE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_Notice_1", "해당 알림는 존재하지 않습니다."),
-
+    NOTICELIST_NOT_EXIST(HttpStatus.NOT_FOUND, "404_Notice_2", "알림 목록이 없습니다."),
+    NOTICE_DELETE_NOT_EXIST(HttpStatus.NOT_FOUND, "403_Notice_1", "해당 알림을 삭제할 권한이 없습니다."),
 
     //인증 페이지 관련 에러 모음
     AUTH_NOT_EXIST(HttpStatus.NOT_FOUND, "404_AUTH_1", "해당 인증 페이지는 존재하지 않습니다."),
     AUTH_NOT_SELLER(HttpStatus.NOT_FOUND, "400_AUTH_1", "해당 기능은 판매자만 가능합니다."),
+
+    //500
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"500_AUTH_1" ,"Internal Server Error");
+
 
     //파일 관련 에러모음
     VIDEOFILE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_FILE_1", "비디오 파일을 입력하지 않았습니다.");

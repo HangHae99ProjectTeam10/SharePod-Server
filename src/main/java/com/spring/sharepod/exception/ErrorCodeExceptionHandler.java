@@ -11,10 +11,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class ErrorCodeExceptionHandler extends ResponseEntityExceptionHandler {
 
-    // ErrorCode 에서 만든 커스텀 에러들을 보낼 수 있다! 이거 너무좋다.
+
     @ExceptionHandler( value = { ErrorCodeException.class })
     protected ResponseEntity<ErrorCodeResponse> handleCustomException(ErrorCodeException e) {
         log.error("Error - ErrorCodeException : " + e.getErrorCode());
         return ErrorCodeResponse.toResponseEntity(e.getErrorCode());
     }
+
+
 }
