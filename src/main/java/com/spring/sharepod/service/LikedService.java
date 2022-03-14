@@ -11,6 +11,8 @@ import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.repository.UserRepository;
+import com.spring.sharepod.validator.BoardValidator;
+import com.spring.sharepod.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +24,17 @@ public class LikedService {
     private final LikedRepository likedRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final BoardValidator boardValidator;
+    private final UserValidator userValidator;
 
     @Transactional
     public BasicResponseDTO islikeservice(Long boardid, LikeRequestDTO requestDTO) {
 
         //찜할 게시판 boardid로 검색해 가져오기
-        Board board = boardRepository.findById(boardid).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
-        );
+        Board board = boardValidator.ValidByBoardId(boardid);
+
         //찜할 유저 userid로 검색해 가져오기
-        User user = userRepository.findById(requestDTO.getUserid()).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND)
-        );
+        User user = userValidator.ValidByUserId(requestDTO.getUserid());
 
         //해당 like 가져오기
         Liked like = likedRepository.findByUserAndBoard(user, board);

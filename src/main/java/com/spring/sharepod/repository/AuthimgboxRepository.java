@@ -6,11 +6,17 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 public interface AuthimgboxRepository extends JpaRepository<Authimgbox, Long> {
 
     @Modifying
     @Transactional
     @Query("delete from Authimgbox a where a.auth.id=:authid")
     void deleteByAuthId(Long authid);
+
+
+    @Query("select a from Authimgbox a where a.auth.authbuyer.id=:buyerid")
+    Optional<Authimgbox> findByBuyerId(Long buyerid);
 
 }

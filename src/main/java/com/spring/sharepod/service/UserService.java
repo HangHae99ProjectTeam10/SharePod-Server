@@ -190,8 +190,7 @@ public class UserService {
     //회원 정보 수정
     @Transactional
     public BasicResponseDTO usermodifyService(Long userid, UserModifyRequestDTO modifyRequestDTO){
-        User user = userRepository.findById(userid).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
+        User user = userValidator.ValidByUserId(userid);
 
         //유저 이미지가 변경 되었을 때
         if(modifyRequestDTO.getUserimg() != null){

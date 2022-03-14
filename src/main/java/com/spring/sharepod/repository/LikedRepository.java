@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface LikedRepository extends JpaRepository<Liked, Long> {
 
+    @Query("select c from Liked c where c.user=:user and c.board=:board")
     Liked findByUserAndBoard(User user, Board board);
 
     //userid와 boardid를 통한

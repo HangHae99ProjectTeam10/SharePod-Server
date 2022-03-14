@@ -81,11 +81,11 @@ public enum ErrorCode {
     AUTH_NOT_SELLER(HttpStatus.NOT_FOUND, "400_AUTH_1", "해당 기능은 판매자만 가능합니다."),
 
     //500
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"500_AUTH_1" ,"Internal Server Error");
-
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"500_AUTH_1" ,"Internal Server Error"),
 
     //파일 관련 에러모음
     VIDEOFILE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_FILE_1", "비디오 파일을 입력하지 않았습니다.");
+
     private final HttpStatus httpStatus;
     private final String errorCode;
     private final String errorMessage;

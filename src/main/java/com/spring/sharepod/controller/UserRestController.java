@@ -41,6 +41,7 @@ public class UserRestController {
 
         //유저 프로필 업로드
         String userimg = s3Service.upload(userRegisterRequestDto, imgfile);
+
         userRegisterRequestDto.setUserimg(userimg);
 
         //회원가입 완료
