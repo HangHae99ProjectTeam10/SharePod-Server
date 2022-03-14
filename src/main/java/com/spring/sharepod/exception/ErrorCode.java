@@ -49,14 +49,22 @@ public enum ErrorCode {
     RESERVATION_NOT_EXIST(HttpStatus.BAD_REQUEST, "400_Reservation_1", "이미 거래 요청이 존재합니다."),
 
 
-    // 인증 관련 에러 모음
+    // 인증사진 관련 에러 모음
     AUTHIMGBOX_NOT_EXIST(HttpStatus.BAD_REQUEST, "404_AuthImgBox_1", "이미 거래 요청이 존재합니다."),
     AUTHIMGBOX_NOT_SELLER(HttpStatus.BAD_REQUEST, "400_AuthImgBox_2", "판매자가 아닙니다."),
+    AUTHIMGBOX_NOT_BUYER(HttpStatus.NOT_FOUND, "404_AUTHIMGBOX_1", "해당 물건의 구매자가 아닙니다."),
+
     //알림 삭제 관련 에러 모음
     NOTICE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_Notice_1", "해당 알림는 존재하지 않습니다."),
 
+
+    //인증 페이지 관련 에러 모음
+    AUTH_NOT_EXIST(HttpStatus.NOT_FOUND, "404_AUTH_1", "해당 인증 페이지는 존재하지 않습니다."),
+    AUTH_NOT_SELLER(HttpStatus.NOT_FOUND, "400_AUTH_1", "해당 기능은 판매자만 가능합니다.");
+
     //해당 물건의 구매자가 아닙니다.
-    AUTHIMGBOX_NOT_EXIST(HttpStatus.NOT_FOUND, "404_AUTHIMGBOX_1", "해당 물건의 구매자가 아닙니다.");
+    AUTHIMGBOX_NOT_BUYER(HttpStatus.NOT_FOUND, "404_AUTHIMGBOX_1", "해당 물건의 구매자가 아닙니다.");
+
 
     private final HttpStatus httpStatus;
     private final String errorCode;

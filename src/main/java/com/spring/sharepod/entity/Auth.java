@@ -45,7 +45,7 @@ public class Auth{
     private User authseller;
 
     //Auth : Board => N: 1 boardid 외래키를 뜻함
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "BOARDID")
     private Board board;
 

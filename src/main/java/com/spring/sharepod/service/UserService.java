@@ -1,6 +1,8 @@
 package com.spring.sharepod.service;
 
+import com.spring.sharepod.dto.request.User.UserModifyRequestDTO;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
+import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.dto.response.Board.MyBoardResponseDto;
 import com.spring.sharepod.dto.response.Board.RentBuyerResponseDto;
 import com.spring.sharepod.dto.response.Board.RentSellerResponseDto;
@@ -10,6 +12,7 @@ import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
+import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.AuthRepository;
 import com.spring.sharepod.repository.BoardRepository;
@@ -169,6 +172,41 @@ public class UserService {
             rentSellerResponseDtoList.add(rentSellerResponseDto);
         }
         return rentSellerResponseDtoList;
+
+    }
+
+
+    @Transactional
+    public String UserDelete(Long userid){
+        //여기서 userid랑 토큰 비교
+        // 다를 경우 에러 메시지 호출
+
+        User user = userRepository.findById(userid).orElseThrow(()-> new ErrorCodeException(USER_NOT_FOUND));
+        userRepository.deleteById(userid);
+
+        return user.getNickname();
+}
+
+    //회원 정보 수정
+    @Transactional
+    public BasicResponseDTO usermodifyService(Long userid, UserModifyRequestDTO modifyRequestDTO){
+        User user = userRepository.findById(userid).orElseThrow(
+                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
+
+        //유저 이미지가 변경 되었을 때
+        if(modifyRequestDTO.getUserimg() != null){
+            user.update1(modifyRequestDTO);
+        }
+        // 아닐때
+        else {
+            user.update2(modifyRequestDTO);
+        }
+
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg("수정 성공")
+                .build();
+
 
     }
 }
