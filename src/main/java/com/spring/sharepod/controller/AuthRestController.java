@@ -8,6 +8,8 @@ import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.service.AuthService;
 import com.spring.sharepod.service.S3Service;
+import com.spring.sharepod.validator.TokenValidator;
+import com.spring.sharepod.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ import java.io.IOException;
 public class AuthRestController {
     private final S3Service s3Service;
     private final AuthService authService;
+    private final UserValidator userValidator;
+    private final TokenValidator tokenValidator;
 
     //buyer가 인증 이미지 저장
     @PostMapping("/auth/img/{userid}/{authimgboxid}")
@@ -39,15 +43,28 @@ public class AuthRestController {
         return authService.dataAllResponseDTO(authid);
     }
 
-
+    // 빌려준 사람의 인증 성공 or 실패
     @PostMapping("/auth/img/bool")
     public ResponseEntity<Success> AuthBool(@RequestBody AuthBoolRequestDto authBoolRequestDto){
+        //토큰과 authBoolRequestDto.getSellerid()가 일치하는지에 대한 판단
+        tokenValidator.userIdCompareToken(authBoolRequestDto.getSellerid());
+
+        //seller id가 user 테이블에 존재하는지에 대한 판단
+        userValidator.ValidByUserId(authBoolRequestDto.getSellerid());
+
         authService.BoolAuth(authBoolRequestDto);
         return new ResponseEntity<>(new Success("success"," 사진 인증 성공"), HttpStatus.OK);
     }
 
+    // 재업로드 or 삭제 api
     @PostMapping("/auth/reupload")
     public ResponseEntity<Success> AuthBool(@RequestBody AuthCheckReUploadRequestDto authCheckReUploadRequestDto){
+        //토큰과 authBoolRequestDto.getSellerid()가 일치하는지에 대한 판단
+        tokenValidator.userIdCompareToken(authCheckReUploadRequestDto.getSellerid());
+
+        //seller id가 user 테이블에 존재하는지에 대한 판단
+        userValidator.ValidByUserId(authCheckReUploadRequestDto.getSellerid());
+
         Long id = authService.CheckReuploadBoard(authCheckReUploadRequestDto);
 
         String result = "";
