@@ -22,9 +22,7 @@ public class LikeRestController {
     //찜하기, 찜하기 취소
     @PostMapping("/like/{boardid}")
     public BasicResponseDTO likecontroll(@PathVariable Long boardid, @RequestBody LikeRequestDTO requestDTO, @AuthenticationPrincipal User user){
-        tokenValidator.likeIdCompareToken(requestDTO.getUserid(),user);
+        tokenValidator.userIdCompareToken(requestDTO.getUserid(),user.getId());
         return likedService.islikeservice(boardid,requestDTO);
     }
-
-
 }

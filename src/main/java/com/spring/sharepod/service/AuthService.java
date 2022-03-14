@@ -6,16 +6,15 @@ import com.spring.sharepod.dto.response.Auth.AuthDataResponseDTO;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Board;
-import com.spring.sharepod.exception.ErrorCode;
-import com.spring.sharepod.exception.ErrorCodeException;
+import com.spring.sharepod.entity.User;
 import com.spring.sharepod.repository.AuthRepository;
 import com.spring.sharepod.repository.AuthimgboxRepository;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.validator.AuthValidator;
-import com.spring.sharepod.validator.AuthimgboxValidator;
 import com.spring.sharepod.validator.BoardValidator;
 import com.spring.sharepod.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,15 +44,15 @@ public class AuthService {
 
     //buyer가 인증 이미지 업로드
     @PostMapping("/auth/img/{userid}/{authimgboxid}")
-    public BasicResponseDTO AuthImgUpload(@PathVariable Long userid, @PathVariable Long authimgboxid, @RequestPart MultipartFile authfile) throws IOException {
+    public BasicResponseDTO AuthImgUpload(@PathVariable Long userid, @PathVariable Long authimgboxid, @RequestPart MultipartFile authfile,@AuthenticationPrincipal User user) throws IOException {
         // 토큰과 userid 일치하는지 확인
-        tokenValidator.userIdCompareToken(userid);
+        tokenValidator.userIdCompareToken(userid,user.getId());
 
         //인증 사진 저장 및 유저 정보 맞는지 확인
         String s3authimgurl = s3Service.authimgboxs3(userid, authimgboxid, authfile);
 
         //authimgbox 저장 및 반환
-        return authImgService.authimguploadService(userid, authimgboxid, s3authimgurl);
+        return authImgService.authimguploadService(userid, authimgboxid, s3authimgurl, user);
     }
 
 

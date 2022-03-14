@@ -3,9 +3,11 @@ package com.spring.sharepod.service;
 import com.spring.sharepod.dto.request.Auth.AuthBoolRequestDto;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.entity.Authimgbox;
+import com.spring.sharepod.entity.User;
 import com.spring.sharepod.validator.AuthimgboxValidator;
 import com.spring.sharepod.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +18,9 @@ public class AuthImgService {
     private final AuthimgboxValidator authimgboxValidator;
 
     @javax.transaction.Transactional
-    public BasicResponseDTO authimguploadService(Long userid, Long authimgboxid, String imgurl) {
+    public BasicResponseDTO authimguploadService(Long userid, Long authimgboxid, String imgurl, @AuthenticationPrincipal User user) {
         //user가 토큰과 일치하는지
-        tokenValidator.userIdCompareToken(userid);
+        tokenValidator.userIdCompareToken(userid,user.getId());
 
         //구매자가 id가 일치하는지를 확인한다.
         Authimgbox authimgbox = authimgboxValidator.ValidAuthImgBoxByBuyerId(userid);
