@@ -38,7 +38,7 @@ public class BoardRestController {
     private final BoardValidator boardValidator;
 
 
-    //**게시판 작성
+    //** 9번 게시판 작성
     @PostMapping("/board")
     public BasicResponseDTO writeBoard(@RequestPart BoardWriteRequestDTO boardWriteRequestDTO,
                                        @RequestPart MultipartFile[] imgfiles,
@@ -54,7 +54,7 @@ public class BoardRestController {
         return boardService.wirteboard(boardWriteRequestDTOadd);
     }
 
-    //**게시판 수정
+    //** 10번 게시판 수정
     @PatchMapping("/board/{boardid}")
 
     public BasicResponseDTO updateboardcontroll(@PathVariable Long boardid, @RequestBody BoardPatchRequestDTO patchRequestDTO) {

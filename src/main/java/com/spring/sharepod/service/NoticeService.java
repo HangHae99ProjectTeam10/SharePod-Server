@@ -77,6 +77,9 @@ public class NoticeService {
         //알림이 존재하지 않을 시 에러 메시지 호출
         Notice findNoticeId = noticeValidator.ValidDeleteNotice(noticeid);
 
+        //findNoticeId를 통해 token으로 받은 정보와 일치하는지 확인한다.
+        // if(user.getId() == findNoticeId.getSeller().getId() or findNoticeId.getBuyer().getId())
+
         //존재할 시 해당 id로 알림 삭제
         noticeRepository.deleteByNoticeId(noticeid);
     }

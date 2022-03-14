@@ -31,6 +31,7 @@ public class NoticeRestController {
     public ResponseEntity<NoticeCount> NoticeCount(@PathVariable Long userid){
         //userid와 토큰 비교 validator
         tokenValidator.userIdCompareToken(userid);
+
         int NoticeCount = noticeService.getNoticeCount(userid);
         return new ResponseEntity<>(new NoticeCount("success", "알림 개수 전송 성공", NoticeCount), HttpStatus.OK);
     }
@@ -39,6 +40,7 @@ public class NoticeRestController {
     public ResponseEntity<NoticeInfo> NoticeList(@PathVariable Long userid){
         //userid와 토큰 비교 validator
         tokenValidator.userIdCompareToken(userid);
+
         List<NoticeResponseDto> noticeList = noticeService.getNoticeList(userid);
         return new ResponseEntity<>(new NoticeInfo("success", "알림 목록 데이터 전송 성공",noticeList), HttpStatus.OK);
     }

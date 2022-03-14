@@ -14,11 +14,7 @@ import java.util.Optional;
 import static com.spring.sharepod.exception.ErrorCode.BOARD_NOT_FOUND;
 import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
-import com.spring.sharepod.exception.ErrorCodeException;
-import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
