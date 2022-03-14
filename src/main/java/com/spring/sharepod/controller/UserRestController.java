@@ -1,7 +1,9 @@
 package com.spring.sharepod.controller;
 
 
+import com.spring.sharepod.dto.request.User.UserModifyRequestDTO;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
+import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.dto.response.Board.MyBoardResponseDto;
 import com.spring.sharepod.dto.response.Board.RentBuyerResponseDto;
 import com.spring.sharepod.dto.response.Board.RentSellerResponseDto;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @RestController
@@ -51,6 +54,21 @@ public class UserRestController {
         List<RentBuyerResponseDto> rentbuyer = userService.getBuyList(userid);
         List<RentSellerResponseDto> rentseller = userService.getSellList(userid);
         return new ResponseEntity<>(new UserInfo("success", "내 정보 불러오기 성공", userinfo,userlikeboard,usermyboard,rentbuyer,rentseller), HttpStatus.OK);
+    }
+
+    //회원 정보 수정하기
+    @PatchMapping("/user/{userid}")
+    public BasicResponseDTO usermodify(@PathVariable Long userid,
+                                       @RequestPart UserModifyRequestDTO userModifyRequestDTO,
+                                       @RequestPart MultipartFile userimgfile) throws IOException {
+
+        //이미지가 새롭게 들어왔으면
+        if(!Objects.equals(userimgfile.getOriginalFilename(), "")){
+            //변경된 사진 저장 후 이름 넘겨주기
+            userModifyRequestDTO.setUserimg(s3Service.userprofileimgchange(userimgfile));
+        }
+
+        return userService.usermodifyService(userid, userModifyRequestDTO);
     }
 
 }

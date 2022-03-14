@@ -71,6 +71,9 @@ public class Board extends Timestamped {
     @JoinColumn(name = "USERID")
     private User user;
 
+    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private Auth auth;
+
     //Board : Liked => 해당 boardid를 좋아요 누른 목록을 가져오기 위한 양방향 설정
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Liked> likeNumber = new ArrayList<>();

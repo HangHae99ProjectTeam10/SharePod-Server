@@ -1,6 +1,7 @@
 package com.spring.sharepod.entity;
 
 
+import com.spring.sharepod.dto.request.User.UserModifyRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,6 +52,20 @@ public class User extends Timestamped {
     //Auth : User => 해당 authseller 요청 목록을 가져오기 위한 양방향 설정
     @OneToMany(mappedBy = "authseller")
     private List<Auth> authsellerlist = new ArrayList<>();
+
+    //유저 이미지가 변경 되었을 때
+    public void update1(UserModifyRequestDTO modifyRequestDTO){
+        this.username = modifyRequestDTO.getUsername();
+        this.nickname = modifyRequestDTO.getNickname();
+        this.mapdata = modifyRequestDTO.getMapdata();
+        this.userimg = modifyRequestDTO.getUserimg();
+    }
+    // 아닐때
+    public void update2(UserModifyRequestDTO modifyRequestDTO){
+        this.username = modifyRequestDTO.getUsername();
+        this.nickname = modifyRequestDTO.getNickname();
+        this.mapdata = modifyRequestDTO.getMapdata();
+    }
 
 
 }
