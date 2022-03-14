@@ -22,7 +22,7 @@ public class Notice extends Timestamped {
     private String noticeinfo;
 
     //Notice : User => N: 1 buyer 외래키를 뜻함
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "BUYER")
     private User buyer;
 

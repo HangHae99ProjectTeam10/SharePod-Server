@@ -171,4 +171,15 @@ public class UserService {
         return rentSellerResponseDtoList;
 
     }
+
+    @Transactional
+    public String UserDelete(Long userid){
+        //여기서 userid랑 토큰 비교
+        // 다를 경우 에러 메시지 호출
+
+        User user = userRepository.findById(userid).orElseThrow(()-> new ErrorCodeException(USER_NOT_FOUND));
+        userRepository.deleteById(userid);
+
+        return user.getNickname();
+    }
 }
