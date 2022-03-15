@@ -6,11 +6,9 @@ import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
@@ -20,33 +18,35 @@ import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.ErrorCode;
 import com.spring.sharepod.exception.ErrorCodeException;
-import com.spring.sharepod.repository.AuthRepository;
 import com.spring.sharepod.repository.AuthimgboxRepository;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.UserRepository;
+import com.spring.sharepod.validator.AuthValidator;
+import com.spring.sharepod.validator.AuthimgboxValidator;
 import com.spring.sharepod.validator.BoardValidator;
-import io.sentry.Sentry;
+import com.spring.sharepod.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.spring.sharepod.exception.ErrorCode.VIDEOFILE_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
 public class S3Service {
     private final UserRepository userRepository;
     private final AuthimgboxRepository authimgboxRepository;
-    private final BoardValidator boardValidator;
     private final BoardRepository boardRepository;
+    private final BoardValidator boardValidator;
+    private final UserValidator userValidator;
+    private final AuthimgboxValidator authimgboxValidator;
+    private final AuthValidator authValidator;
+
 
     private AmazonS3 s3Client;
 
@@ -91,8 +91,8 @@ public class S3Service {
         boardValidator.validateBoardWrite(boardWriteRequestDTO, imgfiles, videofile);
 
         //이미지 3개 처리
-        User user = userRepository.findById(boardWriteRequestDTO.getUserid()).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
+        User user = userValidator.ValidByUserId(boardWriteRequestDTO.getUserid());
+
         String[] giveurl = new String[3];
         for (int i = 0; i < imgfiles.length; i++) {
             String filename = UUID.randomUUID() + "_" + imgfiles[i].getOriginalFilename();
@@ -124,14 +124,14 @@ public class S3Service {
                                             MultipartFile[] imgfiles,
                                             MultipartFile videofile) throws IOException {
         //수정할 게시판 boardid로 검색해 가져오기
-        Board board = boardRepository.findById(boardid).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND));
+        Board board = boardValidator.ValidByBoardId(boardid);
+
         //게시판 작성 validator
         boardValidator.validateBoardUpdate(patchRequestDTO);
 
         //이미지 3개 처리
-        User user = userRepository.findById(patchRequestDTO.getUserid()).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
+        User user = userValidator.ValidByUserId(patchRequestDTO.getUserid());
+
         String[] giveurl = new String[3];
         for (int i = 0; i < imgfiles.length; i++) {
             if (Objects.equals(imgfiles[i].getOriginalFilename(), "")) {
@@ -211,31 +211,17 @@ public class S3Service {
             }
 
         }
-//        try {
-//            System.out.println(fileName);
-//            s3Client.deleteObject(bucket, fileName);
-//        }
-////        }catch (Exception e) {
-////            Sentry.captureException(e);
-////        }
-//        catch (AmazonServiceException e){
-//            System.out.println(e.getErrorMessage());
-//        }
-//        catch (SdkClientException e) {
-//            e.printStackTrace();
-//        }
-//        }
     }
 
     //인증 이미지
     public String authimgboxs3(Long userid, Long authimgboxid, MultipartFile authfile) throws IOException {
 
-        //구매자가 인증을 누르는 건지 확인
-        Authimgbox authimgbox = authimgboxRepository.findById(authimgboxid).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_EXIST));
-        if (!Objects.equals(userid, authimgbox.getAuth().getAuthbuyer().getId())) {
-            throw new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_EXIST);
-        }
+        //이미지박스 id가 존재하는지 확인
+        Authimgbox authimgbox = authimgboxValidator.ValidAuthImgBoxById(authimgboxid);
+
+        //구매자가 아이디가 일치하는지 확인
+        authimgboxValidator.ValidAuthImgBoxIdEqualBuyerId(userid,authimgbox.getAuth().getAuthbuyer().getId());
+
 
         //이미지 s3 저장
         String imgname = UUID.randomUUID() + "_" + authfile.getOriginalFilename();
@@ -248,6 +234,7 @@ public class S3Service {
     //유저 프로필 이미지 변경시
     public String userprofileimgchange(MultipartFile userimgfile) throws IOException {
         //추후 S3에서 기존 이미지를 삭제해주는 과정을 해야함
+
 
         String userimg = UUID.randomUUID() + "_" + userimgfile.getOriginalFilename();
         s3Client.putObject(new PutObjectRequest(bucket, userimg, userimgfile.getInputStream(), null)

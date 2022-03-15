@@ -24,6 +24,7 @@ public class UserValidator {
 
     private final UserRepository userRepository;
 
+    //회원가입 validator
     public void validateUserRegisterData(UserRegisterRequestDto userRegisterRequestDto) {
 
         //userRegisterRequestDto 중에 하나라도 빵구
@@ -95,10 +96,12 @@ public class UserValidator {
 
     }
 
+    //유저네임(이메일) 유무 확인
     public void validateUserChange(UserModifyRequestDTO modifyRequestDTO) {
         // 유저네임(이메일) 유무 확인
         userRepository.findByUsername(modifyRequestDTO.getUsername()).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
 
     }
+
 }

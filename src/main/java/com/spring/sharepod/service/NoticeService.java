@@ -3,6 +3,7 @@ package com.spring.sharepod.service;
 
 import com.spring.sharepod.dto.response.Notice.NoticeResponseDto;
 import com.spring.sharepod.entity.Notice;
+import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.NoticeRepository;
 import com.spring.sharepod.validator.NoticeValidator;
@@ -73,9 +74,16 @@ public class NoticeService {
 
     //알림 확인 삭제
     @Transactional
-    public void DeleteNotice(Long noticeid) {
+    public void DeleteNotice(Long noticeid, Long userid) {
         //알림이 존재하지 않을 시 에러 메시지 호출
         Notice findNoticeId = noticeValidator.ValidDeleteNotice(noticeid);
+
+
+
+        //findNoticeId를 통해 token으로 받은 정보와 일치하는지 확인한다.
+         if(Objects.equals(userid, findNoticeId.getSeller().getId()) || Objects.equals(userid, findNoticeId.getBuyer().getId())){
+
+         }
 
         //존재할 시 해당 id로 알림 삭제
         noticeRepository.deleteByNoticeId(noticeid);

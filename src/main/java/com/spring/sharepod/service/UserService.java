@@ -1,5 +1,6 @@
 package com.spring.sharepod.service;
 
+import com.spring.sharepod.dto.request.User.UserLoginRequest;
 import com.spring.sharepod.dto.request.User.UserModifyRequestDTO;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
@@ -7,6 +8,7 @@ import com.spring.sharepod.dto.response.Board.MyBoardResponseDto;
 import com.spring.sharepod.dto.response.Board.RentBuyerResponseDto;
 import com.spring.sharepod.dto.response.Board.RentSellerResponseDto;
 import com.spring.sharepod.dto.response.Liked.LikedResponseDto;
+import com.spring.sharepod.dto.response.User.LoginReturnResponseDTO;
 import com.spring.sharepod.dto.response.UserInfoResponseDto;
 import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Board;
@@ -18,15 +20,18 @@ import com.spring.sharepod.repository.AuthRepository;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.repository.UserRepository;
+import com.spring.sharepod.security.jwt.JwtTokenProvider;
 import com.spring.sharepod.validator.LikedValidator;
-import com.spring.sharepod.validator.TokenValidator;
 import com.spring.sharepod.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.spring.sharepod.exception.ErrorCode.USER_NOT_FOUND;
@@ -37,12 +42,37 @@ import static com.spring.sharepod.exception.ErrorCode.USER_NOT_FOUND;
 public class UserService {
 
     private final UserValidator userValidator;
-    //    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final LikedRepository likedRepository;
     private final BoardRepository boardRepository;
     private final AuthRepository authRepository;
+    private final JwtTokenProvider jwtTokenProvider;
     private final LikedValidator likedValidator;
+
+    //로그인
+    @Transactional
+    public LoginReturnResponseDTO loginReturnDTO(UserLoginRequest userLoginRequest, HttpServletResponse res){
+        User user = userRepository.findByUsername(userLoginRequest.getUsername()).orElseThrow(
+                () -> new ErrorCodeException(USER_NOT_FOUND));
+
+        //비밀번호 다르면
+        if(!passwordEncoder.matches(userLoginRequest.getPassword(),user.getPassword())){
+            throw new ErrorCodeException(ErrorCode.PASSWORD_COINCIDE);
+        }
+
+        String tokenDto = jwtTokenProvider.createToken(user.getUsername(), user.getRoles(),user.getId());
+        res.addHeader("Bearer", tokenDto);
+
+        return LoginReturnResponseDTO.builder()
+                .result("success")
+                .msg("로그인 성공")
+                .userid(user.getId())
+                .nickname(user.getNickname())
+                .mapdata(user.getMapdata())
+                .userimg(user.getUserimg())
+                .build();
+    }
 
     // 회원가입
     @Transactional
@@ -58,10 +88,10 @@ public class UserService {
         User user = User.builder()
                 .userimg(userRegisterRequestDto.getUserimg())
                 .username(userRegisterRequestDto.getUsername())
-                .password(userRegisterRequestDto.getPassword())
+                .password(passwordEncoder.encode(userRegisterRequestDto.getPassword()))
                 .mapdata(userRegisterRequestDto.getMapdata())
                 .nickname(userRegisterRequestDto.getNickname())
-                //.roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
+                .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
                 .build();
 
         // 유저 저장하기
@@ -190,8 +220,7 @@ public class UserService {
     //회원 정보 수정
     @Transactional
     public BasicResponseDTO usermodifyService(Long userid, UserModifyRequestDTO modifyRequestDTO){
-        User user = userRepository.findById(userid).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
+        User user = userValidator.ValidByUserId(userid);
 
         //유저 이미지가 변경 되었을 때
         if(modifyRequestDTO.getUserimg() != null){

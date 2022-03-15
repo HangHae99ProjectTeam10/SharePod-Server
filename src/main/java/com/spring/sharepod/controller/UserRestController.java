@@ -1,6 +1,7 @@
 package com.spring.sharepod.controller;
 
 
+import com.spring.sharepod.dto.request.User.UserLoginRequest;
 import com.spring.sharepod.dto.request.User.UserModifyRequestDTO;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
 import com.spring.sharepod.dto.response.BasicResponseDTO;
@@ -8,7 +9,9 @@ import com.spring.sharepod.dto.response.Board.MyBoardResponseDto;
 import com.spring.sharepod.dto.response.Board.RentBuyerResponseDto;
 import com.spring.sharepod.dto.response.Board.RentSellerResponseDto;
 import com.spring.sharepod.dto.response.Liked.LikedResponseDto;
+import com.spring.sharepod.dto.response.User.LoginReturnResponseDTO;
 import com.spring.sharepod.dto.response.UserInfoResponseDto;
+import com.spring.sharepod.entity.User;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.model.UserInfo;
 import com.spring.sharepod.service.S3Service;
@@ -18,9 +21,11 @@ import com.spring.sharepod.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +39,12 @@ public class UserRestController {
     private final UserValidator userValidator;
     //private final FileUploadService fileUploadService;
 
+    //로그인 구현하기
+    @PostMapping("/user/login")
+    public LoginReturnResponseDTO loginControll(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse res){
+        return userService.loginReturnDTO(userLoginRequest,res);
+    }
+
     // 유저 생성하기 (JSON)
     @PostMapping("/user/register")
     public ResponseEntity<Success> createUser(@RequestPart UserRegisterRequestDto userRegisterRequestDto,
@@ -41,6 +52,7 @@ public class UserRestController {
 
         //유저 프로필 업로드
         String userimg = s3Service.upload(userRegisterRequestDto, imgfile);
+
         userRegisterRequestDto.setUserimg(userimg);
 
         //회원가입 완료
@@ -52,9 +64,9 @@ public class UserRestController {
     @PatchMapping("/user/{userid}")
     public BasicResponseDTO usermodify(@PathVariable Long userid,
                                        @RequestPart UserModifyRequestDTO userModifyRequestDTO,
-                                       @RequestPart MultipartFile userimgfile) throws IOException {
+                                       @RequestPart MultipartFile userimgfile, @AuthenticationPrincipal User user) throws IOException {
         //토큰과 userid 일치 확인
-        tokenValidator.userIdCompareToken(userid);
+        tokenValidator.userIdCompareToken(userid, user.getId());
 
         //해당 request vaildator 작동
         userValidator.validateUserChange(userModifyRequestDTO);
@@ -70,9 +82,9 @@ public class UserRestController {
 
     //회원 탈퇴하기
     @DeleteMapping("/user/{userid}")
-    public ResponseEntity<Success> DeleteUser(@PathVariable Long userid){
+    public ResponseEntity<Success> DeleteUser(@PathVariable Long userid,@AuthenticationPrincipal User user){
         //토큰과 userid 일치 확인
-        tokenValidator.userIdCompareToken(userid);
+        tokenValidator.userIdCompareToken(userid,user.getId());
 
         String nickname = userService.UserDelete(userid);
         return new ResponseEntity<>(new Success("success", nickname + " 님의 회원탈퇴 성공했습니다."),HttpStatus.OK);
@@ -80,9 +92,9 @@ public class UserRestController {
 
     //마이페이지 불러오기
     @GetMapping("/user/{userid}")
-    public ResponseEntity<UserInfo> getBoardList(@PathVariable Long userid) {
+    public ResponseEntity<UserInfo> getBoardList(@PathVariable Long userid, @AuthenticationPrincipal User user) {
         //토큰과 userid 일치 확인
-        tokenValidator.userIdCompareToken(userid);
+        tokenValidator.userIdCompareToken(userid,user.getId());
 
         //각각의 데이터 받아오기
         UserInfoResponseDto userinfo = userService.getUserInfo(userid);
