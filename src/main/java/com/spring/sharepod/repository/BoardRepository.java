@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     //메인 페이지 조회시 limit 갯수로 제한하여 전송함
     @Query(nativeQuery = true, value = "select * from board b where b.appear = true ORDER BY b.modified_at asc LIMIT :limitcount")
-    List<Board> findAllByOrderByCreatedAtDesc(int limitcount);
+    List<Board> findAllByOrderByCreatedAtDesc(Long limitcount);
 
     // 릴스를 limit 갯수만큼 랜덤으로 반환
     @Query(nativeQuery = true, value = "select * from board b ORDER BY RAND() LIMIT :limitcount")
