@@ -23,7 +23,7 @@ public class User extends Timestamped {
     private String username;
 
     // 유저 비밀번호
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
 
     //유저 닉네임
@@ -37,6 +37,14 @@ public class User extends Timestamped {
     //유저 지역명
     @Column
     private String mapdata;
+
+    public User(String username, String password, String nickname, String userimg, String mapdata) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.userimg = userimg;
+        this.mapdata = mapdata;
+    }
 
 }
 
