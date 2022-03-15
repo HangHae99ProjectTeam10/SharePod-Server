@@ -50,7 +50,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
                 .antMatchers("/user/login").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/showpost").permitAll()
+                .antMatchers("/user/register").permitAll()
+                .antMatchers("/board/video").permitAll()
+                .antMatchers(HttpMethod.GET, "/board/{boardid}").permitAll()
+                .antMatchers(HttpMethod.GET, "/board").permitAll()
+                .antMatchers(HttpMethod.GET, "/board/sort").permitAll()
+                .antMatchers(HttpMethod.GET, "/search").permitAll()
                 .anyRequest().authenticated()
 //                .antMatchers(HttpMethod.GET, "/api/board").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/board/{id}").permitAll()
