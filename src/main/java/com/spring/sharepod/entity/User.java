@@ -5,8 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +29,7 @@ public class User extends Timestamped {
     private String username;
 
     // 유저 비밀번호
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String password;
 
     //유저 닉네임
@@ -37,13 +43,68 @@ public class User extends Timestamped {
     //유저 지역명
     @Column
     private String mapdata;
+    //Reservation : User => 해당 userid의 요청 목록을 가져오기 위한 양방향 설정
+    @OneToMany(mappedBy = "seller")
+    private List<Reservation> reservation = new ArrayList<>();
 
-    public User(String username, String password, String nickname, String userimg, String mapdata) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-        this.userimg = userimg;
-        this.mapdata = mapdata;
+    //Auth : User => 해당 authbuyer 요청 목록을 가져오기 위한 양방향 설정
+    @OneToMany(mappedBy = "authbuyer")
+    private List<Auth> authbuyerlist  = new ArrayList<>();
+
+    //Auth : User => 해당 authseller 요청 목록을 가져오기 위한 양방향 설정
+    @OneToMany(mappedBy = "authseller")
+    private List<Auth> authsellerlist = new ArrayList<>();
+
+
+    //유저 이미지가 변경 되었을 때
+    public void update1(UserModifyRequestDTO modifyRequestDTO){
+        this.username = modifyRequestDTO.getUsername();
+        this.nickname = modifyRequestDTO.getNickname();
+        this.mapdata = modifyRequestDTO.getMapdata();
+        this.userimg = modifyRequestDTO.getUserimg();
+    }
+    // 아닐때
+    public void update2(UserModifyRequestDTO modifyRequestDTO){
+        this.username = modifyRequestDTO.getUsername();
+        this.nickname = modifyRequestDTO.getNickname();
+        this.mapdata = modifyRequestDTO.getMapdata();
+    }
+
+    ///////////////////////////////////////////
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 }
