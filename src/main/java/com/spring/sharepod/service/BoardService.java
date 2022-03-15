@@ -36,7 +36,7 @@ public class BoardService {
 
     //메인 페이지 전체 게시글 불러오기
     @Transactional
-    public List<BoardAllResponseDto> getAllBoard(int limitcount) {
+    public List<BoardAllResponseDto> getAllBoard(Long limitcount) {
 
         // 모든 게시글 가져오기
         List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc(limitcount);
