@@ -1,4 +1,4 @@
-package com.spring.sharepod.exception;
+package com.spring.sharepod.exception.CommonError;
 
 
 import lombok.Builder;
@@ -28,4 +28,6 @@ public class ErrorCodeResponse {
                         .build()
                 );
     }
+
+
 }

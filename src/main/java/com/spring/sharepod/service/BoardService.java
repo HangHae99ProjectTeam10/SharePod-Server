@@ -8,8 +8,8 @@ import com.spring.sharepod.dto.response.Board.BoardDetailResponseDto;
 import com.spring.sharepod.dto.response.Board.VideoAllResponseDto;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.exception.ErrorCode;
-import com.spring.sharepod.exception.ErrorCodeException;
+import com.spring.sharepod.exception.CommonError.ErrorCode;
+import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.repository.UserRepository;
@@ -21,8 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.spring.sharepod.exception.ErrorCode.BOARD_NOT_FOUND;
-import static com.spring.sharepod.exception.ErrorCode.BOARD_NOT_FOUND2;
+import static com.spring.sharepod.exception.CommonError.ErrorCode.BOARD_NOT_FOUND;
+import static com.spring.sharepod.exception.CommonError.ErrorCode.BOARD_NOT_FOUND2;
 
 @Service
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package com.spring.sharepod.exception;
+package com.spring.sharepod.exception.CommonError;
 
 import com.spring.sharepod.entity.Authimgbox;
 import lombok.Getter;
@@ -84,7 +84,10 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"500_AUTH_1" ,"Internal Server Error"),
 
     //파일 관련 에러모음
-    VIDEOFILE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_FILE_1", "비디오 파일을 입력하지 않았습니다.");
+    VIDEOFILE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_FILE_1", "비디오 파일을 입력하지 않았습니다."),
+
+    //토큰 관련 에러 모음
+    ACCTOKEN_EXPIRATION(HttpStatus.NOT_FOUND, "403_ACCTOKEN", "엑세스 토큰이 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String errorCode;

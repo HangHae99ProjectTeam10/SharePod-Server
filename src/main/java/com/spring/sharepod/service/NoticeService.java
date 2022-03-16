@@ -3,8 +3,6 @@ package com.spring.sharepod.service;
 
 import com.spring.sharepod.dto.response.Notice.NoticeResponseDto;
 import com.spring.sharepod.entity.Notice;
-import com.spring.sharepod.entity.User;
-import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.NoticeRepository;
 import com.spring.sharepod.validator.NoticeValidator;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-
-import static com.spring.sharepod.exception.ErrorCode.NOTICE_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
