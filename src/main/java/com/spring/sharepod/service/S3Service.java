@@ -16,8 +16,6 @@ import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
 import com.spring.sharepod.entity.Authimgbox;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.exception.ErrorCode;
-import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.AuthimgboxRepository;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.UserRepository;

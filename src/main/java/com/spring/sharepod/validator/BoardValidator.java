@@ -3,16 +3,15 @@ package com.spring.sharepod.validator;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.exception.ErrorCodeException;
+import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static com.spring.sharepod.exception.ErrorCode.BOARD_NOT_FOUND;
+import static com.spring.sharepod.exception.CommonError.ErrorCode.BOARD_NOT_FOUND;
 import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
 import com.spring.sharepod.repository.UserRepository;
@@ -20,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 
-import static com.spring.sharepod.exception.ErrorCode.*;
+import static com.spring.sharepod.exception.CommonError.ErrorCode.*;
 
 @Component // 선언하지 않으면 사용할 수 없다!!!!!
 @RequiredArgsConstructor

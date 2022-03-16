@@ -2,7 +2,7 @@ package com.spring.sharepod.model;
 
 import com.spring.sharepod.dto.response.Board.*;
 import com.spring.sharepod.dto.response.Liked.LikedResponseDto;
-import com.spring.sharepod.dto.response.UserInfoResponseDto;
+import com.spring.sharepod.dto.response.User.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

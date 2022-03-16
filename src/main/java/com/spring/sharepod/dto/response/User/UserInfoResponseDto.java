@@ -1,4 +1,4 @@
-package com.spring.sharepod.dto.response;
+package com.spring.sharepod.dto.response.User;
 
 
 import lombok.AllArgsConstructor;
