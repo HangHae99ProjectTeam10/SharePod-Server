@@ -1,16 +1,16 @@
 package com.spring.sharepod.validator;
 
 import com.spring.sharepod.entity.Authimgbox;
-import com.spring.sharepod.exception.ErrorCode;
-import com.spring.sharepod.exception.ErrorCodeException;
+import com.spring.sharepod.exception.CommonError.ErrorCode;
+import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.repository.AuthimgboxRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-import static com.spring.sharepod.exception.ErrorCode.AUTHIMGBOX_NOT_EXIST;
-import static com.spring.sharepod.exception.ErrorCode.AUTHIMGBOX_NOT_SELLER;
+import static com.spring.sharepod.exception.CommonError.ErrorCode.AUTHIMGBOX_NOT_EXIST;
+import static com.spring.sharepod.exception.CommonError.ErrorCode.AUTHIMGBOX_NOT_SELLER;
 
 @Component // 선언하지 않으면 사용할 수 없다!!!!!
 @RequiredArgsConstructor

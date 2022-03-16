@@ -1,6 +1,7 @@
 package com.spring.sharepod.controller;
 
 
+import com.spring.sharepod.dto.request.User.ReIssueRequestDto;
 import com.spring.sharepod.dto.request.User.UserLoginRequest;
 import com.spring.sharepod.dto.request.User.UserModifyRequestDTO;
 import com.spring.sharepod.dto.request.User.UserRegisterRequestDto;
@@ -10,8 +11,10 @@ import com.spring.sharepod.dto.response.Board.RentBuyerResponseDto;
 import com.spring.sharepod.dto.response.Board.RentSellerResponseDto;
 import com.spring.sharepod.dto.response.Liked.LikedResponseDto;
 import com.spring.sharepod.dto.response.User.LoginReturnResponseDTO;
-import com.spring.sharepod.dto.response.UserInfoResponseDto;
+import com.spring.sharepod.dto.response.User.UserInfoResponseDto;
 import com.spring.sharepod.entity.User;
+import com.spring.sharepod.model.LogOut;
+import com.spring.sharepod.model.ReFreshToken;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.model.UserInfo;
 import com.spring.sharepod.service.S3Service;
@@ -22,9 +25,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -44,6 +49,26 @@ public class UserRestController {
     public LoginReturnResponseDTO loginControll(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse res){
         return userService.loginReturnDTO(userLoginRequest,res);
     }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<ReFreshToken> reissue(@RequestBody ReIssueRequestDto reissue,HttpServletResponse res, HttpServletRequest req) {
+        // validation check
+//        if (errors.hasErrors()) {
+//            return response.invalidFields(Helper.refineErrors(errors));
+//        }
+//        System.out.println(user.getId());
+        return userService.reissue(reissue,res,req);
+    }
+
+    //로그 아웃
+    @PostMapping("/user/logout")
+    public ResponseEntity<LogOut> logout(@RequestBody ReIssueRequestDto reIssueRequestDto,HttpServletRequest req) {
+        System.out.println(reIssueRequestDto.getAccessToken()+ "reIssueRequestDto.getAccessToken()");
+        return userService.logout(reIssueRequestDto,req);
+    }
+
+
+
 
     // 유저 생성하기 (JSON)
     @PostMapping("/user/register")
@@ -93,6 +118,7 @@ public class UserRestController {
     //마이페이지 불러오기
     @GetMapping("/user/{userid}")
     public ResponseEntity<UserInfo> getBoardList(@PathVariable Long userid, @AuthenticationPrincipal User user) {
+
         //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userid,user.getId());
 

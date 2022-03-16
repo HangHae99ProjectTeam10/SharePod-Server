@@ -6,11 +6,10 @@ import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.dto.response.Reservation.ReservationGetDTO;
 import com.spring.sharepod.dto.response.Reservation.ReservationGetFinalDTO;
 import com.spring.sharepod.entity.*;
-import com.spring.sharepod.exception.ErrorCode;
-import com.spring.sharepod.exception.ErrorCodeException;
+import com.spring.sharepod.exception.CommonError.ErrorCode;
+import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.repository.*;
 import com.spring.sharepod.validator.ReservationValidator;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

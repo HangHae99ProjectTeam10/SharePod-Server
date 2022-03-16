@@ -6,8 +6,6 @@ import com.spring.sharepod.dto.response.BasicResponseDTO;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.exception.ErrorCode;
-import com.spring.sharepod.exception.ErrorCodeException;
 import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.repository.UserRepository;
