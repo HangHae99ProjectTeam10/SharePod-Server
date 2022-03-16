@@ -25,7 +25,6 @@ import com.spring.sharepod.repository.BoardRepository;
 import com.spring.sharepod.repository.LikedRepository;
 import com.spring.sharepod.repository.UserRepository;
 import com.spring.sharepod.security.jwt.JwtTokenProvider;
-import com.spring.sharepod.validator.LikedValidator;
 import com.spring.sharepod.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -62,7 +61,6 @@ public class UserService {
     private final BoardRepository boardRepository;
     private final AuthRepository authRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final LikedValidator likedValidator;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -257,14 +255,14 @@ public class UserService {
         // 없으면 for문 안돌고 빈 list가 들어간다.
         List<Liked> userlikeList = likedRepository.findByUserId(userid);
 
-        for (int i = 0; i < userlikeList.size(); i++) {
+        for (Liked liked : userlikeList) {
             //Board likedBoardList = likedRepository.findByBoardId(userliked.getBoard().getId());
 
             LikedResponseDto likedResponseDto = LikedResponseDto.builder()
-                    .boardid(userlikeList.get(i).getBoard().getId())
-                    .boardtitle(userlikeList.get(i).getBoard().getTitle())
-                    .userid(userlikeList.get(i).getUser().getId())
-                    .category(userlikeList.get(i).getBoard().getCategory())
+                    .boardid(liked.getBoard().getId())
+                    .boardtitle(liked.getBoard().getTitle())
+                    .userid(liked.getUser().getId())
+                    .category(liked.getBoard().getCategory())
                     .build();
 
             likedResponseDtoList.add(likedResponseDto);
@@ -302,13 +300,13 @@ public class UserService {
         // 없으면 for문 안돌고 빈 list가 들어간다.
         List<Auth> authList = authRepository.findByBuyerId(userid);
 
-        for (int i = 0; i < authList.size(); i++) {
+        for (Auth auth : authList) {
             RentBuyerResponseDto rentBuyerResponseDto = RentBuyerResponseDto.builder()
-                    .boardid(authList.get(i).getBoard().getId())
-                    .boardtitle(authList.get(i).getBoard().getTitle())
-                    .nickname(authList.get(i).getAuthseller().getNickname())
-                    .authid(authList.get(i).getId())
-                    .category(authList.get(i).getBoard().getCategory())
+                    .boardid(auth.getBoard().getId())
+                    .boardtitle(auth.getBoard().getTitle())
+                    .nickname(auth.getAuthseller().getNickname())
+                    .authid(auth.getId())
+                    .category(auth.getBoard().getCategory())
                     .build();
             rentBuyerResponseDtoList.add(rentBuyerResponseDto);
         }
@@ -325,13 +323,13 @@ public class UserService {
         // 없으면 for문 안돌고 빈 list가 들어간다.
         List<Auth> authList = authRepository.findBySellerId(userid);
 
-        for (int i = 0; i < authList.size(); i++) {
+        for (Auth auth : authList) {
             RentSellerResponseDto rentSellerResponseDto = RentSellerResponseDto.builder()
-                    .boardid(authList.get(i).getBoard().getId())
-                    .boardtitle(authList.get(i).getBoard().getTitle())
-                    .nickname(authList.get(i).getAuthbuyer().getNickname())
-                    .authid(authList.get(i).getId())
-                    .category(authList.get(i).getBoard().getCategory())
+                    .boardid(auth.getBoard().getId())
+                    .boardtitle(auth.getBoard().getTitle())
+                    .nickname(auth.getAuthbuyer().getNickname())
+                    .authid(auth.getId())
+                    .category(auth.getBoard().getCategory())
                     .build();
             rentSellerResponseDtoList.add(rentSellerResponseDto);
         }
