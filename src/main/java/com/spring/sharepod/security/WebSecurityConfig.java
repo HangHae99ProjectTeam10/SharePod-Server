@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -41,6 +42,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/h2-console/**");
 //    }
 
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/static/css/**, /static/js/**, *.ico"); // swagger
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "**/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/swagger/**");
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -49,14 +57,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
-                .antMatchers("/user/login").permitAll()
-                .antMatchers("/user/register").permitAll()
-                .antMatchers("/board/video").permitAll()
-                .antMatchers(HttpMethod.GET, "/board/{boardid}").permitAll()
-                .antMatchers(HttpMethod.GET, "/board").permitAll()
-                .antMatchers(HttpMethod.GET, "/board/sort").permitAll()
-                .antMatchers(HttpMethod.GET, "/search").permitAll()
-                .anyRequest().authenticated()
+//                .antMatchers("/user/login").permitAll()
+//                .antMatchers("/user/register").permitAll()
+//                .antMatchers("/board/video").permitAll()
+//                .antMatchers(HttpMethod.GET, "/board/{boardid}").permitAll()
+//                .antMatchers(HttpMethod.GET, "/board").permitAll()
+//                .antMatchers(HttpMethod.GET, "/board/sort").permitAll()
+//                .antMatchers("/api/v2/**","/health","/swagger-ui.html","**/swagger/**","**/swagger-resources/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/search").permitAll()
+//                .anyRequest().authenticated()
+
+
+                //////////////////////////////////////////////////////////////
+                .anyRequest().permitAll()
+
+
+
+
+                //////////////////////////////////////////////////////////
 //                .antMatchers(HttpMethod.GET, "/api/board").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/board/{id}").permitAll()
 ////                .antMatchers("/admin/**").hasRole("ADMIN")
