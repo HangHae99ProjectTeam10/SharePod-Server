@@ -69,9 +69,9 @@ public class BoardRestController {
         tokenValidator.userIdCompareToken(patchRequestDTO.getUserid(), user.getId());
 
         //게시판 수정 업로드
-        //BoardPatchRequestDTO boardPatchRequestDTOadd = awsS3Service.boardupdate(boardid, patchRequestDTO, imgfiles, videofile);
+        BoardPatchRequestDTO boardPatchRequestDTOadd = s3Service.boardupdate(boardid, patchRequestDTO, imgfiles, videofile);
 
-        return boardService.updateboard(boardid, patchRequestDTO);
+        return boardService.updateboard(boardid, boardPatchRequestDTOadd);
     }
 
     //**게시판 삭제
