@@ -28,9 +28,9 @@ public class JwtTokenProvider {
 
     private String secretKey = "webfirewood";
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 60 * 1000L;              // //1분
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 2 * 60 * 1000L;              // //1분
     //private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 2 * 60 * 1000L;    // 10초
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 3 * 60 * 1000L;    // 10초
 
     private final UserDetailsService userDetailsService;
 
@@ -120,7 +120,7 @@ public class JwtTokenProvider {
 
 
     // 토큰의 유효성 + 만료일자 확인
-    public boolean validateToken(String jwtToken,HttpServletRequest request) {
+    public boolean validateToken(String jwtToken, HttpServletRequest request) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());

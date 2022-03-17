@@ -17,6 +17,7 @@ import com.spring.sharepod.model.LogOut;
 import com.spring.sharepod.model.ReFreshToken;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.model.UserInfo;
+import com.spring.sharepod.service.AwsS3Service;
 import com.spring.sharepod.service.S3Service;
 import com.spring.sharepod.service.UserService;
 import com.spring.sharepod.validator.TokenValidator;
@@ -39,9 +40,10 @@ import java.util.Objects;
 @RestController
 public class UserRestController {
     private final UserService userService;
-    private final S3Service s3Service;
     private final TokenValidator tokenValidator;
     private final UserValidator userValidator;
+    private final AwsS3Service awsS3Service;
+    private final S3Service s3Service;
     //private final FileUploadService fileUploadService;
 
     //로그인 구현하기
@@ -49,7 +51,7 @@ public class UserRestController {
     public LoginReturnResponseDTO loginControll(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse res){
         return userService.loginReturnDTO(userLoginRequest,res);
     }
-
+    // 토큰 재발급
     @PostMapping("/reissue")
     public ResponseEntity<ReFreshToken> reissue(@RequestBody ReIssueRequestDto reissue,HttpServletResponse res, HttpServletRequest req) {
         // validation check
@@ -75,6 +77,9 @@ public class UserRestController {
     public ResponseEntity<Success> createUser(@RequestPart UserRegisterRequestDto userRegisterRequestDto,
                                               @RequestPart MultipartFile imgfile) throws IOException {
 
+        //이미지를 업로드 하기 전에 validator로 걸러줘야지 이미지가 안 들어간다.
+        userValidator.validateUserRegisterData(userRegisterRequestDto);
+
         //유저 프로필 업로드
         String userimg = s3Service.upload(userRegisterRequestDto, imgfile);
 
@@ -92,14 +97,17 @@ public class UserRestController {
                                        @RequestPart MultipartFile userimgfile, @AuthenticationPrincipal User user) throws IOException {
         //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userid, user.getId());
+        System.out.println("modified userid =====  "  + user.getId());
 
         //해당 request vaildator 작동
         userValidator.validateUserChange(userModifyRequestDTO);
 
         //이미지가 새롭게 들어왔으면
         if(!Objects.equals(userimgfile.getOriginalFilename(), "")){
-            //변경된 사진 저장 후 이름 넘겨주기
-            userModifyRequestDTO.setUserimg(s3Service.userprofileimgchange(userimgfile));
+            //변경된 사진 저장 후 기존 삭제 삭제 후 requestDto에 setUserimg 하기
+            userModifyRequestDTO.setUserimg(awsS3Service.ModifiedProfileImg(user.getUserimg().substring(user.getUserimg().lastIndexOf("/")+1), user.getNickname(), userimgfile));
+        }else {
+            userModifyRequestDTO.setUserimg(user.getUserimg());
         }
 
         return userService.usermodifyService(userid, userModifyRequestDTO);

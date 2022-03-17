@@ -39,9 +39,9 @@ public class UserValidator {
         if(userRegisterRequestDto.getMapdata() == null){
             throw new ErrorCodeException(REGISTER_NULL_MAPDATA);
         }
-        if(userRegisterRequestDto.getUserimg() == null){
-            throw new ErrorCodeException(REGISTER_NULL_USERIMG);
-        }
+//        if(userRegisterRequestDto.getUserimg() == null){
+//            throw new ErrorCodeException(REGISTER_NULL_USERIMG);
+//        }
 
 
         // 유저네임(이메일) 중복 확인

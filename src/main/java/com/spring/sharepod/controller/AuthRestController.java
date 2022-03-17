@@ -8,6 +8,7 @@ import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.service.AuthImgService;
 import com.spring.sharepod.service.AuthService;
+import com.spring.sharepod.service.AwsS3Service;
 import com.spring.sharepod.service.S3Service;
 import com.spring.sharepod.validator.AuthValidator;
 import com.spring.sharepod.validator.TokenValidator;
@@ -24,12 +25,13 @@ import java.io.IOException;
 @RequiredArgsConstructor //DI 형태, IoC 컨테이너 생성
 @RestController
 public class AuthRestController {
-    private final S3Service s3Service;
+    private final AwsS3Service awsS3Service;
     private final AuthService authService;
     private final UserValidator userValidator;
     private final TokenValidator tokenValidator;
     private final AuthImgService authImgService;
     private final AuthValidator authValidator;
+    private final S3Service s3Service;
 
     //20번 이미지 인증 창 데이터
     @GetMapping("/auth/img/{authid}")
