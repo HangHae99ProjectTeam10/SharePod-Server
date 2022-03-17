@@ -338,9 +338,9 @@ public class UserService {
 
     //회원 탈퇴
     @Transactional
-    public String UserDelete(Long userid) {
+    public String UserDelete(Long userid, UserLoginRequest userLoginRequest) {
         //userid에 의한 user가 있는지 판단
-        User user = userValidator.ValidByUserId(userid);
+        User user = userValidator.ValidByUserDelete(userid, userLoginRequest);
 
         String fileName = user.getUserimg().substring(user.getUserimg().lastIndexOf("/")+1);;
 
