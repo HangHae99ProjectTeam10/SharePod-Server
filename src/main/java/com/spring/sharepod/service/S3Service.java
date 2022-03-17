@@ -9,6 +9,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import com.spring.sharepod.dto.request.Board.BoardWriteRequestDTO;
@@ -81,6 +82,8 @@ public class S3Service {
         return s3Client.getUrl(bucket, fileName).toString();
     }
 
+
+
     //게시판 사진 3개, 영상 1개 업로드
     public BoardWriteRequestDTO boardupload(BoardWriteRequestDTO boardWriteRequestDTO,
                                             MultipartFile[] imgfiles,
@@ -94,7 +97,7 @@ public class S3Service {
         String[] giveurl = new String[3];
         for (int i = 0; i < imgfiles.length; i++) {
             String filename = UUID.randomUUID() + "_" + imgfiles[i].getOriginalFilename();
-            filename = user.getUsername() + i + filename;
+            filename = user.getNickname() + filename;
             s3Client.putObject(new PutObjectRequest(bucket, filename, imgfiles[i].getInputStream(), null)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             giveurl[i] = s3Client.getUrl(bucket, filename).toString();
@@ -107,6 +110,7 @@ public class S3Service {
 
         //비디오 처리
         String videoname = UUID.randomUUID() + "_" + videofile.getOriginalFilename();
+        videoname = user.getNickname() + videoname;
         System.out.println(videoname);
         //https://sharepod.s3.ap-northeast-2.amazonaws.com/be034d91-2265-4913-8d20-ffdf33d88961_new_profile.png
         s3Client.putObject(new PutObjectRequest(bucket, videoname, videofile.getInputStream(), null)
@@ -124,6 +128,13 @@ public class S3Service {
         //수정할 게시판 boardid로 검색해 가져오기
         Board board = boardValidator.ValidByBoardId(boardid);
 
+        String FirstBoardImgUrl = board.getImgurl1();
+        String SecondBoardImgUrl = board.getImgurl2();
+        String ThirdBoardImgUrl = board.getImgurl3();
+        String VideoUrl = board.getVideourl();
+
+        System.out.println("Video URL :" + VideoUrl);
+
         //게시판 작성 validator
         boardValidator.validateBoardUpdate(patchRequestDTO);
 
@@ -139,8 +150,23 @@ public class S3Service {
 
             }
             else {
+                String modifiedBoardImg = "";
+                if(i==0){
+                    modifiedBoardImg = FirstBoardImgUrl.substring(FirstBoardImgUrl.lastIndexOf("/")+1);
+                }
+                else if(i==1){
+                    modifiedBoardImg = SecondBoardImgUrl.substring(SecondBoardImgUrl.lastIndexOf("/")+1);
+                }
+                else{
+                    modifiedBoardImg = ThirdBoardImgUrl.substring(ThirdBoardImgUrl.lastIndexOf("/")+1);
+                }
+                System.out.println("modifiedBoardImg          :" + modifiedBoardImg);
+
+                // 게시글 삭제
+                s3Client.deleteObject(new DeleteObjectRequest(bucket,modifiedBoardImg));
+
                 String filename = UUID.randomUUID() + "_" + imgfiles[i].getOriginalFilename();
-                filename = user.getUsername() + i + filename;
+                filename = user.getNickname() + filename;
                 s3Client.putObject(new PutObjectRequest(bucket, filename, imgfiles[i].getInputStream(), null)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
                 giveurl[i] = s3Client.getUrl(bucket, filename).toString();
@@ -158,8 +184,15 @@ public class S3Service {
             patchRequestDTO.setVideourl(board.getVideourl());
         }
         else{
+
+            //기존 이미지 삭제
+            System.out.println("지우려는 video url 키 값:       " +VideoUrl.substring(VideoUrl.lastIndexOf("/")+1));
+
+            s3Client.deleteObject(bucket,VideoUrl.substring(VideoUrl.lastIndexOf("/")+1));
+
             //비디오 처리
             String videoname = UUID.randomUUID() + "_" + videofile.getOriginalFilename();
+            videoname = user.getNickname() + videoname;
             System.out.println(videoname);
             //https://sharepod.s3.ap-northeast-2.amazonaws.com/be034d91-2265-4913-8d20-ffdf33d88961_new_profile.png
             s3Client.putObject(new PutObjectRequest(bucket, videoname, videofile.getInputStream(), null)
@@ -170,47 +203,6 @@ public class S3Service {
 
         return patchRequestDTO;
     }
-
-
-    //파일 삭제
-//    public void fileDelete(List<String> fileName) {
-//        try {
-//            for (int i=0; i <=fileName.size(); i++){
-//                //s3Client.deleteObject(bucket, (fileName.get(i)).replace(File.separatorChar, '/'));
-//
-//                System.out.println("1");
-//                System.out.println(fileName.get(i));
-//                DeleteObjectRequest request = new DeleteObjectRequest(bucket, fileName.get(i));
-//
-//                System.out.println("2");
-//                s3Client.deleteObject(request);
-//            }
-//        } catch (AmazonServiceException e) {
-//            System.err.println(e.getErrorMessage());
-//        }catch (SdkClientException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
-
-    // 파일 하나 삭제
-    public void fileDeleteOne(String fileName) {
-        boolean isExistObject = s3Client.doesObjectExist(bucket, fileName);
-        if (isExistObject) {
-            try {
-                System.out.println(fileName);
-                s3Client.deleteObject(bucket, fileName);
-
-            } catch (AmazonServiceException e) {
-                System.out.println(e.getErrorMessage());
-            } catch (SdkClientException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
     //인증 이미지
     public String authimgboxs3(Long userid, Long authimgboxid, MultipartFile authfile) throws IOException {
 
@@ -229,16 +221,16 @@ public class S3Service {
         return s3Client.getUrl(bucket, imgname).toString();
     }
 
-    //유저 프로필 이미지 변경시
-    public String userprofileimgchange(MultipartFile userimgfile) throws IOException {
-        //추후 S3에서 기존 이미지를 삭제해주는 과정을 해야함
-
-
-        String userimg = UUID.randomUUID() + "_" + userimgfile.getOriginalFilename();
-        s3Client.putObject(new PutObjectRequest(bucket, userimg, userimgfile.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, userimg).toString();
-    }
+//    //유저 프로필 이미지 변경시
+//    public String userprofileimgchange(MultipartFile userimgfile) throws IOException {
+//        //추후 S3에서 기존 이미지를 삭제해주는 과정을 해야함
+//
+//
+//        String userimg = UUID.randomUUID() + "_" + userimgfile.getOriginalFilename();
+//        s3Client.putObject(new PutObjectRequest(bucket, userimg, userimgfile.getInputStream(), null)
+//                .withCannedAcl(CannedAccessControlList.PublicRead));
+//        return s3Client.getUrl(bucket, userimg).toString();
+//    }
 }
 
 

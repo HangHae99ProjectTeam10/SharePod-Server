@@ -63,7 +63,7 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate<String, String> redisTemplate;
-
+    private final AwsS3Service awsS3Service;
 
     //로그인
     @Transactional
@@ -207,7 +207,7 @@ public class UserService {
     @Transactional
     public Long createUser(UserRegisterRequestDto userRegisterRequestDto) {
         //회원가입 유효성 검사 validator 통해서 검증한다. 중간에 이상하거 있으면 바로 거기서 메시지 반환하도록
-        userValidator.validateUserRegisterData(userRegisterRequestDto);
+
 
         // 여기서부터는 검증된 데이터들이기에 그냥 비밀번호 암호화하고 빌더 패턴으로 유저에 대한 정보를 생성한다.
         // 비밀번호 암호화
@@ -336,11 +336,18 @@ public class UserService {
         return rentSellerResponseDtoList;
     }
 
-
+    //회원 탈퇴
     @Transactional
     public String UserDelete(Long userid) {
         //userid에 의한 user가 있는지 판단
         User user = userValidator.ValidByUserId(userid);
+
+        String fileName = user.getUserimg().substring(user.getUserimg().lastIndexOf("/")+1);;
+
+        System.out.println("filename " + user.getUserimg());
+
+        // 프로필 이미지 삭제 후, 회원탈퇴
+        awsS3Service.deleteProfileImg(fileName);
 
         userRepository.deleteById(userid);
         return user.getNickname();
