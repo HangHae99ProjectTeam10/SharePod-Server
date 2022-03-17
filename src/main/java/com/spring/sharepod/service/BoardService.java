@@ -222,6 +222,7 @@ public class BoardService {
         if (!Objects.equals(patchRequestDTO.getUserid(), board.getUser().getId())) {
             throw new ErrorCodeException(BOARD_NOT_FOUND2);
         }
+
         //게시판 업데이트
         board.update(patchRequestDTO);
 
