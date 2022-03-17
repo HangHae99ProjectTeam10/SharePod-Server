@@ -113,11 +113,11 @@ public class UserRestController {
 
     //회원 탈퇴하기
     @DeleteMapping("/user/{userid}")
-    public ResponseEntity<Success> DeleteUser(@PathVariable Long userid,@AuthenticationPrincipal User user){
+    public ResponseEntity<Success> DeleteUser(@PathVariable Long userid, @RequestBody UserLoginRequest userLoginRequest, @AuthenticationPrincipal User user){
         //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userid,user.getId());
 
-        String nickname = userService.UserDelete(userid);
+        String nickname = userService.UserDelete(userid, userLoginRequest);
         return new ResponseEntity<>(new Success("success", nickname + " 님의 회원탈퇴 성공했습니다."),HttpStatus.OK);
     }
 
