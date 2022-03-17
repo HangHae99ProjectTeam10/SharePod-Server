@@ -40,10 +40,10 @@ import java.util.Objects;
 @RestController
 public class UserRestController {
     private final UserService userService;
-    private final S3Service s3Service;
     private final TokenValidator tokenValidator;
     private final UserValidator userValidator;
     private final AwsS3Service awsS3Service;
+    private final S3Service s3Service;
     //private final FileUploadService fileUploadService;
 
     //로그인 구현하기

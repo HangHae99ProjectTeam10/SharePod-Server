@@ -30,7 +30,6 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final LikedRepository likedRepository;
-    private final S3Service s3Service;
     private final BoardValidator boardValidator;
     private final AwsS3Service awsS3Service;
 
@@ -265,7 +264,7 @@ public class BoardService {
 //        s3Service.fileDelete(fileName);
         //s3Service.fileDeleteOne(fileName);
 
-        String[] imgs = {videourl,boardimg1,boardimg2,boardimg3};
+        String[] imgs = {boardimg1,boardimg2,boardimg3, videourl};
         List<String> fileName = Arrays.asList(imgs);
         awsS3Service.deleteFile(fileName);
 

@@ -36,6 +36,7 @@ public class AuthService {
     private final AuthValidator authValidator;
     private final TokenValidator tokenValidator;
     private final AuthImgService authImgService;
+    private final AwsS3Service awsS3Service;
     private final S3Service s3Service;
 
 

@@ -36,10 +36,10 @@ import java.util.Optional;
 public class BoardRestController {
     private final BoardService boardService;
     private final LikedRepository likedRepository;
-    private final S3Service s3Service;
     private final TokenValidator tokenValidator;
     private final BoardValidator boardValidator;
     private final AwsS3Service awsS3Service;
+    private final S3Service s3Service;
 
 
     //** 9번 게시판 작성
