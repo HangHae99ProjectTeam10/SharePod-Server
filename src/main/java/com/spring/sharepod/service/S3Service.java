@@ -116,7 +116,7 @@ public class S3Service {
         return boardWriteRequestDTO;
     }
 
-    //게시판 사진 3개, 영상 1개 업로드
+    //게시판 사진 3개, 영상 1개 수정
     public BoardPatchRequestDTO boardupdate(Long boardid,
                                             BoardPatchRequestDTO patchRequestDTO,
                                             MultipartFile[] imgfiles,
