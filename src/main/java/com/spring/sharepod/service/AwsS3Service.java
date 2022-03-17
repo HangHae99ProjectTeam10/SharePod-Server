@@ -46,8 +46,6 @@ public class AwsS3Service {
 
 
 
-
-
     //파일 여러개 삭제(게시판 삭제)
     public void deleteFile(List<String> fileName) {
         try {
@@ -57,7 +55,8 @@ public class AwsS3Service {
                 System.out.println("1");
                 System.out.println("keys            " +    fileName.get(i));
                 String DeleteFileName = fileName.get(i);
-                amazonS3.deleteObject(new DeleteObjectRequest(bucket,DeleteFileName));
+
+                amazonS3.deleteObject(bucket,DeleteFileName);
 
                 System.out.println("2");
             }
