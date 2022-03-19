@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class NoticeCount {
     private String result;
     private String msg;
-    private int noticecnt;
+    private int noticeCnt;
 }

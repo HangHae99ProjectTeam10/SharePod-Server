@@ -1,6 +1,6 @@
 package com.spring.sharepod.model;
 
-import com.spring.sharepod.dto.response.Board.BoardDetailResponseDto;
+import com.spring.sharepod.v1.dto.response.BoardResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class BoardDetail {
     private String result;
     private String msg;
-    private BoardDetailResponseDto data;
+    private BoardResponseDto.BoardDetail data;
 }
