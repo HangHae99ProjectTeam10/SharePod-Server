@@ -25,6 +25,7 @@ public enum ErrorCode {
     //형식이 틀렸을 시
     USERNAME_VALIDATE(HttpStatus.BAD_REQUEST, "400_Register_1", "유저네임은 최소 3자 이상, 알파벳 대소문자(a~z, A~Z), 숫자(0~9)로 구성해야 합니다." ),
     USERNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "400_Register_2", "이미 존재하는 유저네임 입니다."),
+    USERNAME_VALIDATE2(HttpStatus.BAD_REQUEST, "400_Register_3", "유저네임이 일치하지 않습니다."),
 
     EMAIL_VALIDATE(HttpStatus.BAD_REQUEST, "400_Register_3", "이메일 형식이 아닙니다."),
     EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "400_Register_4", "이미 가입한 E-MAIL 입니다."),
