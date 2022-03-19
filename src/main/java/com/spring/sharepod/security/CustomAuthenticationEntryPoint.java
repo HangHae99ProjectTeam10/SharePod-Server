@@ -1,15 +1,13 @@
 package com.spring.sharepod.security;
 
 import com.spring.sharepod.exception.TokenError.TokenErrorCode;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.security.access.AccessDeniedException;
+import lombok.SneakyThrows;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,53 +15,40 @@ import java.io.IOException;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+    @SneakyThrows
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        String exception = (String)request.getAttribute("exception");
+        String exception = (String) request.getAttribute("exception");
 
         System.out.println("exception          " + exception);
 
-        if(exception == null) {
-            try {
-                setResponse(response, TokenErrorCode.UNKNOWN_ERROR);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        if (exception == null) {
+            setResponse(response, TokenErrorCode.UNKNOWN_ERROR);
+
         }
         //잘못된 타입의 토큰인 경우
-        else if(exception.equals(TokenErrorCode.WRONG_TYPE_TOKEN.getErrorMessage())) {
-            try {
-                setResponse(response, TokenErrorCode.WRONG_TYPE_TOKEN);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        else if (exception.equals(TokenErrorCode.WRONG_TYPE_TOKEN.getErrorMessage())) {
+
+            setResponse(response, TokenErrorCode.WRONG_TYPE_TOKEN);
+
         }
         //토큰 만료된 경우
-        else if(exception.equals(TokenErrorCode.EXPIRED_TOKEN.getErrorMessage())) {
-            try {
-                setResponse(response, TokenErrorCode.EXPIRED_TOKEN);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        else if (exception.equals(TokenErrorCode.EXPIRED_TOKEN.getErrorMessage())) {
+            setResponse(response, TokenErrorCode.EXPIRED_TOKEN);
+
         }
         //지원되지 않는 토큰인 경우
-        else if(exception.equals(TokenErrorCode.UNSUPPORTED_TOKEN.getErrorMessage())) {
-            try {
-                setResponse(response, TokenErrorCode.UNSUPPORTED_TOKEN);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            try {
-                setResponse(response,TokenErrorCode.ACCESS_DENIED);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        else if (exception.equals(TokenErrorCode.UNSUPPORTED_TOKEN.getErrorMessage())) {
+
+            setResponse(response, TokenErrorCode.UNSUPPORTED_TOKEN);
+        } else {
+
+            setResponse(response, TokenErrorCode.ACCESS_DENIED);
+
         }
     }
 
-    private void setResponse(HttpServletResponse response, TokenErrorCode exceptionCode) throws IOException, JSONException {
+    private void setResponse(HttpServletResponse response, TokenErrorCode exceptionCode) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 

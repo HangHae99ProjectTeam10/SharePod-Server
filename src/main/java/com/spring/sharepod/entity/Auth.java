@@ -24,34 +24,41 @@ public class Auth{
 
     //인증 확인 변수
     @Column(nullable = false)
-    private boolean checkorder;
+    private boolean sellectAllImg;
 
     //대여 시작 날짜
     @Column(nullable = false)
-    private LocalDate rentalstart;
+    private LocalDate startRental;
 
     //대여 끝나는 날짜
     @Column(nullable = false)
-    private LocalDate rentalend;
+    private LocalDate endRental;
 
     //Auth : User => N: 1 buyer 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AUTHBUYER")
-    private User authbuyer;
+    private User authBuyer;
 
     //Auth : User => N: 1 buyer 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AUTHSELLER")
-    private User authseller;
+    private User authSeller;
 
-    //Auth : Board => N: 1 boardid 외래키를 뜻함
+    //Auth : Board => 1: 1 boardid 외래키를 뜻함
     @OneToOne
     @JoinColumn(name = "BOARDID")
     private Board board;
 
     //Auth : Authimgbox => 해당 authid에 소속된 목록을 가져오기 위한 양방향 설정
-    @OneToMany(mappedBy = "auth")
-    private List<Authimgbox> authimgboxList = new ArrayList<>();
+    @Builder.Default
+    @OneToMany(mappedBy = "auth" ,cascade = CascadeType.REMOVE)
+    private List<AuthImg> authImgList = new ArrayList<>();
+
+
+    //모든 동의가 끝났을 시점의 sellectAllImg true로
+    public void setSellectAllImg(Boolean sellectAllImg){
+        this.sellectAllImg = sellectAllImg;
+    }
 
 
 }

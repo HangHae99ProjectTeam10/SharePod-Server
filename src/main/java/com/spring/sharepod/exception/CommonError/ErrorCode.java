@@ -1,6 +1,6 @@
 package com.spring.sharepod.exception.CommonError;
 
-import com.spring.sharepod.entity.Authimgbox;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,26 +25,27 @@ public enum ErrorCode {
     //형식이 틀렸을 시
     USERNAME_VALIDATE(HttpStatus.BAD_REQUEST, "400_Register_1", "유저네임은 최소 3자 이상, 알파벳 대소문자(a~z, A~Z), 숫자(0~9)로 구성해야 합니다." ),
     USERNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "400_Register_2", "이미 존재하는 유저네임 입니다."),
+    USERNAME_VALIDATE2(HttpStatus.BAD_REQUEST, "400_Register_3", "유저네임이 일치하지 않습니다."),
 
     EMAIL_VALIDATE(HttpStatus.BAD_REQUEST, "400_Register_3", "이메일 형식이 아닙니다."),
     EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "400_Register_4", "이미 가입한 E-MAIL 입니다."),
 
     PASSWORD_INCLUDE_USERNAME(HttpStatus.BAD_REQUEST, "400_Register_5", "비밀번호는 닉네임을 포함하지 못합니다."),
     PASSWORD_LENGTH(HttpStatus.BAD_REQUEST, "400_Register_6", "비밀번호는 최소 4자 이상입니다."),
-    PASSWORD_COINCIDE(HttpStatus.BAD_REQUEST, "400_Register_7", "비밀번호를 다시 한번 확인해주세요"),
+    PASSWORD_COINCIDE(HttpStatus.BAD_REQUEST, "400_Register_7", "비밀번호를 다시 한번 확인해주세요."),
 
 
     // 로그인 관련 에러 모음
     LOGIN_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "404_Login_1", "가입되지 않은 E-MAIL 입니다."),
     LOGIN_PASSWORD_NOT_MATCH(HttpStatus.NOT_FOUND, "404_Login_2", "비밀번호가 일치하지 않습니다."),
-
+    LOGIN_DATA_NOT_EXIST(HttpStatus.BAD_REQUEST, "404_Login_3", "로그인 정보가 비어있습니다. 다시 입력해주십시요."),
 
     // 유저 관련 에러 모음
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "404_User_1", "해당 유저는 존재하지 않습니다." ),
 
     // 게시판 관련 에러 모음
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "404_Board_1", "해당 게시글이 존재하지 않습니다."),
-    BOARD_NOT_FOUND2(HttpStatus.NOT_FOUND, "404_Board_4", "아이디가 일치하지 않습니다.."),
+    BOARD_NOT_EQUAL_WRITER(HttpStatus.NOT_FOUND, "404_Board_4", "아이디가 일치하지 않습니다.."),
     BOARD_EDIT_OR_DELETE_NOT_MATCH(HttpStatus.FORBIDDEN, "403_Board_2", "게시글의 생성자만 게시글을 수정 혹은 삭제할 수 있습니다."),
     BOARD_IMG_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_3", "게시하려는 이미지의 주소가 없습니다."),
     BOARD_TITLE_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_5", "게시글 제목을 적지 않으셨습니다."),
@@ -63,8 +64,8 @@ public enum ErrorCode {
 
 
     // 거래 요청 관련 에러 모음
-    RESERVATION_NOT_EXIST(HttpStatus.BAD_REQUEST, "400_Reservation_1", "이미 거래 요청이 존재합니다."),
-
+    RESERVATION_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "400_Reservation_1", "이미 거래 요청이 존재합니다."),
+    RESERVATION_NOT_EXIST(HttpStatus.BAD_REQUEST, "400_Reservation_2", "수락하거나 거절할 거래가 존재하지 않습니다."),
 
     // 인증사진 관련 에러 모음
     AUTHIMGBOX_NOT_EXIST(HttpStatus.BAD_REQUEST, "404_AuthImgBox_1", "이미 거래 요청이 존재합니다."),

@@ -1,8 +1,6 @@
 package com.spring.sharepod.exception.TokenError;
 
 
-import com.spring.sharepod.exception.CommonError.ErrorCode;
-import com.spring.sharepod.exception.CommonError.ErrorCodeResponse;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
