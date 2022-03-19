@@ -80,21 +80,6 @@ public class User extends Timestamped implements UserDetails {
     @OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
     private List<Notice> noticeSellerList = new ArrayList<>();
 
-    //Reservation : User => 해당 userid의 요청 목록을 가져오기 위한 양방향 설정
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.REMOVE)
-    private List<Reservation> reservationBuyerList = new ArrayList<>();
-
-    //Board: User => 회원탈퇴 시 글에 대한 삭제를 위한 양방향 설정
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Board> boardlist = new ArrayList<>();
-
-    //Notice: User => 회원탈퇴 시 글에 대한 삭제를 위한 양방향 설정
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.REMOVE)
-    private List<Notice> noticeBuyerList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
-    private List<Notice> noticeSellerList = new ArrayList<>();
-
 
     //유저 이미지가 변경 되었을 때
     public void updateUserImg(UserRequestDto.Modify modifyRequestDTO){

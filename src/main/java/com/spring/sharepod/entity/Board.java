@@ -49,9 +49,6 @@ public class Board extends Timestamped {
     @Column
     private String boardTag;
 
-    //보드 대표 태그
-    @Column(nullable = false)
-    private String boardtag;
 
     //Board : User => N: 1 엔티티에서 userid 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
