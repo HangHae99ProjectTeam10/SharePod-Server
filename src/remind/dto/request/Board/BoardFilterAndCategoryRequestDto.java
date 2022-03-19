@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class BoardFilterAndCategoryRequestDto {
+public class   BoardFilterAndCategoryRequestDto {
     private String filtertype;
     private String category;
     private String mapdata;
