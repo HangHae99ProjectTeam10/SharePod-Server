@@ -40,7 +40,6 @@ public class BoardRestController {
         //limit 안 들어오면 5로 고정
         Long validLimitCount = boardValidator.DefaultLimitCount(limitCount);
 
-        //
         List<BoardResponseDto.VideoAll> videoAllResponseDtos = boardService.getAllVideo(validLimitCount);
         return new ResponseEntity<>(new AllVideo("success", "영상 전송 성공", videoAllResponseDtos), HttpStatus.OK);
     }

@@ -61,13 +61,10 @@ public class UserRestController {
     @PostMapping("/user/register")
     public ResponseEntity<Success> UserRegister(@RequestPart UserRequestDto.Register userRegisterRequestDto,
                                                 @RequestPart MultipartFile imgFile) throws IOException {
-        if (imgFile.isEmpty()) {
-            userRegisterRequestDto.setUserImg(null);
-        } else {
-            //유저 프로필 업로드
-            String userimg = awsS3Service.upload(userRegisterRequestDto, imgFile);
-            userRegisterRequestDto.setUserImg(userimg);
-        }
+        //유저 프로필 업로드
+        String userimg = awsS3Service.upload(userRegisterRequestDto, imgFile);
+        userRegisterRequestDto.setUserImg(userimg);
+
         //회원가입 완료
         String NickName = userService.registerUser(userRegisterRequestDto);
         return new ResponseEntity<>(new Success("success", NickName + "님! 회원 가입 성공하였습니다."), HttpStatus.OK);

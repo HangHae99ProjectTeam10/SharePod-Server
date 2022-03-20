@@ -120,16 +120,17 @@ public class BoardService {
     public BoardResponseDto.BoardDetail getDetailBoard(Long boardId, Boolean isLiked) {
         //보드가 존재하지 않을 시 메시지 호출
         Board board = boardValidator.ValidByBoardId(boardId);
-        String[] imgs = {board.getImgFiles().getFirstImgUrl(),board.getImgFiles().getSecondImgUrl(),board.getImgFiles().getLastImgUrl()};
-        List<String> fileName = Arrays.asList(imgs);
+        List<String> fileNameList = new ArrayList<>();
+        fileNameList.add(board.getImgFiles().getFirstImgUrl());
+        fileNameList.add(board.getImgFiles().getSecondImgUrl());
+        fileNameList.add(board.getImgFiles().getLastImgUrl());
+        fileNameList.removeAll(Arrays.asList("",null));
 
         // 존재한다면 받아온 내용들을 담아서 보내주기
         BoardResponseDto.BoardDetail boardDetailResponseDto = BoardResponseDto.BoardDetail.builder()
                 .Title(board.getTitle())
                 .videoUrl(board.getImgFiles().getVideoUrl())
-                .imgFiles(fileName)
-//                .secondImgUrl(board.getImgFiles().getSecondImgUrl())
-//                .lastImgUrl(board.getImgFiles().getLastImgUrl())
+                .imgFiles(fileNameList)
                 .contents(board.getContents())
                 .originPrice(board.getAmount().getOriginPrice())
                 .dailyRentalFee(board.getAmount().getDailyRentalFee())

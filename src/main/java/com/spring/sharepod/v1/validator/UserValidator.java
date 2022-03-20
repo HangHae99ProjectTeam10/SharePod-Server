@@ -41,9 +41,9 @@ public class UserValidator {
         if(userRegisterRequestDto.getUserRegion() == null){
             throw new ErrorCodeException(REGISTER_NULL_MAPDATA);
         }
-//        if(userRegisterRequestDto.getUserImg() == null){
-//            throw new ErrorCodeException(REGISTER_NULL_USERIMG);
-//        }
+        if(userRegisterRequestDto.getUserImg() == null){
+            throw new ErrorCodeException(REGISTER_NULL_USERIMG);
+        }
 
 
         // 유저네임(이메일) 중복 확인
@@ -80,6 +80,8 @@ public class UserValidator {
 
     }
 
+
+
     //유저 id에 대한 user가 존재하는지에 대한 판단
     public User ValidByUserId(Long userId) {
         return userRepository.findById(userId).orElseThrow(
@@ -95,6 +97,8 @@ public class UserValidator {
 
     }
 
+
+    //회원 탈퇴
     public User ValidByUserDelete(Long userid, UserRequestDto.Login userLoginRequest) {
         //userid가 있는지 확인
         User user = userRepository.findById(userid).orElseThrow(
@@ -106,7 +110,6 @@ public class UserValidator {
         if(!Objects.equals(user.getUsername(), userLoginRequest.getUsername())){
             throw new ErrorCodeException(USER_NOT_FOUND);
         }
-        ;
         //패스워드가 맞는지 확인
         //비밀번호 다르면
         if (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) {
@@ -115,7 +118,7 @@ public class UserValidator {
         return user;
     }
 
-
+    //로그인 request 관련 예외처리
     public void ValidLoginRequest(UserRequestDto.Login userLoginRequest){
         if(userLoginRequest.getPassword() == null || userLoginRequest.getUsername() == null){
             throw new ErrorCodeException(LOGIN_DATA_NOT_EXIST);
