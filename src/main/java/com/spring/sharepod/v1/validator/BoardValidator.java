@@ -140,16 +140,17 @@ public class BoardValidator {
             throw new ErrorCodeException(BOARD_BOARDQUILITY_NOT_EXIST);
         }
 
-        //이미지 파일이 3개 오지 않았을 때
-        if(imgfiles.length != 3){
-            throw new ErrorCodeException(BOARD_IMGFILE3_NOT_EXIST);
+        //이미지 파일이 첫번째 오지 않았을 때
+        if(Objects.equals(imgfiles[0].getOriginalFilename(), "")){
+            throw new ErrorCodeException(BOARD_MAIN_IMGFILE_NOT_EXIST);
         }
-        //이미지 파일이 있는지 확인
-        for (int i = 0; i < imgfiles.length; i++){
-            if(Objects.equals(imgfiles[i].getOriginalFilename(), "")){
-                throw new ErrorCodeException(BOARD_IMG_NOT_EXIST);
-            }
-        }
+
+//        //이미지 파일이 있는지 확인
+//        for (int i = 0; i < imgfiles.length; i++){
+//            if(Objects.equals(imgfiles[i].getOriginalFilename(), "")){
+//                throw new ErrorCodeException(BOARD_IMG_NOT_EXIST);
+//            }
+//        }
 
         //비디오파일 있는지 확인
         if(Objects.equals(videofile.getOriginalFilename(), "")){
