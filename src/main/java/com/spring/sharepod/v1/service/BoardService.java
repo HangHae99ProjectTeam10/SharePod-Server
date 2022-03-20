@@ -15,6 +15,9 @@ import com.spring.sharepod.v1.repository.ImgFilesRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,11 +40,14 @@ public class BoardService {
     private final AmountRepository amountRepository;
 
 
+    private static final int BLOCK_PAGE_NUM_COUNT = 5;
+    private static final int PAGE_POST_COUNT = 3;
+
     //8번 API 릴스 video 전체 GET(Limit) (구현 완료)
     @Transactional
-    public List<BoardResponseDto.VideoAll> getAllVideo(Long limitCount) {
+    public List<BoardResponseDto.VideoAll> getAllVideo(Long startCount) {
         // 모든 릴스 가져오기
-        List<Board> boardList = boardRepository.findAllByVideoUrlRan(limitCount);
+        List<Board> boardList = boardRepository.findAllByVideoUrlRan(startCount);
 
         // 릴스를 반환해서 저장할 리스트
         List<BoardResponseDto.VideoAll> videoAllResponseDtos = new ArrayList<>();
@@ -243,7 +249,7 @@ public class BoardService {
 
     //API 13번 메인 페이지 전체 게시글 불러오기 (구현 완료)
     @Transactional
-    public List<BoardResponseDto.BoardAll> getAllBoard(Long limitCount, Optional<Long> userId) {
+    public List<BoardResponseDto.BoardAll> getAllBoard(Optional<Long> userId) {
 //        TypeQuery<BoardResponseDto.BoardAll> query =
 //                em.createQuery("SELECT new test.jpql.UserDTO(m.username, m.age)
 //                        FROM Member m", UserDTO.class);
@@ -251,7 +257,7 @@ public class BoardService {
 //        List<BoardResponseDto.BoardAll> boardlist = query.getResultList();
 
         // 모든 게시글 가져오기
-        List<Board> boardList = boardRepository.findAllByOrderByModifiedAtDesc(limitCount);
+        List<Board> boardList = boardRepository.findAllByOrderByModifiedAtDesc();
 
         return getBoardService(boardList,userId);
     }
@@ -259,24 +265,24 @@ public class BoardService {
 
     //15번 카테고리 정렬별 보여주기 (구현 완료)
     @Transactional
-    public List<BoardResponseDto.BoardAll> getSortedBoard(String filterType, String category, String boardRegion, Long limitCount, Optional<Long> userId) {
+    public List<BoardResponseDto.BoardAll> getSortedBoard(String filterType, String category, String boardRegion, Long startCount, Optional<Long> userId) {
         List<Board> boardList = new ArrayList<>();
         System.out.println("filterType : " + filterType);
         System.out.println("category : " + category);
         System.out.println("boardRegion :" + boardRegion);
-        System.out.println("limitCount" + limitCount);
+        System.out.println("limitCount" + startCount);
 
         switch (filterType) {
             case "quality":
-                boardList = boardRepository.findByAndMapAndCategoryByQuility(boardRegion, category, limitCount);
+                boardList = boardRepository.findByAndMapAndCategoryByQuility(boardRegion, category, startCount);
                 break;
 
             case "cost":
-                boardList = boardRepository.findByAndMapAndCategoryByCost(boardRegion, category, limitCount);
+                boardList = boardRepository.findByAndMapAndCategoryByCost(boardRegion, category, startCount);
                 break;
 
             default:
-                boardList = boardRepository.findByAndMapAndCategoryByCreatedAt(boardRegion, category, limitCount);
+                boardList = boardRepository.findByAndMapAndCategoryByCreatedAt(boardRegion, category, startCount);
 
         }
 
@@ -286,20 +292,20 @@ public class BoardService {
 
     //15번 검색한 내용에 대한 정보 (구현 완료)
     @Transactional
-    public List<BoardResponseDto.BoardAll> getSearchBoard(String filtertype, String searchtitle, String mapdata, Long limitcount, Optional<Long> userId) {
+    public List<BoardResponseDto.BoardAll> getSearchBoard(String filtertype, String searchtitle, String boardRegion, Long startCount, Optional<Long> userId) {
         List<Board> boardList = new ArrayList<>();
 
         switch (filtertype) {
             case "quality":
-                boardList = boardRepository.findByAndMapAndSearchByQuility(mapdata, searchtitle, limitcount);
+                boardList = boardRepository.findByAndMapAndSearchByQuility(boardRegion, searchtitle, startCount);
                 break;
 
             case "cost":
-                boardList = boardRepository.findByAndMapAndSearchByCost(mapdata, searchtitle, limitcount);
+                boardList = boardRepository.findByAndMapAndSearchByCost(boardRegion, searchtitle, startCount);
                 break;
 
             default:
-                boardList = boardRepository.findByAndMapAndSearchByCreatedAt(mapdata, searchtitle, limitcount);
+                boardList = boardRepository.findByAndMapAndSearchByCreatedAt(boardRegion, searchtitle, startCount);
 
         }
         return getBoardService(boardList, userId);
