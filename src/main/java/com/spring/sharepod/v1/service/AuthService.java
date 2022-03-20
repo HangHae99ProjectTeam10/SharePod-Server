@@ -1,7 +1,6 @@
 package com.spring.sharepod.v1.service;
 
 import com.spring.sharepod.entity.Auth;
-import com.spring.sharepod.entity.AuthImg;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
@@ -88,9 +87,6 @@ public class AuthService {
         //authimgbox 저장 및 반환
         return authImgService.authimguploadService(userid,s3authimgurl);
     }
-
-
-
 
 
     //빌려준 사람만의 기능, 인증 성공 or 실패

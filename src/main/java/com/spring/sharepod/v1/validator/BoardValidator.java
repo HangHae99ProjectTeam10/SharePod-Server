@@ -26,36 +26,6 @@ public class BoardValidator {
     private final LikedRepository likedRepository;
     private final UserRepository userRepository;
 
-    //기본 주소 데이터
-    public String DefaultMapData(Optional<String> mapdata) {
-        String defaultMapdata = null;
-        if (!mapdata.isPresent()) {
-            return defaultMapdata = "중구";
-        } else {
-            return defaultMapdata = String.valueOf(mapdata.get());
-        }
-    }
-
-    //기본 filter 데이정
-    public String DefaultFilterData(Optional<String> filtertype) {
-        String defaultFilter = null;
-        if (!filtertype.isPresent()) {
-            return defaultFilter = "recent";
-        } else {
-            return defaultFilter = String.valueOf(filtertype.get());
-        }
-    }
-
-    //기본 카테고리 데이터
-    public String DefaultCategoryData(Optional<String> category) {
-        String defaultCategory = null;
-        if (!category.isPresent()) {
-            return defaultCategory = "전자제품";
-        } else {
-            return defaultCategory = String.valueOf(category.get());
-        }
-    }
-
     //기본 검색 데이터
     public String DefaultSearchData(Optional<String> searchtitle) {
         String defaultSearchTitle = null;
@@ -66,15 +36,6 @@ public class BoardValidator {
         }
     }
 
-    // 기본 limit count 갯수(5)개 설정
-    public Long DefaultLimitCount(Long limitCount) {
-        Long defaultLimitCount = null;
-        if (limitCount == null) {
-            return defaultLimitCount = 8L;
-        } else {
-            return defaultLimitCount = limitCount;
-        }
-    }
 
     //상세 페이지 보여줄 시 로그인이 되어 있을 경우, 찜하기가 되어있는지에 대한 판단
     public Boolean DefaultLiked(Optional<Long> userid, Long boardid) {
@@ -98,10 +59,6 @@ public class BoardValidator {
         return boardRepository.findById(boardId).orElseThrow(
                 () -> new ErrorCodeException(BOARD_NOT_FOUND));
     }
-
-
-    //
-
 
 
     public void validateBoardWrite(BoardRequestDto.WriteBoard boardWriteRequestDTO,
