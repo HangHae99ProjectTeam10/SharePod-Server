@@ -81,12 +81,16 @@ public class AwsS3Service {
         User user = userValidator.ValidByUserId(boardWriteRequestDTO.getUserId());
 
         String[] giveUrl = new String[3];
-        for (int i = 0; i < imgFiles.length; i++) {
-            String filename = UUID.randomUUID() + "_" + imgFiles[i].getOriginalFilename();
-            filename = user.getNickName() + filename;
-            amazonS3.putObject(new PutObjectRequest(bucket, filename, imgFiles[i].getInputStream(), null)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-            giveUrl[i] = amazonS3.getUrl(bucket, filename).toString();
+        for (int i = 0; i < giveUrl.length; i++) {
+            if (imgFiles[i].isEmpty()){
+                giveUrl[i] = null;
+            }else{
+                String filename = UUID.randomUUID() + "_" + imgFiles[i].getOriginalFilename();
+                filename = user.getNickName() + filename;
+                amazonS3.putObject(new PutObjectRequest(bucket, filename, imgFiles[i].getInputStream(), null)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+                giveUrl[i] = amazonS3.getUrl(bucket, filename).toString();
+            }
         }
 
         boardWriteRequestDTO.setFirstImgUrl(giveUrl[0]);
@@ -94,12 +98,16 @@ public class AwsS3Service {
         boardWriteRequestDTO.setLastImgUrl(giveUrl[2]);
 
 
-        //비디오 처리
-        String videoName = UUID.randomUUID() + "_" + videoFile.getOriginalFilename();
-        videoName = user.getNickName() + videoName;
-        amazonS3.putObject(new PutObjectRequest(bucket, videoName, videoFile.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        boardWriteRequestDTO.setVideoUrl(amazonS3.getUrl(bucket, videoName).toString());
+        if(videoFile.isEmpty()){
+            boardWriteRequestDTO.setVideoUrl(null);
+        }else {
+            //비디오 처리
+            String videoName = UUID.randomUUID() + "_" + videoFile.getOriginalFilename();
+            videoName = user.getNickName() + videoName;
+            amazonS3.putObject(new PutObjectRequest(bucket, videoName, videoFile.getInputStream(), null)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            boardWriteRequestDTO.setVideoUrl(amazonS3.getUrl(bucket, videoName).toString());
+        }
 
         return boardWriteRequestDTO;
     }

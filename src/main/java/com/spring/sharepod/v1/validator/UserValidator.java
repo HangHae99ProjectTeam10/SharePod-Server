@@ -41,9 +41,9 @@ public class UserValidator {
         if(userRegisterRequestDto.getUserRegion() == null){
             throw new ErrorCodeException(REGISTER_NULL_MAPDATA);
         }
-        if(userRegisterRequestDto.getUserImg() == null){
-            throw new ErrorCodeException(REGISTER_NULL_USERIMG);
-        }
+//        if(userRegisterRequestDto.getUserImg() == null){
+//            throw new ErrorCodeException(REGISTER_NULL_USERIMG);
+//        }
 
 
         // 유저네임(이메일) 중복 확인

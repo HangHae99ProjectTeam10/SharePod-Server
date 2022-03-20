@@ -1,7 +1,6 @@
 package com.spring.sharepod.entity;
 
 
-import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

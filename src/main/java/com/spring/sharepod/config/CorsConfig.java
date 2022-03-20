@@ -25,6 +25,8 @@ public class CorsConfig implements WebMvcConfigurer {
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
+
+
         configuration.addExposedHeader("accessToken");
         configuration.addExposedHeader("refreshToken");
         configuration.addExposedHeader("Access-Control-Expose-Headers");

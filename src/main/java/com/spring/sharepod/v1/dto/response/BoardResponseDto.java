@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class BoardResponseDto {
 
@@ -33,9 +34,7 @@ public class BoardResponseDto {
     public static class BoardDetail {
         private String Title;
         private String videoUrl;
-        private String firstImgUrl;
-        private String secondImgUrl;
-        private String lastImgUrl;
+        private List<String> imgFiles;
         private String contents;
         private int originPrice;
         private int dailyRentalFee;
