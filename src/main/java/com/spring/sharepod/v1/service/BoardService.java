@@ -73,7 +73,7 @@ public class BoardService {
 
     //9번 API 게시판 작성 (구현 완료)
     @Transactional
-    public BasicResponseDTO wirteBoard(BoardRequestDto.WriteBoard writeBoard) {
+    public BoardResponseDto.BoardWrite wirteBoard(BoardRequestDto.WriteBoard writeBoard) {
 
         //작성자의 id로 user를 찾는다.
         User user = userRepository.findById(writeBoard.getUserId()).orElseThrow(
@@ -109,9 +109,19 @@ public class BoardService {
                 .board(board)
                 .build());
 
-        return BasicResponseDTO.builder()
+        return BoardResponseDto.BoardWrite.builder()
                 .result("success")
                 .msg(user.getNickName() + "님의 게시글 작성 완료되었습니다.")
+                .boardData(BoardResponseDto.BoardData.builder()
+                        .boardId(board.getId())
+                        .firstImgUrl(writeBoard.getFirstImgUrl())
+                        .title(board.getTitle())
+                        .boardRegion(board.getBoardRegion())
+                        .dailyRentalFee(writeBoard.getDailyRentalFee())
+                        .boardTag(board.getBoardTag())
+                        .category(board.getCategory())
+                        .modifiedAt(board.getModifiedAt())
+                        .build())
                 .build();
     }
 
@@ -152,7 +162,7 @@ public class BoardService {
 
     //11번 API 게시판 수정 (구현 완료)
     @Transactional
-    public BasicResponseDTO updateBoard(Long boardId, BoardRequestDto.PatchBoard patchRequestDTO) {
+    public BoardResponseDto.BoardWrite updateBoard(Long boardId, BoardRequestDto.PatchBoard patchRequestDTO) {
 
         //수정할 게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardId).orElseThrow(
@@ -169,9 +179,24 @@ public class BoardService {
         board.getAmount().updateAmount(patchRequestDTO.getOriginPrice(), patchRequestDTO.getDailyRentalFee());
         board.updateBoard(patchRequestDTO.getTitle(), patchRequestDTO.getContents(), patchRequestDTO.getCategory(), patchRequestDTO.getBoardRegion(), patchRequestDTO.getProductQuality(), patchRequestDTO.getBoardTag());
 
-        return BasicResponseDTO.builder()
+        //수정된 게시판 boardid로 검색해 가져오기
+        Board boardupdate = boardRepository.findById(boardId).orElseThrow(
+                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
+        );
+
+        return BoardResponseDto.BoardWrite.builder()
                 .result("success")
                 .msg(board.getUser().getNickName() + "님의 게시글 수정 완료되었습니다.")
+                .boardData(BoardResponseDto.BoardData.builder()
+                        .boardId(boardupdate.getId())
+                        .firstImgUrl(patchRequestDTO.getFirstImgUrl())
+                        .title(patchRequestDTO.getTitle())
+                        .boardRegion(patchRequestDTO.getBoardRegion())
+                        .dailyRentalFee(patchRequestDTO.getDailyRentalFee())
+                        .boardTag(patchRequestDTO.getBoardTag())
+                        .category(patchRequestDTO.getCategory())
+                        .modifiedAt(boardupdate.getModifiedAt())
+                        .build())
                 .build();
     }
 

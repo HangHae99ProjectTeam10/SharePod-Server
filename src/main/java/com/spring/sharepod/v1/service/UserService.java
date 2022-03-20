@@ -335,6 +335,7 @@ public class UserService {
         return rentSellerResponseDtoList;
     }
 
+
     //6번 API 회원 정보 수정 (구현 완료)
     @Transactional
     public BasicResponseDTO usermodifyService(Long userid, UserRequestDto.Modify modifyRequestDTO) {

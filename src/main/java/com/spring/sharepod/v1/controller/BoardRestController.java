@@ -46,7 +46,7 @@ public class BoardRestController {
 
     //** 9번 게시판 작성 (구현 완료)
     @PostMapping("/board")
-    public BasicResponseDTO writeBoard(@RequestPart BoardRequestDto.WriteBoard boardWriteRequestDTO,
+    public BoardResponseDto.BoardWrite writeBoard(@RequestPart BoardRequestDto.WriteBoard boardWriteRequestDTO,
                                        @RequestPart MultipartFile[] imgFiles,
                                        @RequestPart MultipartFile videoFile, @AuthenticationPrincipal User user) throws IOException {
 
@@ -74,7 +74,7 @@ public class BoardRestController {
 
     //** 11번 게시판 수정 (구현 완료)
     @PatchMapping("/board/{boardId}")
-    public BasicResponseDTO updateDetailBoard(@PathVariable Long boardId, @RequestPart BoardRequestDto.PatchBoard patchRequestDTO, @AuthenticationPrincipal User user,@RequestPart MultipartFile[] imgFiles,
+    public BoardResponseDto.BoardWrite updateDetailBoard(@PathVariable Long boardId, @RequestPart BoardRequestDto.PatchBoard patchRequestDTO, @AuthenticationPrincipal User user,@RequestPart MultipartFile[] imgFiles,
                                               @RequestPart MultipartFile videoFile)throws IOException {
         //token과 patchRequestDTO의 userid와 비교
         tokenValidator.userIdCompareToken(patchRequestDTO.getUserId(), user.getId());
