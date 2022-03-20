@@ -55,7 +55,7 @@ public enum ErrorCode {
     BOARD_MAPDATA_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_9", "지역을 적지 않으셨습니다."),
     BOARD_CATEGORY_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_10", "카테고리를 적지 않으셨습니다."),
     BOARD_BOARDQUILITY_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_11", "보드 퀄리티를 적지 않으셨습니다."),
-    BOARD_IMGFILE3_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_12", "이미지가 3개 오지 않으셨습니다."),
+    BOARD_MAIN_IMGFILE_NOT_EXIST(HttpStatus.FORBIDDEN, "403_Board_12", "첫번째 이미지가 오지 않으셨습니다."),
 
 
     // 좋아요 관련 에러 모음

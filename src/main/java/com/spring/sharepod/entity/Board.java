@@ -1,7 +1,6 @@
 package com.spring.sharepod.entity;
 
 
-import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,6 +47,7 @@ public class Board extends Timestamped {
     //게시판 태그
     @Column
     private String boardTag;
+
 
     //Board : User => N: 1 엔티티에서 userid 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
