@@ -63,9 +63,9 @@ public class BoardRestController {
 
     //** 10번 게시글 상세 페이지 불러오기 (구현 완료)
     @GetMapping("/board/{boardId}")
-    public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userid", required=false) Optional<Long> userId, @AuthenticationPrincipal User user) {
+    public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required=false) Optional<Long> userId) {
         // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.(로그인 안했을 때는 찜 그냥 false)
-        Boolean islLked = boardValidator.DefaultLiked(userId,boardId,user);
+        Boolean islLked = boardValidator.DefaultLiked(userId,boardId);
 
         BoardResponseDto.BoardDetail boardDetailResponseDto = boardService.getDetailBoard(boardId, islLked);
         return new ResponseEntity<>(new BoardDetail("success", "게시글 상세 불러오기 성공", boardDetailResponseDto), HttpStatus.OK);
@@ -96,25 +96,26 @@ public class BoardRestController {
 
     //13번 메인 전체 상품 최신순 보여주기 (구현 완료)
     @GetMapping("/board")
-    public ResponseEntity<BoardList> getBoardList(@RequestParam(value = "limit", required=false) Long limitCount) {
-        //Long 값이 들어오지 않는다면 5개로 고정한다.
+    public ResponseEntity<BoardList> getBoardList(@RequestParam(value = "limit", required=false) Long limitCount, @RequestParam(value = "userId", required=false) Optional<Long> userId) {
+        //Long 값이 들어오지 않는다면 8개로 고정한다.
         Long validLimitCount = boardValidator.DefaultLimitCount(limitCount);
 
-        List<BoardResponseDto.BoardAll> boardResponseDtos = boardService.getAllBoard(validLimitCount);
+
+        List<BoardResponseDto.BoardAll> boardResponseDtos = boardService.getAllBoard(validLimitCount, userId);
         return new ResponseEntity<>(new BoardList("success", "리스트 최신순 성공", boardResponseDtos), HttpStatus.OK);
     }
 
 
     //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동 (구현 완료)
     @GetMapping("/board/sort")
-    public ResponseEntity<BoardList> getCategoryBoardList(@RequestParam(value = "limit", required=false) Long limitcount, @RequestParam(value = "filterType", required=false) Optional<String> filtertype, @RequestParam(value = "category", required=false) Optional<String> category, @RequestParam(value = "boardRegion", required=false) Optional<String> mapdata) {
+    public ResponseEntity<BoardList> getCategoryBoardList(@RequestParam(value = "limit", required=false) Long limitcount, @RequestParam(value = "filterType", required=false) Optional<String> filtertype, @RequestParam(value = "category", required=false) Optional<String> category, @RequestParam(value = "boardRegion", required=false) Optional<String> mapdata, @RequestParam(value = "userId", required=false) Optional<Long> userId) {
         // 각각의 변수에 대한 default값 설정
         String validmapdata = boardValidator.DefaultMapData(mapdata);
         String validFilterData = boardValidator.DefaultFilterData(filtertype);
         String validCategoryData = boardValidator.DefaultCategoryData(category);
         Long validLimitCount = boardValidator.DefaultLimitCount(limitcount);
 
-        List<BoardResponseDto.BoardAll> bordResponseDtos = boardService.getSortedBoard(validFilterData, validCategoryData, validmapdata, validLimitCount);
+        List<BoardResponseDto.BoardAll> bordResponseDtos = boardService.getSortedBoard(validFilterData, validCategoryData, validmapdata, validLimitCount, userId);
         return new ResponseEntity<>(new BoardList("success", "리스트 " + validFilterData + " 정렬 성공", bordResponseDtos), HttpStatus.OK);
     }
 
@@ -122,7 +123,7 @@ public class BoardRestController {
 
     //15번 직접 사용자 검색 기능 (구현 완료)
     @GetMapping("/search")
-    public ResponseEntity<BoardList> getSearchBoardList(@RequestParam(value = "limit", required=false) Long limitcount, @RequestParam(value = "filtertype", required=false) Optional<String> filtertype, @RequestParam(value = "searchTitle", required=false) Optional<String> searchtitle, @RequestParam(value = "boardRegion", required=false ) Optional<String> boardRegion) {
+    public ResponseEntity<BoardList> getSearchBoardList(@RequestParam(value = "limit", required=false) Long limitcount, @RequestParam(value = "filtertype", required=false) Optional<String> filtertype, @RequestParam(value = "searchTitle", required=false) Optional<String> searchtitle, @RequestParam(value = "boardRegion", required=false ) Optional<String> boardRegion, @RequestParam(value = "userId", required=false) Optional<Long> userId) {
         // 각각의 변수에 대한 default값 설정
         String validBoardRegion = boardValidator.DefaultMapData(boardRegion);
         String validFilterData = boardValidator.DefaultFilterData(filtertype);
@@ -130,7 +131,7 @@ public class BoardRestController {
         Long validLimitCount = boardValidator.DefaultLimitCount(limitcount);
         System.out.println(validBoardRegion+validFilterData+validSearchData);
 
-        List<BoardResponseDto.BoardAll> boardResponseDtos = boardService.getSearchBoard(validFilterData, validSearchData, validBoardRegion, validLimitCount);
+        List<BoardResponseDto.BoardAll> boardResponseDtos = boardService.getSearchBoard(validFilterData, validSearchData, validBoardRegion, validLimitCount,userId);
         return new ResponseEntity<>(new BoardList("success", "검색 " + validFilterData + " 성공", boardResponseDtos), HttpStatus.OK);
     }
 

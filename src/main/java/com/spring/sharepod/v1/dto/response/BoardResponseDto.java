@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class BoardResponseDto {
@@ -43,14 +44,13 @@ public class BoardResponseDto {
 
         private Long boardId;
         private String firstImgUrl;
-        private String Title;
+        private String title;
         private String category;
         private int dailyRentalFee;
-        private String boardContents;
+        private String boardRegion;
         private String boardTag;
-        private String sellerImgUrl;
-        private String sellerNickName;
-
+        private LocalDateTime modifiedAt;
+        private Boolean isLiked;
     }
 
     @Getter

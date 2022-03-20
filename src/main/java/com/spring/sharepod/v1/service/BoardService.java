@@ -18,10 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.spring.sharepod.exception.CommonError.ErrorCode.BOARD_NOT_EQUAL_WRITER;
 import static com.spring.sharepod.exception.CommonError.ErrorCode.BOARD_NOT_FOUND;
@@ -246,22 +243,29 @@ public class BoardService {
 
     //API 13번 메인 페이지 전체 게시글 불러오기 (구현 완료)
     @Transactional
-    public List<BoardResponseDto.BoardAll> getAllBoard(Long limitCount) {
+    public List<BoardResponseDto.BoardAll> getAllBoard(Long limitCount, Optional<Long> userId) {
+//        TypeQuery<BoardResponseDto.BoardAll> query =
+//                em.createQuery("SELECT new test.jpql.UserDTO(m.username, m.age)
+//                        FROM Member m", UserDTO.class);
+//
+//        List<BoardResponseDto.BoardAll> boardlist = query.getResultList();
 
         // 모든 게시글 가져오기
         List<Board> boardList = boardRepository.findAllByOrderByModifiedAtDesc(limitCount);
-        return getBoardService(boardList);
+
+        return getBoardService(boardList,userId);
     }
 
 
     //15번 카테고리 정렬별 보여주기 (구현 완료)
     @Transactional
-    public List<BoardResponseDto.BoardAll> getSortedBoard(String filterType, String category, String boardRegion, Long limitCount) {
+    public List<BoardResponseDto.BoardAll> getSortedBoard(String filterType, String category, String boardRegion, Long limitCount, Optional<Long> userId) {
         List<Board> boardList = new ArrayList<>();
         System.out.println("filterType : " + filterType);
         System.out.println("category : " + category);
         System.out.println("boardRegion :" + boardRegion);
         System.out.println("limitCount" + limitCount);
+
         switch (filterType) {
             case "quality":
                 boardList = boardRepository.findByAndMapAndCategoryByQuility(boardRegion, category, limitCount);
@@ -276,13 +280,13 @@ public class BoardService {
 
         }
 
-        return getBoardService(boardList);
+        return getBoardService(boardList, userId);
     }
 
 
     //15번 검색한 내용에 대한 정보 (구현 완료)
     @Transactional
-    public List<BoardResponseDto.BoardAll> getSearchBoard(String filtertype, String searchtitle, String mapdata, Long limitcount) {
+    public List<BoardResponseDto.BoardAll> getSearchBoard(String filtertype, String searchtitle, String mapdata, Long limitcount, Optional<Long> userId) {
         List<Board> boardList = new ArrayList<>();
 
         switch (filtertype) {
@@ -298,28 +302,36 @@ public class BoardService {
                 boardList = boardRepository.findByAndMapAndSearchByCreatedAt(mapdata, searchtitle, limitcount);
 
         }
-        return getBoardService(boardList);
+        return getBoardService(boardList, userId);
     }
 
 
     //////////////////반복되는 로직을 처리해주는 함수들
-    public List<BoardResponseDto.BoardAll> getBoardService(List<Board> boardList) {
+    public List<BoardResponseDto.BoardAll> getBoardService(List<Board> boardList, Optional<Long> userId) {
+
+
         // 게시글을 반환해서 저장할 리스트
         List<BoardResponseDto.BoardAll> boardResponseDtos = new ArrayList<>();
 
         // 게시글 해쳐서 for문을 통해 하나씩 넣어주기
         for (Board board : boardList) {
+            Long boardId = board.getId();
+
+            //로그인을 했을 경우에는 좋아요 보이도록
+            Boolean isLiked = boardValidator.DefaultLiked(userId,boardId);
+
             // BoardResponseDto 생성
             BoardResponseDto.BoardAll boardResponseDto = BoardResponseDto.BoardAll.builder()
                     .boardId(board.getId())
                     .category(board.getCategory())
-                    .Title(board.getTitle())
+                    .title(board.getTitle())
                     .firstImgUrl(board.getImgFiles().getFirstImgUrl())
                     .dailyRentalFee(board.getAmount().getDailyRentalFee())
-                    .boardContents(board.getContents())
+                    .boardRegion(board.getBoardRegion())
                     .boardTag(board.getBoardTag())
-                    .sellerImgUrl(board.getUser().getUserImg())
-                    .sellerNickName(board.getUser().getNickName())
+                    .isLiked(isLiked)
+                    .category(board.getCategory())
+                    .modifiedAt(board.getModifiedAt())
                     .build();
 
             // 반환할 리스트에 저장하기
