@@ -47,6 +47,28 @@ public class BoardRequestDto {
 
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class getReels {
+        private Long userId;
+        private String title;
+        private String contents;
+        private String productQuality;
+        private String boardRegion;
+        private String boardTag;
+        private int originPrice;
+        private int dailyRentalFee;
+        private String category;
+        private String videoUrl;
+        private String firstImgUrl;
+        private String secondImgUrl;
+        private String lastImgUrl;
+
+    }
+
 
 
 

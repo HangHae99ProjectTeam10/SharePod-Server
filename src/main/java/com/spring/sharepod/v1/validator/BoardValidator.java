@@ -10,6 +10,7 @@ import com.spring.sharepod.v1.repository.LikedRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
@@ -69,7 +70,7 @@ public class BoardValidator {
     public Long DefaultLimitCount(Long limitCount) {
         Long defaultLimitCount = null;
         if (limitCount == null) {
-            return defaultLimitCount = 5L;
+            return defaultLimitCount = 8L;
         } else {
             return defaultLimitCount = limitCount;
         }
@@ -153,9 +154,31 @@ public class BoardValidator {
 //        }
 
         //비디오파일 있는지 확인
-        if(Objects.equals(videofile.getOriginalFilename(), "")){
-            throw new ErrorCodeException(VIDEOFILE_NOT_EXIST);
-        }
+//        if(Objects.equals(videofile.getOriginalFilename(), "")){
+//            throw new ErrorCodeException(VIDEOFILE_NOT_EXIST);
+//        }
+//
+//
+//        for (int i=0; i<imgfiles.length; i++){
+//
+//        }
+//        // 파일의 확장자 추출
+//        String originalFileExtension;
+//        String contentType = imgfiles.getContentType();
+//
+//        // 확장자명이 존재하지 않을 경우 처리 x
+//        if(ObjectUtils.isEmpty(contentType)) {
+//            break;
+//        }
+//        else {  // 확장자가 jpeg, png인 파일들만 받아서 처리
+//            if(contentType.contains("image/jpeg"))
+//                originalFileExtension = ".jpg";
+//            else if(contentType.contains("image/png"))
+//                originalFileExtension = ".png";
+//            else  // 다른 확장자일 경우 처리 x
+//                break;
+//        }
+
 
     }
 
