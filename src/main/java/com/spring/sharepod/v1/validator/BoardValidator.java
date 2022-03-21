@@ -2,15 +2,13 @@ package com.spring.sharepod.v1.validator;
 
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
-import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
-import com.spring.sharepod.v1.repository.BoardRepository;
+import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.LikedRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;

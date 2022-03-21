@@ -98,8 +98,6 @@ public class BoardResponseDto {
     @AllArgsConstructor
     public static class VideoAll {
         private Long boardId;
-        private String Title;
-        private String boardTag;
         private String videoUrl;
         private String userImg;
         private String nickName;

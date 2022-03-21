@@ -9,18 +9,19 @@ import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
 import com.spring.sharepod.v1.dto.response.BoardResponseDto;
+import com.spring.sharepod.v1.dto.response.VideoAll;
 import com.spring.sharepod.v1.repository.AmountRepository;
-import com.spring.sharepod.v1.repository.BoardRepository;
+import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.ImgFilesRepository;
+import com.spring.sharepod.v1.repository.SearchForm;
 import com.spring.sharepod.v1.repository.UserRepository;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.*;
 
 import static com.spring.sharepod.exception.CommonError.ErrorCode.BOARD_NOT_EQUAL_WRITER;
@@ -38,6 +39,7 @@ public class BoardService {
     private final ImgFilesRepository imgFilesRepository;
 
     private final AmountRepository amountRepository;
+    private final EntityManager entityManager;
 
 
     private static final int BLOCK_PAGE_NUM_COUNT = 5;
@@ -45,33 +47,35 @@ public class BoardService {
 
     //8번 API 릴스 video 전체 GET(Limit) (구현 완료)
     @Transactional
-    public List<BoardResponseDto.VideoAll> getAllVideo(Long startCount) {
+    public List<VideoAll> getAllVideo(int startCount) {
+        TypedQuery<VideoAll> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAll(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i inner join b.user as u ORDER BY b.modifiedAt DESC ", VideoAll. class);
+        query.setFirstResult(startCount);
+        query.setMaxResults(startCount + 3);
+        List<VideoAll> resultList = query.getResultList();
         // 모든 릴스 가져오기
-        List<Board> boardList = boardRepository.findAllByVideoUrlRan(startCount);
+        //List<Board> boardList = boardRepository.findAllByVideoUrlRan(startCount);
 
-        // 릴스를 반환해서 저장할 리스트
-        List<BoardResponseDto.VideoAll> videoAllResponseDtos = new ArrayList<>();
+//        // 릴스를 반환해서 저장할 리스트
+//        List<BoardResponseDto.VideoAll> videoAllResponseDtos = new ArrayList<>();
+//
+//        // 릴스 덩어리 해쳐서 넣어주기
+//        for (Board board : boardList) {
+//            String nickname = board.getUser().getNickName();
+//            String userimg = board.getUser().getUserImg();
+//
+//            // videoAllResponseDto 생성
+//            BoardResponseDto.VideoAll videoAllResponseDto = BoardResponseDto.VideoAll.builder()
+//                    .boardId(board.getId())
+//                    .videoUrl(board.getImgFiles().getVideoUrl())
+//                    .userImg(userimg)
+//                    .nickName(nickname)
+//                    .build();
+//
+//            // 반환할 리스트에 저장하기
+//            videoAllResponseDtos.add(videoAllResponseDto);
+//        }
 
-        // 릴스 덩어리 해쳐서 넣어주기
-        for (Board board : boardList) {
-            String nickname = board.getUser().getNickName();
-            String userimg = board.getUser().getUserImg();
-
-            // videoAllResponseDto 생성
-            BoardResponseDto.VideoAll videoAllResponseDto = BoardResponseDto.VideoAll.builder()
-                    .boardId(board.getId())
-                    .videoUrl(board.getImgFiles().getVideoUrl())
-                    .boardTag(board.getBoardTag())
-                    .Title(board.getTitle())
-                    .userImg(userimg)
-                    .nickName(nickname)
-                    .build();
-
-            // 반환할 리스트에 저장하기
-            videoAllResponseDtos.add(videoAllResponseDto);
-        }
-
-        return videoAllResponseDtos;
+        return resultList;
     }
 
     //9번 API 게시판 작성 (구현 완료)
@@ -137,7 +141,7 @@ public class BoardService {
         fileNameList.add(board.getImgFiles().getFirstImgUrl());
         fileNameList.add(board.getImgFiles().getSecondImgUrl());
         fileNameList.add(board.getImgFiles().getLastImgUrl());
-        fileNameList.removeAll(Arrays.asList("",null));
+        fileNameList.removeAll(Arrays.asList("", null));
 
         // 존재한다면 받아온 내용들을 담아서 보내주기
         BoardResponseDto.BoardDetail boardDetailResponseDto = BoardResponseDto.BoardDetail.builder()
@@ -259,30 +263,45 @@ public class BoardService {
         // 모든 게시글 가져오기
         List<Board> boardList = boardRepository.findAllByOrderByModifiedAtDesc();
 
-        return getBoardService(boardList,userId);
+        return getBoardService(boardList, userId);
     }
 
 
     //15번 카테고리 정렬별 보여주기 (구현 완료)
     @Transactional
-    public List<BoardResponseDto.BoardAll> getSortedBoard(String filterType, String category, String boardRegion, Long startCount, Optional<Long> userId) {
+    public List<BoardResponseDto.BoardAll> getSortedBoard(String filterType, String category, String boardRegion, int startCount, Optional<Long> userId) {
         List<Board> boardList = new ArrayList<>();
         System.out.println("filterType : " + filterType);
         System.out.println("category : " + category);
         System.out.println("boardRegion :" + boardRegion);
         System.out.println("limitCount" + startCount);
-
+//        System.out.println("boardRegion.get" + boardRegion.get().equals(null));
+//        System.out.println("category.get" + category.get().equals(null));
+        int boardLength = 0;
         switch (filterType) {
             case "quality":
-                boardList = boardRepository.findByAndMapAndCategoryByQuility(boardRegion, category, startCount);
+                boardList = boardRepository.searchFormQuality(SearchForm.builder()
+                        .startNum(startCount)
+                        .category(category)
+                        .boardRegion(boardRegion).build());
+                boardLength = boardList.size();
+
                 break;
 
             case "cost":
-                boardList = boardRepository.findByAndMapAndCategoryByCost(boardRegion, category, startCount);
+                boardList = boardRepository.searchFormCost(SearchForm.builder()
+                        .startNum(startCount)
+                        .category(category)
+                        .boardRegion(boardRegion).build());
+                boardLength = boardList.size();
                 break;
 
             default:
-                boardList = boardRepository.findByAndMapAndCategoryByCreatedAt(boardRegion, category, startCount);
+                boardList = boardRepository.searchFormRecent(SearchForm.builder()
+                        .startNum(startCount)
+                        .category(category)
+                        .boardRegion(boardRegion).build());
+                boardLength = boardList.size();
 
         }
 
@@ -294,10 +313,13 @@ public class BoardService {
     @Transactional
     public List<BoardResponseDto.BoardAll> getSearchBoard(String filtertype, String searchtitle, String boardRegion, Long startCount, Optional<Long> userId) {
         List<Board> boardList = new ArrayList<>();
+        int boardLength = 0;
 
         switch (filtertype) {
             case "quality":
-                boardList = boardRepository.findByAndMapAndSearchByQuility(boardRegion, searchtitle, startCount);
+                boardList = boardRepository.findByAndMapAndSearchByQuality(boardRegion, searchtitle, startCount);
+                boardLength = boardRepository.findByAndMapAndSearchByQualityCount(boardRegion, searchtitle);
+                System.out.println(boardLength + "boardLength");
                 break;
 
             case "cost":
@@ -324,7 +346,7 @@ public class BoardService {
             Long boardId = board.getId();
 
             //로그인을 했을 경우에는 좋아요 보이도록
-            Boolean isLiked = boardValidator.DefaultLiked(userId,boardId);
+            Boolean isLiked = boardValidator.DefaultLiked(userId, boardId);
 
             // BoardResponseDto 생성
             BoardResponseDto.BoardAll boardResponseDto = BoardResponseDto.BoardAll.builder()
@@ -345,5 +367,10 @@ public class BoardService {
         }
 
         return boardResponseDtos;
+    }
+
+    @Transactional
+    public int getSearchBoardCount(String filterType,String searchTitle,String boardRegion){
+        return 1;
     }
 }
