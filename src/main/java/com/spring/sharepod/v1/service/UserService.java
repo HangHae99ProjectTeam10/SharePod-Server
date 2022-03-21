@@ -15,7 +15,7 @@ import com.spring.sharepod.v1.dto.response.BoardResponseDto;
 import com.spring.sharepod.v1.dto.response.LikedResponseDto;
 import com.spring.sharepod.v1.dto.response.UserResponseDto;
 import com.spring.sharepod.v1.repository.AuthRepository;
-import com.spring.sharepod.v1.repository.BoardRepository;
+import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.LikedRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
 import com.spring.sharepod.v1.validator.BoardValidator;
@@ -32,7 +32,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.servlet.function.ServerRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -335,12 +334,13 @@ public class UserService {
         return rentSellerResponseDtoList;
     }
 
+
     //6번 API 회원 정보 수정 (구현 완료)
     @Transactional
     public BasicResponseDTO usermodifyService(Long userid, UserRequestDto.Modify modifyRequestDTO) {
         User user = userValidator.ValidByUserId(userid);
 
-        //유저 이미지가 변경 되었을 때03
+        //유저 이미지가 변경 되었을 때
         if (modifyRequestDTO.getUserImg() != null) {
             user.updateUserImg(modifyRequestDTO);
         }
@@ -350,7 +350,7 @@ public class UserService {
         }
         return BasicResponseDTO.builder()
                 .result("success")
-                .msg(user.getNickName() + "님 게시글 수정 성공하였습니다.")
+                .msg(user.getNickName() + "님 회원정보 수정 성공하였습니다.")
                 .build();
 
     }

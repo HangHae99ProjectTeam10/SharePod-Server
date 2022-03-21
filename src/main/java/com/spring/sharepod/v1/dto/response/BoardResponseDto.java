@@ -6,8 +6,36 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 public class BoardResponseDto {
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class BoardWrite {
+        private String result;
+        private String msg;
+        private BoardData boardData;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class BoardData {
+
+        private Long boardId;
+        private String firstImgUrl;
+        private String title;
+        private String boardRegion;
+        private int dailyRentalFee;
+        private String boardTag;
+        private String category;
+        private LocalDateTime modifiedAt;
+
+    }
+
 
     @Getter
     @AllArgsConstructor
@@ -16,14 +44,13 @@ public class BoardResponseDto {
 
         private Long boardId;
         private String firstImgUrl;
-        private String Title;
+        private String title;
         private String category;
         private int dailyRentalFee;
-        private String boardContents;
+        private String boardRegion;
         private String boardTag;
-        private String sellerImgUrl;
-        private String sellerNickName;
-
+        private LocalDateTime modifiedAt;
+        private Boolean isLiked;
     }
 
     @Getter
@@ -33,9 +60,7 @@ public class BoardResponseDto {
     public static class BoardDetail {
         private String Title;
         private String videoUrl;
-        private String firstImgUrl;
-        private String secondImgUrl;
-        private String lastImgUrl;
+        private List<String> imgFiles;
         private String contents;
         private int originPrice;
         private int dailyRentalFee;
@@ -73,8 +98,6 @@ public class BoardResponseDto {
     @AllArgsConstructor
     public static class VideoAll {
         private Long boardId;
-        private String Title;
-        private String boardTag;
         private String videoUrl;
         private String userImg;
         private String nickName;

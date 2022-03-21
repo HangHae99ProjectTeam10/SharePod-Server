@@ -36,4 +36,5 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         response.getWriter().print(responseJson);
     }
+
 }
