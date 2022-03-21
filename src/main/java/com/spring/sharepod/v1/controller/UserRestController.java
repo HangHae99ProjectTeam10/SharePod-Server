@@ -90,7 +90,7 @@ public class UserRestController {
     @PatchMapping("/user/{userId}")
     public BasicResponseDTO UserModify(@PathVariable Long userId,
                                        @RequestPart UserRequestDto.Modify userModifyRequestDTO,
-                                       @RequestPart MultipartFile userImgFile, @AuthenticationPrincipal User user) throws IOException {
+                                       @RequestPart(required=false) MultipartFile userImgFile, @AuthenticationPrincipal User user) throws IOException {
         //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userId, user.getId());
 
@@ -99,7 +99,7 @@ public class UserRestController {
 
 
         //이미지가 새롭게 들어왔으면
-        if (!Objects.equals(userImgFile.getOriginalFilename(), "")) {
+        if (userImgFile == null) {
             //변경된 사진 저장 후 기존 삭제 삭제 후 requestDto에 setUserimg 하기
             userModifyRequestDTO.setUserImg(awsS3Service.ModifiedProfileImg(user.getUserImg().substring(user.getUserImg().lastIndexOf("/") + 1), user.getNickName(), userImgFile));
         } else {

@@ -7,6 +7,7 @@ import com.spring.sharepod.v1.dto.request.ReservationRequestDto;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
 import com.spring.sharepod.v1.dto.response.ReservationResponseDto;
 import com.spring.sharepod.v1.repository.*;
+import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.validator.ReservationValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

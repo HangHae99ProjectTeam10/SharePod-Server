@@ -53,8 +53,7 @@ public class AwsS3Service {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
         System.out.println("기존 이미지 삭제 완료");
 
-        String modifiedFileName = UUID.randomUUID() + "_" + userimgfile.getOriginalFilename();
-        modifiedFileName = userNickName + modifiedFileName;
+        String modifiedFileName = UUID.randomUUID() + "_";
 
         amazonS3.putObject(new PutObjectRequest(bucket, modifiedFileName, userimgfile.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
@@ -122,8 +121,6 @@ public class AwsS3Service {
         //수정할 게시판 boardid로 검색해 가져오기
         Board board = boardValidator.ValidByBoardId(boardId);
 
-
-
         //게시판 작성 validator
         boardValidator.validateBoardUpdate(patchRequestDTO);
 
@@ -132,7 +129,7 @@ public class AwsS3Service {
 
         String[] givenUrl = new String[3];
         for (int i = 0; i < imgFiles.length; i++) {
-            if (Objects.equals(imgFiles[i].getOriginalFilename(), "")) {
+            if (imgFiles[i] == null) {
                 if (i == 0) { givenUrl[i] = board.getImgFiles().getFirstImgUrl(); }
                 else if (i == 1) { givenUrl[i] = board.getImgFiles().getSecondImgUrl(); }
                 else { givenUrl[i] = board.getImgFiles().getLastImgUrl(); }
@@ -154,7 +151,7 @@ public class AwsS3Service {
                 amazonS3.deleteObject(new DeleteObjectRequest(bucket,modifiedBoardImg));
 
 
-                String filename = UUID.randomUUID() + "_" + imgFiles[i].getOriginalFilename();
+                String filename = UUID.randomUUID() + "_";
                 filename = user.getNickName() + filename;
                 amazonS3.putObject(new PutObjectRequest(bucket, filename, imgFiles[i].getInputStream(), null)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
