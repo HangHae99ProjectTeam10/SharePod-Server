@@ -1,9 +1,6 @@
 package com.spring.sharepod.v1.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -102,6 +99,19 @@ public class BoardResponseDto {
         private String userImg;
         private String nickName;
     }
+
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class BoardAllList {
+        private String result;
+        private String msg;
+        private int resultCount;
+        private List<BoardResponseDto.BoardAll> listData;
+    }
+
 
 
 }

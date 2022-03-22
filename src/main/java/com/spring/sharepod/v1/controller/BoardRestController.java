@@ -96,30 +96,26 @@ public class BoardRestController {
 
     //13번 메인 전체 상품 최신순 보여주기 (구현 완료)
     @GetMapping("/board")
-    public ResponseEntity<BoardList> getBoardList(@RequestParam(value = "userId", required=false) Optional<Long> userId) {
-        //Long 값이 들어오지 않는다면 8개로 고정한다.
-        List<BoardResponseDto.BoardAll> boardResponseDtos = boardService.getAllBoard(userId);
-        return new ResponseEntity<>(new BoardList("success", "리스트 최신순 성공", boardResponseDtos), HttpStatus.OK);
+    public BoardResponseDto.BoardAllList getBoardList(@RequestParam(value = "userId", required=false) Optional<Long> userId) {
+        return boardService.getAllBoard(userId);
     }
 
 
     //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동 (구현 완료)
     @GetMapping("/board/sort")
-    public ResponseEntity<BoardList> getCategoryBoardList(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "filterType", defaultValue = "recent") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "boardRegion") String boardRegion, @RequestParam(value = "userId", required=false) Optional<Long> userId) {
-        List<BoardResponseDto.BoardAll> bordResponseDtos = boardService.getSortedBoard(filtertype, category, boardRegion, pageNum, userId);
-        //int boardCount = boardService.getCategoryCount();
-        return new ResponseEntity<>(new BoardList("success", "리스트 " + filtertype + " 정렬 성공", bordResponseDtos), HttpStatus.OK);
+    public BoardResponseDto.BoardAllList getCategoryBoardList(@RequestParam(value = "startNum", defaultValue = "0") int startNum, @RequestParam(value = "filterType", defaultValue = "recent") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "boardRegion") String boardRegion, @RequestParam(value = "searchTitle") String searchtitle, @RequestParam(value = "userId", required=false) Optional<Long> userId) {
+        return boardService.getSortedBoard(filtertype, category, boardRegion, startNum, searchtitle, userId);
     }
 
 
 
     //15번 직접 사용자 검색 기능 (구현 완료)
-    @GetMapping("/search")
-    public ResponseEntity<BoardList> getSearchBoardList(@RequestParam(value = "pageNum", defaultValue = "0") Long pageNum, @RequestParam(value = "filtertype", defaultValue = "recent") String filtertype, @RequestParam(value = "searchTitle", defaultValue = " ") String searchtitle, @RequestParam(value = "boardRegion", defaultValue = "All") String boardRegion, @RequestParam(value = "userId", required=false) Optional<Long> userId) {
-        List<BoardResponseDto.BoardAll> boardResponseDtos = boardService.getSearchBoard(filtertype, searchtitle, boardRegion, pageNum , userId);
-        int boardCount = boardService.getSearchBoardCount(filtertype,searchtitle,boardRegion);
-        return new ResponseEntity<>(new BoardList("success", "검색 " + filtertype + " 성공", boardResponseDtos), HttpStatus.OK);
-    }
+//    @GetMapping("/search")
+//    public ResponseEntity<BoardList> getSearchBoardList(@RequestParam(value = "pageNum", defaultValue = "0") Long pageNum, @RequestParam(value = "filtertype", defaultValue = "recent") String filtertype, @RequestParam(value = "searchTitle", defaultValue = " ") String searchtitle, @RequestParam(value = "boardRegion", defaultValue = "All") String boardRegion, @RequestParam(value = "userId", required=false) Optional<Long> userId) {
+//        List<BoardResponseDto.BoardAll> boardResponseDtos = boardService.getSearchBoard(filtertype, searchtitle, boardRegion, pageNum , userId);
+//        //int boardCount = boardService.getSearchBoardCount(filtertype,searchtitle,boardRegion);
+//        return new ResponseEntity<>(new BoardList("success", "검색 " + filtertype + " 성공", boardResponseDtos), HttpStatus.OK);
+//    }
 
 
 }

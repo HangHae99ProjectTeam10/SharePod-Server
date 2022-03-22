@@ -53,6 +53,7 @@ public class ReservationService {
                 .endRental(LocalDate.parse(requestDTO.getEndRental()))
                 .build()).getId();
 
+
         //알림 추가(ooo님이 거래 요청을 하였습니다)
         noticeRepository.save(Notice.builder()
                 .buyer(buyer)
