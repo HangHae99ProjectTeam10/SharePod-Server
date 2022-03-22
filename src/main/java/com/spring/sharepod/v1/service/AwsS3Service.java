@@ -35,7 +35,6 @@ public class AwsS3Service {
     private final AmazonS3 amazonS3;
     private final UserValidator userValidator;
     private final BoardValidator boardValidator;
-    private final AuthImgRepository authImgRepository;
     private final AuthImgValidator authImgValidator;
 
     //회원 가입 시, 유저 프로필 사진 업로드
