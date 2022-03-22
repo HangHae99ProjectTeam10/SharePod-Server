@@ -34,10 +34,9 @@ public class BoardRestController {
     private final BoardValidator boardValidator;
 
 
-
     //8번 API 릴스 동영상 get 하는 방식 (구현 완료)
     @GetMapping("/board/video")
-    public ResponseEntity<AllVideo> getVideo(@RequestParam(value="pageNum", defaultValue = "0") int pageNum) {
+    public ResponseEntity<AllVideo> getVideo(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum) {
         //limit 안 들어오면 5로 고정
         //Long validLimitCount = boardValidator.DefaultLimitCount(limitCount);
 
@@ -48,15 +47,15 @@ public class BoardRestController {
     //** 9번 게시판 작성 (구현 완료)
     @PostMapping("/board")
     public BoardResponseDto.BoardWrite writeBoard(@RequestPart BoardRequestDto.WriteBoard boardWriteRequestDTO,
-                                       @RequestPart(required = false) MultipartFile[] imgFiles,
-                                       @RequestPart MultipartFile videoFile, @AuthenticationPrincipal User user) throws IOException {
+                                                  @RequestPart(required = false) MultipartFile[] imgFiles,
+                                                  @RequestPart MultipartFile videoFile, @AuthenticationPrincipal User user) throws IOException {
 
         //token과 boardWriteRequestDto의 userid와 비교
         tokenValidator.userIdCompareToken(boardWriteRequestDTO.getUserId(), user.getId());
 
 
         //게시판 업로드
-        BoardRequestDto.WriteBoard writeBoard = awsS3Service.boardUpload(boardWriteRequestDTO,imgFiles,videoFile);
+        BoardRequestDto.WriteBoard writeBoard = awsS3Service.boardUpload(boardWriteRequestDTO, imgFiles, videoFile);
 
         //DB저장 및 리턴
         return boardService.wirteBoard(writeBoard);
@@ -64,9 +63,9 @@ public class BoardRestController {
 
     //** 10번 게시글 상세 페이지 불러오기 (구현 완료)
     @GetMapping("/board/{boardId}")
-    public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required=false) Optional<Long> userId) {
+    public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
         // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.(로그인 안했을 때는 찜 그냥 false)
-        Boolean islLked = boardValidator.DefaultLiked(userId,boardId);
+        Boolean islLked = boardValidator.DefaultLiked(userId, boardId);
 
         BoardResponseDto.BoardDetail boardDetailResponseDto = boardService.getDetailBoard(boardId, islLked);
         return new ResponseEntity<>(new BoardDetail("success", "게시글 상세 불러오기 성공", boardDetailResponseDto), HttpStatus.OK);
@@ -75,8 +74,11 @@ public class BoardRestController {
 
     //** 11번 게시판 수정 (구현 완료)
     @PatchMapping("/board/{boardId}")
-    public BoardResponseDto.BoardWrite updateDetailBoard(@PathVariable Long boardId, @RequestPart BoardRequestDto.PatchBoard patchRequestDTO, @AuthenticationPrincipal User user,@RequestPart(required = false) MultipartFile[] imgFiles,
-                                              @RequestPart MultipartFile videoFile)throws IOException {
+    public BoardResponseDto.BoardWrite updateDetailBoard(@PathVariable Long boardId,
+                                                         @RequestPart BoardRequestDto.PatchBoard patchRequestDTO,
+                                                         @AuthenticationPrincipal User user, @RequestPart(required = false)
+                                                                 MultipartFile[] imgFiles,
+                                                         @RequestPart MultipartFile videoFile) throws IOException {
         //token과 patchRequestDTO의 userid와 비교
         tokenValidator.userIdCompareToken(patchRequestDTO.getUserId(), user.getId());
 
@@ -90,23 +92,22 @@ public class BoardRestController {
     @DeleteMapping("/board/{boardId}")
     public BasicResponseDTO deleteBoard(@PathVariable Long boardId, @RequestBody Map<String, Long> user, @AuthenticationPrincipal User tokenUser) {
         //token과 user.get("userid")와 비교
-        tokenValidator.userIdCompareToken(user.get("userId"),tokenUser.getId());
+        tokenValidator.userIdCompareToken(user.get("userId"), tokenUser.getId());
         return boardService.deleteboard(boardId, user.get("userId"));
     }
 
     //13번 메인 전체 상품 최신순 보여주기 (구현 완료)
     @GetMapping("/board")
-    public BoardResponseDto.BoardAllList getBoardList(@RequestParam(value = "userId", required=false) Optional<Long> userId) {
+    public BoardResponseDto.BoardAllList getBoardList(@RequestParam(value = "userId", required = false) Optional<Long> userId) {
         return boardService.getAllBoard(userId);
     }
 
 
     //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동 (구현 완료)
     @GetMapping("/board/sort")
-    public BoardResponseDto.BoardAllList getCategoryBoardList(@RequestParam(value = "startNum", defaultValue = "0") int startNum, @RequestParam(value = "filterType", defaultValue = "recent") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "boardRegion") String boardRegion, @RequestParam(value = "searchTitle") String searchtitle, @RequestParam(value = "userId", required=false) Optional<Long> userId) {
+    public BoardResponseDto.BoardAllList getCategoryBoardList(@RequestParam(value = "startNum", defaultValue = "0") int startNum, @RequestParam(value = "filterType", defaultValue = "recent") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "boardRegion") String boardRegion, @RequestParam(value = "searchTitle") String searchtitle, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
         return boardService.getSortedBoard(filtertype, category, boardRegion, startNum, searchtitle, userId);
     }
-
 
 
     //15번 직접 사용자 검색 기능 (구현 완료)
