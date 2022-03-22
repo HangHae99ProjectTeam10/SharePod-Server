@@ -41,7 +41,7 @@ public class AwsS3Service {
     //회원 가입 시, 유저 프로필 사진 업로드
     public String upload(UserRequestDto.Register userRegisterRequestDto, MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(file.getOriginalFilename());
-
+        System.out.println(fileName);
         amazonS3.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3.getUrl(bucket, fileName).toString();
@@ -50,6 +50,7 @@ public class AwsS3Service {
 
     //회원정보 수정 시, 파일이 바뀌었다면 진행되는 로직
     public String ModifiedProfileImg(String fileName, String userNickName, MultipartFile userimgfile) throws IOException {
+        System.out.println("fileName" + fileName);
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
         System.out.println("기존 이미지 삭제 완료");
 
@@ -81,7 +82,7 @@ public class AwsS3Service {
 
         String[] giveUrl = new String[3];
         for (int i = 0; i < giveUrl.length; i++) {
-            if (imgFiles[i].isEmpty()) {
+            if (Objects.equals(null, StringUtils.getFilenameExtension(imgFiles[i].getOriginalFilename()))){
                 giveUrl[i] = null;
             } else {
                 String fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(imgFiles[i].getOriginalFilename());
