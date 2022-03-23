@@ -36,11 +36,11 @@ public class BoardRestController {
 
     //8번 API 릴스 동영상 get 하는 방식 (구현 완료)
     @GetMapping("/board/video")
-    public ResponseEntity<AllVideo> getVideo(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum) {
+    public ResponseEntity<AllVideo> getVideo() {
         //limit 안 들어오면 5로 고정
         //Long validLimitCount = boardValidator.DefaultLimitCount(limitCount);
 
-        List<VideoAll> videoAllResponseDtos = boardService.getAllVideo(pageNum);
+        List<VideoAll> videoAllResponseDtos = boardService.getAllVideo();
         return new ResponseEntity<>(new AllVideo("success", "영상 전송 성공", videoAllResponseDtos), HttpStatus.OK);
     }
 

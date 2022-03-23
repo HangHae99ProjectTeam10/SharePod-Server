@@ -52,13 +52,15 @@ public class BoardValidator {
         }
     }
 
+
+
     //상세 페이지를 보여줄 떄, board가 존재하는지 아닌지에 대한 판단
     public Board ValidByBoardId(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
                 () -> new ErrorCodeException(BOARD_NOT_FOUND));
     }
 
-
+    //게시글 작성 시
     public void validateBoardWrite(BoardRequestDto.WriteBoard boardWriteRequestDTO,
                                    MultipartFile[] imgfiles,
                                    MultipartFile videofile){
@@ -108,9 +110,9 @@ public class BoardValidator {
 //        }
 
         //비디오파일 있는지 확인
-//        if(Objects.equals(videofile.getOriginalFilename(), "")){
-//            throw new ErrorCodeException(VIDEOFILE_NOT_EXIST);
-//        }
+        if(Objects.equals(videofile.getOriginalFilename(), "")){
+            throw new ErrorCodeException(VIDEOFILE_NOT_EXIST);
+        }
 //
 //
 //        for (int i=0; i<imgfiles.length; i++){
@@ -172,5 +174,8 @@ public class BoardValidator {
         }
 
     }
+
+
+
 
 }

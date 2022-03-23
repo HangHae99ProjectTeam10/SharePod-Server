@@ -1,5 +1,6 @@
 package com.spring.sharepod.v1.dto.response;
 
+import com.spring.sharepod.entity.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,6 +60,7 @@ public class UserResponseDto {
         private String nickName;
         private String category;
         private Long authId;
+        private Boolean isLiked;
     }
 
     @Getter
@@ -76,6 +78,12 @@ public class UserResponseDto {
         private String nickName;
         private String category;
         private Long authId;
+        private Boolean isLiked;
+
+
+//        public static RentSeller toDto(Board board){
+//
+//        }
     }
 
 

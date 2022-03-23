@@ -44,15 +44,17 @@ public class BoardService {
 
     //8번 API 릴스 video 전체 GET(Limit) (구현 완료)
     @Transactional
-    public List<VideoAll> getAllVideo(int startCount) {
-        TypedQuery<VideoAll> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAll(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i inner join b.user as u ORDER BY b.modifiedAt DESC ", VideoAll.class);
-        query.setFirstResult(startCount);
-        query.setMaxResults(startCount + 3);
+    public List<VideoAll> getAllVideo() {
+
+        TypedQuery<VideoAll> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAll(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i INNER JOIN b.user as u", VideoAll.class);
+        //Long randomIdx = Math.random()/query
+        //query.setFirstResult()
+        query.setMaxResults(3);
         List<VideoAll> resultList = query.getResultList();
 
 
-        // 모든 릴스 가져오기
-        //List<Board> boardList = boardRepository.findAllByVideoUrlRan(startCount);
+        //모든 릴스 가져오기
+        //List<Board> boardList = boardRepository.findAllByVideoUrlRan();
 
 //        // 릴스를 반환해서 저장할 리스트
 //        List<BoardResponseDto.VideoAll> videoAllResponseDtos = new ArrayList<>();
@@ -84,7 +86,6 @@ public class BoardService {
         //작성자의 id로 user를 찾는다.
         User user = userRepository.findById(writeBoard.getUserId()).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
-
 
         //보드 저장
         Long boardId = boardRepository.save(Board.builder()
@@ -134,6 +135,13 @@ public class BoardService {
     // 10번 API 상세 페이지 board GET (구현 완료)
     @Transactional
     public BoardResponseDto.BoardDetail getDetailBoard(Long boardId, Boolean isLiked) {
+        //TypedQuery<Board> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.BoardResponseDto.BoardDetail() From Board b Inner Join b.user INNER JOIN  b.imgFiles INNER JOIN  b.amount")
+
+//        TypedQuery<VideoAll> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAll(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i INNER JOIN join b.user as u ORDER BY b.modifiedAt DESC ", VideoAll.class);
+//        query.setFirstResult(startCount);
+//        query.setMaxResults(startCount + 3);
+//        List<VideoAll> resultList = query.getResultList();
+
         //보드가 존재하지 않을 시 메시지 호출
         Board board = boardValidator.ValidByBoardId(boardId);
         List<String> fileNameList = new ArrayList<>();
@@ -159,7 +167,7 @@ public class BoardService {
                 .isLiked(isLiked)
                 .likeCount(board.getLikeNumber().size())
                 .sellerImg(board.getUser().getUserImg())
-                .modifiedAt(String.valueOf(board.getModifiedAt()))
+                .modifiedAt(board.getModifiedAt())
                 .build();
 
         return boardDetailResponseDto;

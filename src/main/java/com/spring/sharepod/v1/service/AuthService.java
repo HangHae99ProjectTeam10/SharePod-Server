@@ -89,7 +89,7 @@ public class AuthService {
     }
 
 
-    //빌려준 사람만의 기능, 인증 성공 or 실패
+    //빌려준 사람만의 기능, 재업로드
     @Transactional
     public Long CheckReuploadBoard(AuthRequestDto.AuthCheckReUpload authCheckReUploadRequestDto) {
 

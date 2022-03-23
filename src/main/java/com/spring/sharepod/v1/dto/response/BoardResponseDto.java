@@ -3,7 +3,6 @@ package com.spring.sharepod.v1.dto.response;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class BoardResponseDto {
@@ -69,7 +68,7 @@ public class BoardResponseDto {
         private String category;
         private String boardQuaility;
         private boolean isLiked;
-        private String modifiedAt;
+        private LocalDateTime modifiedAt;
         private int likeCount;
 
 
@@ -82,11 +81,13 @@ public class BoardResponseDto {
         private Long boardId;
         private String boardTitle;
         private String boardTag;
+        private String boardRegion;
         private String FirstImg;
         private LocalDateTime modifiedAt;
         private int dailyRentalFee;
         private String nickName;
         private String category;
+        private Boolean isLiked;
     }
 
 
@@ -110,6 +111,7 @@ public class BoardResponseDto {
         private String msg;
         private int resultCount;
         private List<BoardResponseDto.BoardAll> listData;
+
     }
 
 
