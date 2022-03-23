@@ -45,7 +45,7 @@ public class AuthRestController {
 
     //21번 buyer가 인증 이미지 저장 (구현 완료)
     @PostMapping("/auth/img/{userId}/{authImgId}")
-    public BasicResponseDTO AuthImgUpload(@PathVariable Long userId, @PathVariable Long authImgId, @RequestPart MultipartFile authFile, @AuthenticationPrincipal User user) throws IOException {
+    public AuthResponseDto.AuthUploadDTO AuthImgUpload(@PathVariable Long userId, @PathVariable Long authImgId, @RequestPart MultipartFile authFile, @AuthenticationPrincipal User user) throws IOException {
         // 토큰과 userid 일치하는지 확인
         tokenValidator.userIdCompareToken(userId,user.getId());
 
@@ -53,26 +53,20 @@ public class AuthRestController {
         String s3authImgUrl = awsS3Service.authImgCheck(userId, authImgId, authFile);
 
         //authImg 저장 및 반환
-        return authImgService.authimguploadService(authImgId,s3authImgUrl);
+        return authImgService.authimguploadService(userId, authImgId,s3authImgUrl);
     }
 
 
     //23번 재업로드 or 삭제 api (구현 완료)
     @PostMapping("/auth/reupload")
-    public ResponseEntity<Success> AuthBool(@RequestBody AuthRequestDto.AuthCheckReUpload authCheckReUploadRequestDto, @AuthenticationPrincipal User user){
+    public AuthResponseDto.AuthReUploadDTO AuthBool(@RequestBody AuthRequestDto.AuthCheckReUpload authCheckReUploadRequestDto, @AuthenticationPrincipal User user){
         //토큰과 authBoolRequestDto.getSellerid()가 일치하는지에 대한 판단
         tokenValidator.userIdCompareToken(authCheckReUploadRequestDto.getSellerId(), user.getId());
 
         //seller id가 user 테이블에 존재하는지에 대한 판단
         userValidator.ValidByUserId(authCheckReUploadRequestDto.getSellerId());
 
-        //service에서 requestDto로 비즈니스 로직 구현
-        Long id = authService.CheckReuploadBoard(authCheckReUploadRequestDto);
-
-        //reupload에 따라서 메시지 다르게 호출
-        String result = authValidator.ValidAuthByReupload(authCheckReUploadRequestDto.isAuthReUpload());
-
-        return new ResponseEntity<>(new Success("success",id +"번 "+ result), HttpStatus.OK);
+        return authService.CheckReuploadBoard(authCheckReUploadRequestDto);
     }
 
 }

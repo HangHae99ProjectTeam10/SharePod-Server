@@ -35,7 +35,7 @@ public class ReservationRestController {
 
     //19번 API 거래 요청 수락/거절
     @PostMapping("/reservation/response/{boardId}")
-    public BasicResponseDTO resResponse(@PathVariable Long boardId, @RequestBody ReservationRequestDto.AcceptOrNot reservationAcceptNotDTO, @AuthenticationPrincipal User user) throws ParseException {
+    public ReservationResponseDto.accReservationDTO resResponse(@PathVariable Long boardId, @RequestBody ReservationRequestDto.AcceptOrNot reservationAcceptNotDTO, @AuthenticationPrincipal User user) throws ParseException {
         tokenValidator.userIdCompareToken(reservationAcceptNotDTO.getSellerId(), user.getId());
         return reservationService.resResponseService(boardId,reservationAcceptNotDTO);
 

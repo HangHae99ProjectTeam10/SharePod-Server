@@ -21,7 +21,6 @@ public class ReservationResponseDto {
         private String boardImg;
     }
 
-
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
@@ -31,6 +30,19 @@ public class ReservationResponseDto {
         private List<ReservationGetDTO> reservationList;
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class accReservationDTO{
+        private String result;
+        private String msg;
+        private Long boardId;
+        private Long sellerId;
+        private String buyerNickName;
+        private boolean check;
+    }
 
     @Getter
     @AllArgsConstructor
@@ -43,6 +55,7 @@ public class ReservationResponseDto {
         private String startRental;
         private String endRental;
     }
+
 
 
 }

@@ -36,4 +36,41 @@ public class AuthResponseDto {
         private String authImgUrl;
         private boolean authImgCheck;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class AuthUploadDTO{
+        private String result;
+        private String msg;
+        private Long userId;
+        private Long authImgId;
+        private String authImgUrl;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class AuthImgBoolDTO{
+        private String result;
+        private String msg;
+        private Long authImgId;
+        private Long sellerid;
+        private boolean check;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class AuthReUploadDTO{
+        private String result;
+        private String msg;
+        private boolean authReupload;
+        private Long sellerId;
+        private Long authId;
+    }
+
 }
