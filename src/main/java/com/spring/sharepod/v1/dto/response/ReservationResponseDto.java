@@ -31,4 +31,18 @@ public class ReservationResponseDto {
         private List<ReservationGetDTO> reservationList;
     }
 
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class ReservationDeal {
+        private String result;
+        private String msg;
+        private Long userId;
+        private Long boardId;
+        private String startRental;
+        private String endRental;
+    }
+
+
 }

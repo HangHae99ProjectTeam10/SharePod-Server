@@ -6,6 +6,7 @@ import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
+import com.spring.sharepod.v1.dto.response.LikedResponseDto;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.LikedRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
@@ -26,7 +27,7 @@ public class LikedService {
     private final UserValidator userValidator;
 
     @Transactional
-    public BasicResponseDTO islikeservice(Long boardid, LikeRequestDTO.Liked requestDTO) {
+    public LikedResponseDto.LikedPost islikeservice(Long boardid, LikeRequestDTO.Liked requestDTO) {
 
         //찜할 게시판 boardid로 검색해 가져오기
         Board board = boardValidator.ValidByBoardId(boardid);
@@ -43,9 +44,11 @@ public class LikedService {
                     .user(user)
                     .board(board)
                     .build()).getId();
-            return BasicResponseDTO.builder()
+            return LikedResponseDto.LikedPost.builder()
                     .result("success")
                     .msg(board.getTitle()+ "찜하기 완료")
+                    .userId(requestDTO.getUserId())
+                    .boardId(boardid)
                     .build();
 
         }
@@ -53,9 +56,11 @@ public class LikedService {
         else {
             likedRepository.deleteById(like.getId());
 
-            return BasicResponseDTO.builder()
+            return LikedResponseDto.LikedPost.builder()
                     .result("success")
                     .msg(board.getTitle()+ "찜하기 취소 완료")
+                    .userId(requestDTO.getUserId())
+                    .boardId(boardid)
                     .build();
         }
 
