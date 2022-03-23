@@ -86,6 +86,19 @@ public class UserResponseDto {
 //        }
     }
 
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    public static class UserModifiedInfo {
+        private String result;
+        private String msg;
+        private Long userId;
+        private String username;
+        private String userNickname;
+        private String userRegion;
+        private String userModifiedImg;
+    }
+
 
 
 }

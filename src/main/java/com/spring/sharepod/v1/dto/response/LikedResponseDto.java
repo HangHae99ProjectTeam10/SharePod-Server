@@ -25,4 +25,17 @@ public class LikedResponseDto {
         private String userNickName;
         private String category;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class LikedPost {
+        private String result;
+        private String msg;
+        private Long userId;
+        private Long boardId;
+
+    }
+
+
 }

@@ -88,7 +88,13 @@ public enum ErrorCode {
     VIDEOFILE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_FILE_1", "비디오 파일을 입력하지 않았습니다."),
 
     //토큰 관련 에러 모음
-    ACCTOKEN_EXPIRATION(HttpStatus.NOT_FOUND, "403_ACCTOKEN", "엑세스 토큰이 없습니다.");
+    ACCTOKEN_EXPIRATION(HttpStatus.NOT_FOUND, "403_ACCTOKEN", "엑세스 토큰이 없습니다."),
+
+    //채팅 관련 에러 모음
+    CHATROOM_NOT_EXIST(HttpStatus.BAD_REQUEST, "404_CHATROOM_1", "채팅창이 없습니다!"),
+    CHATROOM_EXIST(HttpStatus.BAD_REQUEST, "400_CHATROOM_2", "채팅내역이 존재합니다."),
+    CHATMESSAGE_NOT_EXIST(HttpStatus.BAD_REQUEST, "404_CHATMESSAGE_1", "메시지 객체가 없습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final String errorCode;
