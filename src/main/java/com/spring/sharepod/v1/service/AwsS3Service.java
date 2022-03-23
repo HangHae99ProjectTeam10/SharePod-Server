@@ -59,6 +59,7 @@ public class AwsS3Service {
         amazonS3.putObject(new PutObjectRequest(bucket, modifiedFileName, userimgfile.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         System.out.println("새로운 이미지 등록 완료");
+        System.out.println(amazonS3.getUrl(bucket, modifiedFileName).toString());
 
         return amazonS3.getUrl(bucket, modifiedFileName).toString();
     }

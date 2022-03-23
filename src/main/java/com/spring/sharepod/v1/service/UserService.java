@@ -35,10 +35,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.spring.sharepod.exception.CommonError.ErrorCode.USER_NOT_FOUND;
@@ -346,20 +343,28 @@ public class UserService {
 
     //6번 API 회원 정보 수정 (구현 완료)
     @Transactional
-    public BasicResponseDTO usermodifyService(Long userid, UserRequestDto.Modify modifyRequestDTO) {
+    public UserResponseDto.UserModifiedInfo usermodifyService(Long userid, UserRequestDto.Modify modifyRequestDTO) {
         User user = userValidator.ValidByUserId(userid);
 
         //유저 이미지가 변경 되었을 때
-        if (modifyRequestDTO.getUserImg() != null) {
+        if (!Objects.equals(modifyRequestDTO.getUserImg(), user.getUserImg())) {
+            System.out.println("이미지 변경 적용 완료!");
             user.updateUserImg(modifyRequestDTO);
         }
         // 아닐때
         else {
+            System.out.println("이미지 변경 안한거 확인!");
             user.updateEtc(modifyRequestDTO);
         }
-        return BasicResponseDTO.builder()
+
+        return UserResponseDto.UserModifiedInfo.builder()
                 .result("success")
                 .msg(user.getNickName() + "님 회원정보 수정 성공하였습니다.")
+                .userId(userid)
+                .username(user.getUsername())
+                .userNickname(user.getNickName())
+                .userRegion(user.getUserRegion())
+                .userModifiedImg(user.getUserImg())
                 .build();
 
     }

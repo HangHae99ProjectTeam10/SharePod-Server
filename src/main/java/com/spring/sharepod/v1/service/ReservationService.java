@@ -33,7 +33,7 @@ public class ReservationService {
 
     //17번 거래 요청 (구현 완료)
     @Transactional
-    public BasicResponseDTO reserRequestService(Long boardId, ReservationRequestDto.Reservation requestDTO) {
+    public ReservationResponseDto.ReservationDeal reserRequestService(Long boardId, ReservationRequestDto.Reservation requestDTO) {
         //거래요청 validator
         reservationValidator.validateReservationRequest(boardId, requestDTO);
 
@@ -62,9 +62,13 @@ public class ReservationService {
                 .build()).getId();
 
 
-        return BasicResponseDTO.builder()
+        return ReservationResponseDto.ReservationDeal.builder()
                 .result("success")
                 .msg("거래 요청완료")
+                .userId(requestDTO.getUserId())
+                .boardId(boardId)
+                .startRental(requestDTO.getStartRental())
+                .endRental(requestDTO.getEndRental())
                 .build();
     }
 
