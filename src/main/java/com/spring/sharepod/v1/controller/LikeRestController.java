@@ -4,6 +4,7 @@ package com.spring.sharepod.v1.controller;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.request.LikeRequestDTO;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
+import com.spring.sharepod.v1.dto.response.LikedResponseDto;
 import com.spring.sharepod.v1.service.LikedService;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class LikeRestController {
 
     //찜하기, 찜하기 취소
     @PostMapping("/like/{boardId}")
-    public BasicResponseDTO likecontroll(@PathVariable Long boardId, @RequestBody LikeRequestDTO.Liked requestDTO, @AuthenticationPrincipal User user){
+    public LikedResponseDto.LikedPost likecontroll(@PathVariable Long boardId, @RequestBody LikeRequestDTO.Liked requestDTO, @AuthenticationPrincipal User user){
         System.out.println("user.getId()"+user.getId());
         tokenValidator.userIdCompareToken(requestDTO.getUserId(),user.getId());
         return likedService.islikeservice(boardId,requestDTO);

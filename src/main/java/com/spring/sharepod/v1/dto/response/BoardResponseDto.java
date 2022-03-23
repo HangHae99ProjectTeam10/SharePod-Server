@@ -13,6 +13,7 @@ public class BoardResponseDto {
     public static class BoardWrite {
         private String result;
         private String msg;
+        private Long userId;
         private BoardData boardData;
     }
 
@@ -22,10 +23,13 @@ public class BoardResponseDto {
     public static class BoardData {
 
         private Long boardId;
+        private String contents;
+        private String productQuality;
         private String firstImgUrl;
         private String title;
         private String boardRegion;
         private int dailyRentalFee;
+        private int originalPrice;
         private String boardTag;
         private String category;
         private LocalDateTime modifiedAt;

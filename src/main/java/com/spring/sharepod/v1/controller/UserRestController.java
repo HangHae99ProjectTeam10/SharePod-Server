@@ -89,7 +89,7 @@ public class UserRestController {
 
     //6번 회원 정보 수정하기 (구현 완료)
     @PatchMapping("/user/{userId}")
-    public BasicResponseDTO UserModify(@PathVariable Long userId,
+    public UserResponseDto.UserModifiedInfo UserModify(@PathVariable Long userId,
                                        @RequestPart UserRequestDto.Modify userModifyRequestDTO,
                                        @RequestPart(required=false) MultipartFile userImgFile, @AuthenticationPrincipal User user) throws IOException {
         //토큰과 userid 일치 확인

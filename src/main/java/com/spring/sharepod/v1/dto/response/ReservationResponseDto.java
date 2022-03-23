@@ -44,4 +44,18 @@ public class ReservationResponseDto {
         private boolean check;
     }
 
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class ReservationDeal {
+        private String result;
+        private String msg;
+        private Long userId;
+        private Long boardId;
+        private String startRental;
+        private String endRental;
+    }
+
+
+
 }
