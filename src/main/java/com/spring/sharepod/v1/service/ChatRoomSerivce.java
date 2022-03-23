@@ -65,6 +65,8 @@ public class ChatRoomSerivce {
                 .boardImg(chatRoom.getBoard().getImgFiles().getFirstImgUrl())
                 .dailyRentalFee(chatRoom.getBoard().getAmount().getDailyRentalFee())
                 .chatId(chatRoomId)
+                .boardId(create.getBoardId())
+                .buyerId(create.getBuyerId())
                 .build();
 
         return chatRoomData;

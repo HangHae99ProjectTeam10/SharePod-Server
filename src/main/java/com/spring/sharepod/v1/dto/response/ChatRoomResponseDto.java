@@ -15,13 +15,15 @@ public class ChatRoomResponseDto {
     @AllArgsConstructor
     @Builder
     public static class ChatRoomData {
-        Long chatId;
-        String buyerNickName;
-        String sellerNickName;
-        String sellerImg;
-        String boardImg;
-        String boardTitle;
-        int dailyRentalFee;
+        private Long chatId;
+        private String buyerNickName;
+        private String sellerNickName;
+        private String sellerImg;
+        private String boardImg;
+        private String boardTitle;
+        private int dailyRentalFee;
+        private Long boardId;
+        private Long buyerId;
     }
 
     @Getter

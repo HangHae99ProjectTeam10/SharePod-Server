@@ -98,7 +98,7 @@ public class ReservationService {
 
     //API 19번 거래요청 수락/거절 (구현 중)
     @Transactional
-    public BasicResponseDTO resResponseService(Long boardId, ReservationRequestDto.AcceptOrNot acceptNotDTO) throws ParseException {
+    public ReservationResponseDto.accReservationDTO resResponseService(Long boardId, ReservationRequestDto.AcceptOrNot acceptNotDTO) throws ParseException {
         //buyer
         User buyer = userRepository.findByNickName(acceptNotDTO.getBuyerNickname()).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
@@ -127,9 +127,13 @@ public class ReservationService {
                     .noticeInfo("거래 거절을 하였습니다.")
                     .build()).getId();
 
-            return BasicResponseDTO.builder()
+            return ReservationResponseDto.accReservationDTO.builder()
                     .result("success")
                     .msg("거래 거절완료")
+                    .boardId(boardId)
+                    .sellerId(acceptNotDTO.getSellerId())
+                    .buyerNickName(acceptNotDTO.getBuyerNickname())
+                    .check(acceptNotDTO.isCheck())
                     .build();
         }
 
@@ -178,9 +182,13 @@ public class ReservationService {
                 .noticeInfo("거래 수락을 하였습니다.")
                 .build()).getId();
 
-        return BasicResponseDTO.builder()
+        return ReservationResponseDto.accReservationDTO.builder()
                 .result("success")
                 .msg("거래 수락완료")
+                .boardId(boardId)
+                .sellerId(acceptNotDTO.getSellerId())
+                .buyerNickName(acceptNotDTO.getBuyerNickname())
+                .check(acceptNotDTO.isCheck())
                 .build();
     }
 

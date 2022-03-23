@@ -75,23 +75,10 @@ public class AuthService {
                 .build();
     }
 
-    //21번 API buyer가 인증 이미지 업로드
-    @PostMapping("/auth/img/{userid}/{authImgboxId}")
-    public BasicResponseDTO AuthImgUpload(@PathVariable Long userid, @PathVariable Long authImgboxId, @RequestPart MultipartFile authFile,@AuthenticationPrincipal User user) throws IOException {
-        // 토큰과 userid 일치하는지 확인
-        tokenValidator.userIdCompareToken(userid,user.getId());
-
-        //인증 사진 저장 및 유저 정보 맞는지 확인
-        String s3authimgurl = awsS3Service.authImgCheck(userid, authImgboxId, authFile);
-
-        //authimgbox 저장 및 반환
-        return authImgService.authimguploadService(userid,s3authimgurl);
-    }
-
 
     //빌려준 사람만의 기능, 재업로드
     @Transactional
-    public Long CheckReuploadBoard(AuthRequestDto.AuthCheckReUpload authCheckReUploadRequestDto) {
+    public AuthResponseDto.AuthReUploadDTO CheckReuploadBoard(AuthRequestDto.AuthCheckReUpload authCheckReUploadRequestDto) {
 
         //주어진 id에 대해서 auth가 존재하는지 확인
         Auth auth = authValidator.ValidAuthByAuthId(authCheckReUploadRequestDto.getAuthId());
@@ -112,8 +99,17 @@ public class AuthService {
             boardRepository.deleteById(auth.getBoard().getId());
         }
 
-        // 게시글 번호 리턴
-        return board.getId();
+        //reupload에 따라서 메시지 다르게 호출
+        String result = authValidator.ValidAuthByReupload(authCheckReUploadRequestDto.isAuthReUpload());
+
+
+        return AuthResponseDto.AuthReUploadDTO.builder()
+                .result("success")
+                .msg(board.getId() +"번 "+ result)
+                .authReupload(authCheckReUploadRequestDto.isAuthReUpload())
+                .sellerId(authCheckReUploadRequestDto.getSellerId())
+                .authId(authCheckReUploadRequestDto.getAuthId())
+                .build();
 
     }
 
