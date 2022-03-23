@@ -50,5 +50,6 @@ public class AuthImgService {
         //둘 다 통과가 되면 true, false를 업데이트 해줌
         authimg.AuthBoolupdate(authBoolRequestDto.getCheck());
 
+
     }
 }

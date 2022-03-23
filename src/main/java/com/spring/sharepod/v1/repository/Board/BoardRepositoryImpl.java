@@ -1,6 +1,7 @@
 package com.spring.sharepod.v1.repository.Board;
 
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,9 +34,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
     public List<Board> searchFormRecent(SearchForm searchForm) {
         return getBoardBySearchFormRecent(searchForm).fetch();
     }
-
-
-
 
     private JPAQuery<Board> getBoardBySearchFormRecent(SearchForm searchForm) {
         return jpaQueryFactory
@@ -102,5 +100,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
     private BooleanExpression searchTitle(String searchTitle) {
         System.out.println(searchTitle);
         return isEmpty(searchTitle) ? null : board.title.contains(searchTitle);
+    }
+
+
+    private OrderSpecifier<?> filterType(String filterType){
+        return filterType.equals("cost") ? null : board.amount.dailyRentalFee.asc();
     }
 }
