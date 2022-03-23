@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static com.spring.sharepod.exception.CommonError.ErrorCode.USER_NOT_FOUND;
@@ -237,6 +238,7 @@ public class UserService {
                     .boardTag(liked.getBoard().getBoardTag())
                     .FirstImg(liked.getBoard().getImgFiles().getFirstImgUrl())
                     .isliked(true)
+                    .dailyRentalFee(liked.getBoard().getAmount().getDailyRentalFee())
                     .modifiedAt(liked.getBoard().getModifiedAt())
                     .userNickName(liked.getBoard().getUser().getNickName())
                     .category(liked.getBoard().getCategory())
@@ -259,12 +261,14 @@ public class UserService {
 
 
         for (Board board : boardList) {
-            //Boolean islLked = boardValidator.DefaultMyBoardLiked(userId,board.getId());
+            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),board.getId());
 
             BoardResponseDto.MyBoard myBoardResponseDto = BoardResponseDto.MyBoard.builder()
                     .boardId(board.getId())
                     .boardTitle(board.getTitle())
                     .boardTag(board.getBoardTag())
+                    .boardRegion(board.getBoardRegion())
+                    .isLiked(isLiked)
                     .FirstImg(board.getImgFiles().getFirstImgUrl())
                     .modifiedAt(board.getModifiedAt())
                     .dailyRentalFee(board.getAmount().getDailyRentalFee())
@@ -281,18 +285,21 @@ public class UserService {
 
     //5번 API 내가 대여한 목록 불러오기 (구현 완료)
     @Transactional
-    public List<UserResponseDto.RentBuyer> getBuyList(Long userid) {
+    public List<UserResponseDto.RentBuyer> getBuyList(Long userId) {
         List<UserResponseDto.RentBuyer> rentBuyerResponseDtoList = new ArrayList<>();
 
         // 없으면 for문 안돌고 빈 list가 들어간다.
-        List<Auth> authList = authRepository.findByBuyerId(userid);
+        List<Auth> authList = authRepository.findByBuyerId(userId);
 
         for (Auth auth : authList) {
+            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),auth.getBoard().getId());
+
             UserResponseDto.RentBuyer rentBuyerResponseDto = UserResponseDto.RentBuyer.builder()
                     .boardId(auth.getBoard().getId())
                     .boardTitle(auth.getBoard().getTitle())
                     .boardTag(auth.getBoard().getBoardTag())
                     .boardRegion(auth.getBoard().getBoardRegion())
+                    .isLiked(isLiked)
                     .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
                     .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
                     .startRental(auth.getStartRental())
@@ -309,25 +316,27 @@ public class UserService {
 
     //5번 API 내가 빌려준 목록 불러오기 (구현 완료)
     @Transactional
-    public List<UserResponseDto.RentSeller> getSellList(Long userid) {
+    public List<UserResponseDto.RentSeller> getSellList(Long userId) {
         List<UserResponseDto.RentSeller> rentSellerResponseDtoList = new ArrayList<>();
 
         // 없으면 for문 안돌고 빈 list가 들어간다.
-        List<Auth> authList = authRepository.findBySellerId(userid);
+        List<Auth> authList = authRepository.findBySellerId(userId);
 
-        for (int i = 0; i < authList.size(); i++) {
+        for (Auth auth : authList) {
+            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId), auth.getBoard().getId());
             UserResponseDto.RentSeller rentSellerResponseDto = UserResponseDto.RentSeller.builder()
-                    .boardId(authList.get(i).getBoard().getId())
-                    .boardTitle(authList.get(i).getBoard().getTitle())
-                    .boardRegion(authList.get(i).getBoard().getBoardRegion())
-                    .boardTag(authList.get(i).getBoard().getBoardTag())
-                    .FirstImgUrl(authList.get(i).getBoard().getImgFiles().getFirstImgUrl())
-                    .dailyRentalFee(authList.get(i).getBoard().getAmount().getDailyRentalFee())
-                    .startRental(authList.get(i).getStartRental())
-                    .endRental(authList.get(i).getEndRental())
-                    .nickName(authList.get(i).getAuthBuyer().getNickName())
-                    .authId(authList.get(i).getId())
-                    .category(authList.get(i).getBoard().getCategory())
+                    .boardId(auth.getBoard().getId())
+                    .boardTitle(auth.getBoard().getTitle())
+                    .boardRegion(auth.getBoard().getBoardRegion())
+                    .boardTag(auth.getBoard().getBoardTag())
+                    .isLiked(isLiked)
+                    .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
+                    .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
+                    .startRental(auth.getStartRental())
+                    .endRental(auth.getEndRental())
+                    .nickName(auth.getAuthBuyer().getNickName())
+                    .authId(auth.getId())
+                    .category(auth.getBoard().getCategory())
                     .build();
             rentSellerResponseDtoList.add(rentSellerResponseDto);
         }

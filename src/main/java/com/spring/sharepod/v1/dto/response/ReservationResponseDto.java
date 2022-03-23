@@ -18,6 +18,7 @@ public class ReservationResponseDto {
         private LocalDate endRental;
         private String boardTitle;
         private Long boardId;
+        private String boardImg;
     }
 
 

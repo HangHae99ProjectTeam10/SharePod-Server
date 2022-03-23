@@ -35,7 +35,7 @@ public class ReservationService {
     @Transactional
     public BasicResponseDTO reserRequestService(Long boardId, ReservationRequestDto.Reservation requestDTO) {
         //거래요청 validator
-        reservationValidator.validateReservationRequest(boardId,requestDTO);
+        reservationValidator.validateReservationRequest(boardId, requestDTO);
 
         //게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardId).orElseThrow(
@@ -52,6 +52,7 @@ public class ReservationService {
                 .startRental(LocalDate.parse(requestDTO.getStartRental()))
                 .endRental(LocalDate.parse(requestDTO.getEndRental()))
                 .build()).getId();
+
 
         //알림 추가(ooo님이 거래 요청을 하였습니다)
         noticeRepository.save(Notice.builder()
@@ -74,6 +75,7 @@ public class ReservationService {
         User user = userRepository.findById(seller).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND)
         );
+
         List<ReservationResponseDto.ReservationGetDTO> reservationGetDTOList = new ArrayList<>();
 
         //ReservationGetDTO에 데이터 담아주기
@@ -84,6 +86,7 @@ public class ReservationService {
                     .endRental(user.getReservation().get(i).getEndRental())
                     .boardId(user.getReservation().get(i).getBoard().getId())
                     .boardTitle(user.getReservation().get(i).getBoard().getTitle())
+                    .boardImg(user.getReservation().get(i).getBoard().getImgFiles().getFirstImgUrl())
                     .build());
         }
 
@@ -141,26 +144,26 @@ public class ReservationService {
                 .authSeller(seller)
                 .board(board)
                 .sellectAllImg(false)
-                .startRental(LocalDate.parse(acceptNotDTO.getStartRental()))
-                .endRental(LocalDate.parse(acceptNotDTO.getEndRental()))
+                .startRental(reservation.getStartRental())
+                .endRental(reservation.getEndRental())
                 .build()).getId();
 
         Auth auth = authRepository.getById(authid);
 
         //Authimgbox 테이블 날짜 만큼 갯수 만들기
         SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-        Date startDate = format.parse(acceptNotDTO.getStartRental());
-        Date endDate = format.parse(acceptNotDTO.getEndRental());
+        Date startDate = format.parse(reservation.getStartRental().toString());
+        Date endDate = format.parse(reservation.getEndRental().toString());
         long calDate = endDate.getTime() - startDate.getTime();
         long calDateDays = calDate / (24 * 60 * 60 * 1000);
         calDateDays = Math.abs(calDateDays);
 
         for (int i = 0; i < calDateDays + 1; i++) {
             authImgRepository.save(AuthImg.builder()
-                            .authImgUrl(null)
-                            .checkImgBox(false)
-                            .auth(auth)
-                            .build()).getId();
+                    .authImgUrl(null)
+                    .checkImgBox(false)
+                    .auth(auth)
+                    .build()).getId();
 
         }
 

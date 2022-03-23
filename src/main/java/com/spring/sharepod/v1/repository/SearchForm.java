@@ -21,6 +21,9 @@ public class SearchForm {
      */
     @Length(max = 100)
     private String boardRegion;
+
     private int startNum;
+
+    private String searchTitle;
 
 }

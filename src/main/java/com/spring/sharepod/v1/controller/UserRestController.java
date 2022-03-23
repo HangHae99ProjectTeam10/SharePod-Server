@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -99,10 +100,12 @@ public class UserRestController {
 
 
         //이미지가 새롭게 들어왔으면
-        if (userImgFile == null) {
+        if (!Objects.equals(null, StringUtils.getFilenameExtension(userImgFile.getOriginalFilename()))){
+            System.out.println("if문 들어옴?");
             //변경된 사진 저장 후 기존 삭제 삭제 후 requestDto에 setUserimg 하기
             userModifyRequestDTO.setUserImg(awsS3Service.ModifiedProfileImg(user.getUserImg().substring(user.getUserImg().lastIndexOf("/") + 1), user.getNickName(), userImgFile));
         } else {
+            System.out.println("else문 들어옴?");
             userModifyRequestDTO.setUserImg(user.getUserImg());
         }
 
