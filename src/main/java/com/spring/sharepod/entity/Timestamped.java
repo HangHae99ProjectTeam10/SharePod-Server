@@ -20,4 +20,8 @@ public abstract class Timestamped {
 
     @LastModifiedDate // 마지막 변경 시점
     private LocalDateTime modifiedAt;
+
+    public void setModifiedAt(LocalDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
 }
