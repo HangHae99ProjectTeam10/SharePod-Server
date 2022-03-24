@@ -1,6 +1,6 @@
 package com.spring.sharepod.v1.validator;
 
-import com.spring.sharepod.v1.repository.LikedRepository;
+import com.spring.sharepod.v1.repository.Liked.LikedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

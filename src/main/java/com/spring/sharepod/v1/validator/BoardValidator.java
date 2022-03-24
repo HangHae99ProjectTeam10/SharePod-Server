@@ -1,16 +1,12 @@
 package com.spring.sharepod.v1.validator;
 
-import com.querydsl.core.types.dsl.NumberPath;
 import com.spring.sharepod.entity.Board;
-import com.spring.sharepod.entity.Liked;
-import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
-import com.spring.sharepod.v1.repository.LikedRepository;
+import com.spring.sharepod.v1.repository.Liked.LikedRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,13 +42,13 @@ public class BoardValidator {
         } else {
             //userid.get().longValue()이 존재하므로
             //tokenValidator.userIdCompareToken(userid,user.getId());
-
-            int result = likedRepository.existLiked(userId.get(), boardId);
-            if(result == 1){
-                return true;
-            }else {
-                return false;
-            }
+            return likedRepository.existLikedBoolean(userId.get(),boardId);
+//            int result = likedRepository.existLiked(userId.get(), boardId);
+//            if(result == 1){
+//                return true;
+//            }else {
+//                return false;
+//            }
         }
     }
 

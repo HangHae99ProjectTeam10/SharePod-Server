@@ -1,4 +1,4 @@
-package com.spring.sharepod.v1.repository;
+package com.spring.sharepod.v1.repository.Liked;
 
 import com.querydsl.core.types.dsl.NumberPath;
 import com.spring.sharepod.entity.Board;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface LikedRepository extends JpaRepository<Liked, Long> {
+public interface LikedRepository extends JpaRepository<Liked, Long>, LikedRepositoryCustom {
 
     @Query("select c from Liked c where c.user=:user and c.board=:board")
     Liked findByUserAndBoard(User user, Board board);
