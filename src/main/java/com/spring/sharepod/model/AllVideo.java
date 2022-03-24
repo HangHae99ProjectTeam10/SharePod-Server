@@ -1,6 +1,7 @@
 package com.spring.sharepod.model;
 
-import com.spring.sharepod.dto.response.Board.VideoAllResponseDto;
+import com.spring.sharepod.v1.dto.response.BoardResponseDto;
+import com.spring.sharepod.v1.dto.response.VideoAll;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,5 @@ import java.util.List;
 public class AllVideo {
     private String result;
     private String msg;
-    private List<VideoAllResponseDto> videodata;
+    private List<VideoAll> videoData;
 }

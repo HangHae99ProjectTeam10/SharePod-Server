@@ -1,11 +1,11 @@
 package com.spring.sharepod.entity;
 
 
-import com.spring.sharepod.dto.request.Board.BoardPatchRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Board extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,30 +26,9 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String title;
 
-    // 게시물 영상 url
-    @Column(nullable = false , unique = true)
-    private String videourl;
-
-    //게시물 사진 1 url
-    @Column(nullable = false, unique = true)
-    private String imgurl1;
-    //게시물 사진 2 url
-    @Column(nullable = false, unique = true)
-    private String imgurl2;
-    //게시물 사진 3 url
-    @Column(nullable = false, unique = true)
-    private String imgurl3;
-
     // 게시물 내용
     @Column(nullable = false)
     private String contents;
-
-    // 원가
-    @Column(nullable = false)
-    private int originprice;
-    // 하루대여 가격
-    @Column(nullable = false)
-    private int dailyrentalfee;
 
     // 카테고리
     @Column(nullable = false)
@@ -56,45 +36,57 @@ public class Board extends Timestamped {
 
     //상품 등록
     @Column(nullable = false)
-    private String mapdata;
+    private String boardRegion;
 
     //상품 품질
     @Column(nullable = false)
-    private String boardquility;
+    private String productQuality;
 
     //게시판 활성화 변수
     @Column(nullable = false)
-    private Boolean appear;
+    private Boolean mainAppear;
+
+    //게시판 태그
+    @Column
+    private String boardTag;
+
 
     //Board : User => N: 1 엔티티에서 userid 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERID")
     private User user;
 
+    //Board : ImgFiles => 1 : 1 엔터티
+    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private ImgFiles imgFiles;
+
+    //Board : Auth => 1 : 1 엔터티
     @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE)
     private Auth auth;
 
+    //Board : Amount => 1 : 1 엔터티
+    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private Amount amount;
+
+
     //Board : Liked => 해당 boardid를 좋아요 누른 목록을 가져오기 위한 양방향 설정
+    @Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Liked> likeNumber = new ArrayList<>();
 
 
-    public void setAppear(boolean appear){
-        this.appear = appear;
+    //메인 페이지에 보이게 하려면 setApper를 해주는 작업
+    public void setAppear(boolean mainAppear) {
+        this.mainAppear = mainAppear;
     }
 
     //게시판 업데이트
-    public void update(BoardPatchRequestDTO patchRequestDTO){
-        this.title = patchRequestDTO.getTitle();
-        this.videourl = patchRequestDTO.getVideourl();
-        this.imgurl1 = patchRequestDTO.getImgurl1();
-        this.imgurl2 = patchRequestDTO.getImgurl2();
-        this.imgurl3 = patchRequestDTO.getImgurl3();
-        this.contents = patchRequestDTO.getContents();
-        this.originprice = patchRequestDTO.getOriginprice();
-        this.dailyrentalfee = patchRequestDTO.getDailyrentalfee();
-        this.mapdata = patchRequestDTO.getMapdata();
-        this.category = patchRequestDTO.getCategory();
-        this.boardquility = patchRequestDTO.getBoardquility();
+    public void updateBoard(String title, String contents, String category, String boardRegion, String productQuality, String boardTag) {
+        this.title = title;
+        this.contents = contents;
+        this.category = category;
+        this.boardRegion = boardRegion;
+        this.productQuality = productQuality;
+        this.boardTag = boardTag;
     }
 }
