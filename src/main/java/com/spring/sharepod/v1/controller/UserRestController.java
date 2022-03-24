@@ -6,10 +6,7 @@ import com.spring.sharepod.model.ReFreshToken;
 import com.spring.sharepod.model.Success;
 import com.spring.sharepod.model.UserInfo;
 import com.spring.sharepod.v1.dto.request.UserRequestDto;
-import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
-import com.spring.sharepod.v1.dto.response.BoardResponseDto;
-import com.spring.sharepod.v1.dto.response.LikedResponseDto;
-import com.spring.sharepod.v1.dto.response.UserResponseDto;
+import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.service.AwsS3Service;
 import com.spring.sharepod.v1.service.UserService;
 import com.spring.sharepod.v1.validator.TokenValidator;
@@ -79,11 +76,11 @@ public class UserRestController {
         tokenValidator.userIdCompareToken(userId, user.getId());
 
         //각각의 데이터 받아오기
-        UserResponseDto.UserInfo userInfo = userService.getUserInfo(userId);
-        List<LikedResponseDto.Liked> userLikeBoard = userService.getUserLikeBoard(userId);
-        List<BoardResponseDto.MyBoard> userMyBoard = userService.getMyBoard(userId);
-        List<UserResponseDto.RentBuyer> rentBuyList = userService.getBuyList(userId);
-        List<UserResponseDto.RentSeller> rentSellList = userService.getSellList(userId);
+        UserInfoResponseDto userInfo = userService.getUserInfo(userId);
+        List<LikedListResponseDto> userLikeBoard = userService.getUserLikeBoard(userId);
+        List<MyBoardResponseDto> userMyBoard = userService.getMyBoard(userId);
+        List<RentBuyer> rentBuyList = userService.getBuyList(userId);
+        List<RentSeller> rentSellList = userService.getSellList(userId);
         return new ResponseEntity<>(new UserInfo("success", "마이페이지 불러오기 성공", userInfo, userLikeBoard, userMyBoard, rentBuyList, rentSellList), HttpStatus.OK);
     }
 

@@ -68,9 +68,7 @@ public class BoardRestController {
     public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
         // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.(로그인 안했을 때는 찜 그냥 false)
 
-        Boolean isLiked = boardValidator.DefaultLiked(userId, boardId);
-
-        BoardResponseDto.BoardDetail boardDetailResponseDto = boardService.getDetailBoard(boardId, isLiked);
+        BoardResponseDto.BoardDetail boardDetailResponseDto = boardService.getDetailBoard(boardId,userId);
         return new ResponseEntity<>(new BoardDetail("success", "게시글 상세 불러오기 성공", boardDetailResponseDto), HttpStatus.OK);
 
     }

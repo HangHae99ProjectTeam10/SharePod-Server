@@ -9,10 +9,9 @@ import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.jwt.JwtTokenProvider;
 import com.spring.sharepod.model.LogOut;
 import com.spring.sharepod.model.ReFreshToken;
+import com.spring.sharepod.model.UserInfo;
 import com.spring.sharepod.v1.dto.request.UserRequestDto;
-import com.spring.sharepod.v1.dto.response.BoardResponseDto;
-import com.spring.sharepod.v1.dto.response.LikedResponseDto;
-import com.spring.sharepod.v1.dto.response.UserResponseDto;
+import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.repository.AuthRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.Liked.LikedRepository;
@@ -32,6 +31,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -55,7 +56,7 @@ public class UserService {
     private final RedisTemplate<String, String> redisTemplate;
     private final AwsS3Service awsS3Service;
     private final BoardValidator boardValidator;
-
+    private final EntityManager entityManager;
 
     //1번 API 로그인 구현 완료
     @Transactional
@@ -201,143 +202,199 @@ public class UserService {
 
     //5번 API userinfo 불러오기 (구현 완료)
     @Transactional
-    public UserResponseDto.UserInfo getUserInfo(Long userid) {
-        User user = userValidator.ValidByUserId(userid);
+    public UserInfoResponseDto getUserInfo(Long userid) {
+        TypedQuery<UserInfoResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.UserInfoResponseDto(u.id,u.username,u.nickName,u.userRegion,u.userImg)  FROM User u where u.id=:userId", UserInfoResponseDto.class);
+        query.setParameter("userId",userid);
+        UserInfoResponseDto resultList = query.getSingleResult();
 
+        if(resultList==null){
+            throw new ErrorCodeException(USER_NOT_FOUND);
+        }
+
+        //User user = userValidator.ValidByUserId(userid);
         //build해서 찾은 user의 내용 중 일부를 responseDto를 통해서 전달한다.
-        UserResponseDto.UserInfo userInfoResponseDto = UserResponseDto.UserInfo.builder()
-                .userId(user.getId())
-                .username(user.getUsername())
-                .nickName(user.getNickName())
-                .userRegion(user.getUserRegion())
-                .userImg(user.getUserImg())
-                .build();
+//        UserResponseDto.UserInfo userInfoResponseDto = UserResponseDto.UserInfo.builder()
+//                .userId(user.getId())
+//                .username(user.getUsername())
+//                .nickName(user.getNickName())
+//                .userRegion(user.getUserRegion())
+//                .userImg(user.getUserImg())
+//                .build();
 
-        return userInfoResponseDto;
+        return resultList;
     }
 
     //5번 API 찜목록 불러오기 (구현 완료)
     @Transactional
-    public List<LikedResponseDto.Liked> getUserLikeBoard(Long userid) {
-        //해당하는 유저가 존재하는 like 테이블에서 boardid를 받아오고 그 boardid를 통해
-        // boardtitle과 userid category를 찾아낸다.
-        List<LikedResponseDto.Liked> likedResponseDtoList = new ArrayList<>();
+    public List<LikedListResponseDto> getUserLikeBoard(Long userid) {
+        TypedQuery<LikedListResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.LikedListResponseDto(b.id,b.title,b.boardRegion,b.boardTag,b.imgFiles.firstImgUrl,true,b.modifiedAt,b.amount.dailyRentalFee,b.user.nickName,b.category)  FROM Liked l inner JOIN Board b on l.board.id = b.id where l.user.id=:userId", LikedListResponseDto.class);
+        query.setParameter("userId",userid);
+        List<LikedListResponseDto> resultList = query.getResultList();
 
-        // 없으면 for문 안돌고 빈 list가 들어간다.
-        List<Liked> userlikeList = likedRepository.findByUserId(userid);
 
-        for (Liked liked : userlikeList) {
-            System.out.println("getTitle" + liked.getBoard().getTitle());
-            LikedResponseDto.Liked likedResponseDto = LikedResponseDto.Liked.builder()
-                    .boardId(liked.getBoard().getId())
-                    .boardTitle(liked.getBoard().getTitle())
-                    .boardRegion(liked.getBoard().getBoardRegion())
-                    .boardTag(liked.getBoard().getBoardTag())
-                    .FirstImg(liked.getBoard().getImgFiles().getFirstImgUrl())
-                    .isliked(true)
-                    .dailyRentalFee(liked.getBoard().getAmount().getDailyRentalFee())
-                    .modifiedAt(liked.getBoard().getModifiedAt())
-                    .userNickName(liked.getBoard().getUser().getNickName())
-                    .category(liked.getBoard().getCategory())
-                    .build();
-
-            likedResponseDtoList.add(likedResponseDto);
-        }
-        return likedResponseDtoList;
+//        //해당하는 유저가 존재하는 like 테이블에서 boardid를 받아오고 그 boardid를 통해
+//        // boardtitle과 userid category를 찾아낸다.
+//        List<LikedResponseDto.Liked> likedResponseDtoList = new ArrayList<>();
+//
+//        // 없으면 for문 안돌고 빈 list가 들어간다.
+//        List<Liked> userlikeList = likedRepository.findByUserId(userid);
+//
+//        for (Liked liked : userlikeList) {
+//            System.out.println("getTitle" + liked.getBoard().getTitle());
+//            LikedResponseDto.Liked likedResponseDto = LikedResponseDto.Liked.builder()
+//                    .boardId(liked.getBoard().getId())
+//                    .boardTitle(liked.getBoard().getTitle())
+//                    .boardRegion(liked.getBoard().getBoardRegion())
+//                    .boardTag(liked.getBoard().getBoardTag())
+//                    .FirstImg(liked.getBoard().getImgFiles().getFirstImgUrl())
+//                    .isliked(true)
+//                    .dailyRentalFee(liked.getBoard().getAmount().getDailyRentalFee())
+//                    .modifiedAt(liked.getBoard().getModifiedAt())
+//                    .userNickName(liked.getBoard().getUser().getNickName())
+//                    .category(liked.getBoard().getCategory())
+//                    .build();
+//
+//            likedResponseDtoList.add(likedResponseDto);
+//        }
+        return resultList;
     }
 
     //5번 API 등록한 목록 (구현 완료)
     @Transactional
-    public List<BoardResponseDto.MyBoard> getMyBoard(Long userId) {
-        // userid를 사용하여 board에서 있는 것들 다 찾아오고 그에 따른 내용들을 전달
-        List<BoardResponseDto.MyBoard> myBoardResponseDtoList = new ArrayList<>();
+    public List<MyBoardResponseDto> getMyBoard(Long userId) {
+//        TypedQuery<MyBoardResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.MyBoardResponseDto(b.id,b.title,b.boardTag,b.boardRegion,i.firstImgUrl,b.modifiedAt,a.dailyRentalFee,b.user.nickName)  FROM Board b inner JOIN Amount a inner JOIN ImgFiles i on i.board.id = a.board.id where b.user.id=:userId", MyBoardResponseDto.class);
+//        query.setParameter("userId",userId);
+//        List<MyBoardResponseDto> resultList = query.getResultList();
 
-        // 없으면 for문 안돌고 빈 list가 들어간다.
-        List<Board> boardList = boardRepository.findListBoardByUserId(userId);
-
-
-
-        for (Board board : boardList) {
-            //Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),board.getId());
-
-            BoardResponseDto.MyBoard myBoardResponseDto = BoardResponseDto.MyBoard.builder()
-                    .boardId(board.getId())
-                    .boardTitle(board.getTitle())
-                    .boardTag(board.getBoardTag())
-                    .boardRegion(board.getBoardRegion())
-            //        .isLiked(isLiked)
-                    .FirstImg(board.getImgFiles().getFirstImgUrl())
-                    .modifiedAt(board.getModifiedAt())
-                    .dailyRentalFee(board.getAmount().getDailyRentalFee())
-                    .nickName(board.getUser().getNickName())
-                    .category(board.getCategory())
-                    .build();
-
-            myBoardResponseDtoList.add(myBoardResponseDto);
-
-
+        Boolean isLiked = false;
+        List<MyBoardResponseDto> querydslMyBoardList = boardRepository.getMyBoard(userId);
+        int resultCount = querydslMyBoardList.size();
+        for (int i=0;i<resultCount;i++){
+            isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslMyBoardList.get(i).getBoardId());
+            querydslMyBoardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
-        return myBoardResponseDtoList;
+
+
+//        Boolean isLiked = false;
+//        List<BoardAllResponseDto> querydslBoardList = boardRepository.searchAllBoard();
+//
+//        int resultCount = querydslBoardList.size();
+//
+//
+//        for (int i = 0; i < resultCount; i++) {
+//            //System.out.println(querydslBoardList.get(i).getId() + "boardID");
+//            isLiked = boardValidator.DefaultLiked(userId,querydslBoardList.get(i).getId());
+//            querydslBoardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
+//        }
+
+
+
+
+//        // userid를 사용하여 board에서 있는 것들 다 찾아오고 그에 따른 내용들을 전달
+//        List<BoardResponseDto.MyBoard> myBoardResponseDtoList = new ArrayList<>();
+//
+//        // 없으면 for문 안돌고 빈 list가 들어간다.
+//        List<Board> boardList = boardRepository.findListBoardByUserId(userId);
+//
+//
+//
+//        for (Board board : boardList) {
+//            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),board.getId());
+//
+//            BoardResponseDto.MyBoard myBoardResponseDto = BoardResponseDto.MyBoard.builder()
+//                    .boardId(board.getId())
+//                    .boardTitle(board.getTitle())
+//                    .boardTag(board.getBoardTag())
+//                    .boardRegion(board.getBoardRegion())
+//                    .isLiked(isLiked)
+//                    .FirstImg(board.getImgFiles().getFirstImgUrl())
+//                    .modifiedAt(board.getModifiedAt())
+//                    .dailyRentalFee(board.getAmount().getDailyRentalFee())
+//                    .nickName(board.getUser().getNickName())
+//                    .category(board.getCategory())
+//                    .build();
+//
+//            myBoardResponseDtoList.add(myBoardResponseDto);
+//
+//
+//        }
+        return querydslMyBoardList;
     }
 
     //5번 API 내가 대여한 목록 불러오기 (구현 완료)
     @Transactional
-    public List<UserResponseDto.RentBuyer> getBuyList(Long userId) {
-        List<UserResponseDto.RentBuyer> rentBuyerResponseDtoList = new ArrayList<>();
-
-        // 없으면 for문 안돌고 빈 list가 들어간다.
-        List<Auth> authList = authRepository.findByBuyerId(userId);
-
-        for (Auth auth : authList) {
-            //Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),auth.getBoard().getId());
-
-            UserResponseDto.RentBuyer rentBuyerResponseDto = UserResponseDto.RentBuyer.builder()
-                    .boardId(auth.getBoard().getId())
-                    .boardTitle(auth.getBoard().getTitle())
-                    .boardTag(auth.getBoard().getBoardTag())
-                    .boardRegion(auth.getBoard().getBoardRegion())
-            //        .isLiked(isLiked)
-                    .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
-                    .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
-                    .startRental(auth.getStartRental())
-                    .nickName(auth.getAuthSeller().getNickName())
-                    .authId(auth.getId())
-                    .category(auth.getBoard().getCategory())
-                    .build();
-            rentBuyerResponseDtoList.add(rentBuyerResponseDto);
+    public List<RentBuyer> getBuyList(Long userId) {
+        Boolean isLiked = false;
+        List<RentBuyer> querydslRentBuyerList = boardRepository.getRentBuyer(userId);
+        int resultCount = querydslRentBuyerList.size();
+        for (int i=0;i<resultCount;i++){
+            isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentBuyerList.get(i).getBoardId());
+            querydslRentBuyerList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
-        return rentBuyerResponseDtoList;
+
+//        List<UserResponseDto.RentBuyer> rentBuyerResponseDtoList = new ArrayList<>();
+//        // 없으면 for문 안돌고 빈 list가 들어간다.
+//        List<Auth> authList = authRepository.findByBuyerId(userId);
+//
+//        for (Auth auth : authList) {
+//            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),auth.getBoard().getId());
+//
+//            UserResponseDto.RentBuyer rentBuyerResponseDto = UserResponseDto.RentBuyer.builder()
+//                    .boardId(auth.getBoard().getId())
+//                    .boardTitle(auth.getBoard().getTitle())
+//                    .boardTag(auth.getBoard().getBoardTag())
+//                    .boardRegion(auth.getBoard().getBoardRegion())
+//                    .isLiked(isLiked)
+//                    .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
+//                    .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
+//                    .startRental(auth.getStartRental())
+//                    .nickName(auth.getAuthSeller().getNickName())
+//                    .authId(auth.getId())
+//                    .category(auth.getBoard().getCategory())
+//                    .build();
+//            rentBuyerResponseDtoList.add(rentBuyerResponseDto);
+//        }
+        return querydslRentBuyerList;
 
     }
 
 
     //5번 API 내가 빌려준 목록 불러오기 (구현 완료)
     @Transactional
-    public List<UserResponseDto.RentSeller> getSellList(Long userId) {
-        List<UserResponseDto.RentSeller> rentSellerResponseDtoList = new ArrayList<>();
-
-        // 없으면 for문 안돌고 빈 list가 들어간다.
-        List<Auth> authList = authRepository.findBySellerId(userId);
-
-        for (Auth auth : authList) {
-            //Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId), auth.getBoard().getId());
-            UserResponseDto.RentSeller rentSellerResponseDto = UserResponseDto.RentSeller.builder()
-                    .boardId(auth.getBoard().getId())
-                    .boardTitle(auth.getBoard().getTitle())
-                    .boardRegion(auth.getBoard().getBoardRegion())
-                    .boardTag(auth.getBoard().getBoardTag())
-            //        .isLiked(isLiked)
-                    .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
-                    .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
-                    .startRental(auth.getStartRental())
-                    .endRental(auth.getEndRental())
-                    .nickName(auth.getAuthBuyer().getNickName())
-                    .authId(auth.getId())
-                    .category(auth.getBoard().getCategory())
-                    .build();
-            rentSellerResponseDtoList.add(rentSellerResponseDto);
+    public List<RentSeller> getSellList(Long userId) {
+        Boolean isLiked = false;
+        List<RentSeller> querydslRentSellerList = boardRepository.getRentSeller(userId);
+        int resultCount = querydslRentSellerList.size();
+        for (int i=0;i<resultCount;i++){
+            isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentSellerList.get(i).getBoardId());
+            querydslRentSellerList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
-        return rentSellerResponseDtoList;
+
+
+//        List<UserResponseDto.RentSeller> rentSellerResponseDtoList = new ArrayList<>();
+//
+//        // 없으면 for문 안돌고 빈 list가 들어간다.
+//        List<Auth> authList = authRepository.findBySellerId(userId);
+//
+//        for (Auth auth : authList) {
+//            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId), auth.getBoard().getId());
+//            UserResponseDto.RentSeller rentSellerResponseDto = UserResponseDto.RentSeller.builder()
+//                    .boardId(auth.getBoard().getId())
+//                    .boardTitle(auth.getBoard().getTitle())
+//                    .boardRegion(auth.getBoard().getBoardRegion())
+//                    .boardTag(auth.getBoard().getBoardTag())
+//                    .isLiked(isLiked)
+//                    .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
+//                    .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
+//                    .startRental(auth.getStartRental())
+//                    .endRental(auth.getEndRental())
+//                    .nickName(auth.getAuthBuyer().getNickName())
+//                    .authId(auth.getId())
+//                    .category(auth.getBoard().getCategory())
+//                    .build();
+//            rentSellerResponseDtoList.add(rentSellerResponseDto);
+//        }
+        return querydslRentSellerList;
     }
 
 
