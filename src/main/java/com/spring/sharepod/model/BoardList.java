@@ -1,5 +1,6 @@
 package com.spring.sharepod.model;
 
+import com.spring.sharepod.v1.dto.response.BoardAllResponseDto;
 import com.spring.sharepod.v1.dto.response.BoardResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,5 +14,5 @@ import java.util.List;
 public class BoardList {
     private String result;
     private String msg;
-    private List<BoardResponseDto.BoardAll> listdata;
+    private List<BoardAllResponseDto> listdata;
 }

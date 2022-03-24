@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class VideoAll {
+public class VideoAllResponseDto {
     private Long boardId;
     private String videoUrl;
     private String userImg;

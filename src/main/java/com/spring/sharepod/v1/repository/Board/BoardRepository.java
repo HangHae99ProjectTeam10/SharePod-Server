@@ -1,6 +1,7 @@
 package com.spring.sharepod.v1.repository.Board;
 
 import com.spring.sharepod.entity.Board;
+import com.spring.sharepod.v1.dto.response.BoardResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -8,13 +9,13 @@ import java.util.List;
 
 
 public interface BoardRepository extends JpaRepository<Board, Long>,BoardRepositoryCustom{
-    //메인 페이지 조회시 limit 갯수로 제한하여 전송함
-    @Query(nativeQuery = true, value = "select * from board b where b.main_appear = true ORDER BY b.modified_at asc LIMIT 8;")
-    List<Board> findAllByOrderByModifiedAtDesc();
-
-    // 릴스를 limit 갯수만큼 랜덤으로 반환
-    @Query(nativeQuery = true, value = "select * from board b ORDER BY RAND() LIMIT 3;")
-    List<Board> findAllByVideoUrlRan();
+//    //메인 페이지 조회시 limit 갯수로 제한하여 전송함
+//    @Query(nativeQuery = true, value = "select * from board b where b.main_appear = true ORDER BY b.modified_at asc LIMIT 8;")
+//    List<BoardResponseDto.BoardAll> findAllByOrderByModifiedAtDesc();
+//
+//    // 릴스를 limit 갯수만큼 랜덤으로 반환
+//    @Query(nativeQuery = true, value = "select * from board b ORDER BY RAND() LIMIT 3;")
+//    List<Board> findAllByVideoUrlRan();
 //
 //
 //    //mapdata,category를 받아서 (appear) 보여주는 정보만 보여주면서 정렬한다. 기준 cost,quility,recent
