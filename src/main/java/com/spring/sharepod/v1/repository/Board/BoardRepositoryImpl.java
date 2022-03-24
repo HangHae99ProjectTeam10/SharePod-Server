@@ -2,10 +2,11 @@ package com.spring.sharepod.v1.repository.Board;
 
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.spring.sharepod.entity.Board;
+import com.spring.sharepod.v1.dto.response.BoardAllResponseDto;
 import com.spring.sharepod.v1.repository.SearchForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,23 +22,51 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Board> searchFormQuality(SearchForm searchForm) {
+    public List<BoardAllResponseDto> searchFormQuality(SearchForm searchForm) {
         return getBoardBySearchFormQuality(searchForm).fetch();
     }
 
     @Override
-    public List<Board> searchFormCost(SearchForm searchForm) {
+    public List<BoardAllResponseDto> searchFormCost(SearchForm searchForm) {
         return getBoardBySearchFormCost(searchForm).fetch();
     }
 
     @Override
-    public List<Board> searchFormRecent(SearchForm searchForm) {
+    public List<BoardAllResponseDto> searchFormRecent(SearchForm searchForm) {
         return getBoardBySearchFormRecent(searchForm).fetch();
     }
 
-    private JPAQuery<Board> getBoardBySearchFormRecent(SearchForm searchForm) {
+
+    @Override
+    public List<BoardAllResponseDto> searchAllBoard() {
+        return getAllBoard().fetch();
+    }
+
+    private JPAQuery<BoardAllResponseDto> getAllBoard() {
         return jpaQueryFactory
-                .select(board)
+                .select(Projections.bean(BoardAllResponseDto.class,
+                        board.id,
+                        board.imgFiles.firstImgUrl,
+                        board.title,board.category,
+                        board.amount.dailyRentalFee,
+                        board.boardRegion,
+                        board.boardTag,
+                        board.modifiedAt
+                ))
+                .from(board)
+                .orderBy(board.modifiedAt.asc())
+                .limit(8);
+    }
+
+//    private BooleanExpression userId(Optional<Long> userId) {
+//        System.out.println(userId);
+//        return isEmpty(String.valueOf(userId)) ? null : userId.get();
+//    }
+
+
+    private JPAQuery<BoardAllResponseDto> getBoardBySearchFormRecent(SearchForm searchForm) {
+        return jpaQueryFactory
+                .select(Projections.constructor(BoardAllResponseDto.class,board.id,board.imgFiles.firstImgUrl,board.title,board.category,board.amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
                 .from(board)
                 .orderBy(board.modifiedAt.asc())
                 .offset(searchForm.getStartNum())
@@ -53,9 +82,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 );
     }
 
-    private JPAQuery<Board> getBoardBySearchFormCost(SearchForm searchForm) {
+    private JPAQuery<BoardAllResponseDto> getBoardBySearchFormCost(SearchForm searchForm) {
         return jpaQueryFactory
-                .select(board)
+                .select(Projections.constructor(BoardAllResponseDto.class,board.id,board.imgFiles.firstImgUrl,board.title,board.category,board.amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
                 .from(board)
                 .orderBy(board.amount.dailyRentalFee.asc())
                 .offset(searchForm.getStartNum())
@@ -70,9 +99,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 );
     }
 
-    private JPAQuery<Board> getBoardBySearchFormQuality(SearchForm searchForm) {
+    private JPAQuery<BoardAllResponseDto> getBoardBySearchFormQuality(SearchForm searchForm) {
         return jpaQueryFactory
-                .select(board)
+                .select(Projections.constructor(BoardAllResponseDto.class,board.id,board.imgFiles.firstImgUrl,board.title,board.category,board.amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
                 .from(board)
                 .orderBy(board.productQuality.asc())
                 .offset(searchForm.getStartNum())
@@ -101,7 +130,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
         System.out.println(searchTitle);
         return isEmpty(searchTitle) ? null : board.title.contains(searchTitle);
     }
-
 
     private OrderSpecifier<?> filterType(String filterType){
         return filterType.equals("cost") ? null : board.amount.dailyRentalFee.asc();

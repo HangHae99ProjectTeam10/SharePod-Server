@@ -258,14 +258,14 @@ public class UserService {
 
 
         for (Board board : boardList) {
-            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),board.getId());
+            //Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),board.getId());
 
             BoardResponseDto.MyBoard myBoardResponseDto = BoardResponseDto.MyBoard.builder()
                     .boardId(board.getId())
                     .boardTitle(board.getTitle())
                     .boardTag(board.getBoardTag())
                     .boardRegion(board.getBoardRegion())
-                    .isLiked(isLiked)
+            //        .isLiked(isLiked)
                     .FirstImg(board.getImgFiles().getFirstImgUrl())
                     .modifiedAt(board.getModifiedAt())
                     .dailyRentalFee(board.getAmount().getDailyRentalFee())
@@ -289,14 +289,14 @@ public class UserService {
         List<Auth> authList = authRepository.findByBuyerId(userId);
 
         for (Auth auth : authList) {
-            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),auth.getBoard().getId());
+            //Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),auth.getBoard().getId());
 
             UserResponseDto.RentBuyer rentBuyerResponseDto = UserResponseDto.RentBuyer.builder()
                     .boardId(auth.getBoard().getId())
                     .boardTitle(auth.getBoard().getTitle())
                     .boardTag(auth.getBoard().getBoardTag())
                     .boardRegion(auth.getBoard().getBoardRegion())
-                    .isLiked(isLiked)
+            //        .isLiked(isLiked)
                     .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
                     .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
                     .startRental(auth.getStartRental())
@@ -320,13 +320,13 @@ public class UserService {
         List<Auth> authList = authRepository.findBySellerId(userId);
 
         for (Auth auth : authList) {
-            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId), auth.getBoard().getId());
+            //Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId), auth.getBoard().getId());
             UserResponseDto.RentSeller rentSellerResponseDto = UserResponseDto.RentSeller.builder()
                     .boardId(auth.getBoard().getId())
                     .boardTitle(auth.getBoard().getTitle())
                     .boardRegion(auth.getBoard().getBoardRegion())
                     .boardTag(auth.getBoard().getBoardTag())
-                    .isLiked(isLiked)
+            //        .isLiked(isLiked)
                     .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
                     .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
                     .startRental(auth.getStartRental())

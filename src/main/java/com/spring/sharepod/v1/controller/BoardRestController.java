@@ -7,8 +7,9 @@ import com.spring.sharepod.model.BoardDetail;
 import com.spring.sharepod.model.BoardList;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
+import com.spring.sharepod.v1.dto.response.BoardAllResponseDto;
 import com.spring.sharepod.v1.dto.response.BoardResponseDto;
-import com.spring.sharepod.v1.dto.response.VideoAll;
+import com.spring.sharepod.v1.dto.response.VideoAllResponseDto;
 import com.spring.sharepod.v1.service.AwsS3Service;
 import com.spring.sharepod.v1.service.BoardService;
 import com.spring.sharepod.v1.validator.BoardValidator;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +42,7 @@ public class BoardRestController {
         //limit 안 들어오면 5로 고정
         //Long validLimitCount = boardValidator.DefaultLimitCount(limitCount);
 
-        List<VideoAll> videoAllResponseDtos = boardService.getAllVideo();
+        List<VideoAllResponseDto> videoAllResponseDtos = boardService.getAllVideo();
         return new ResponseEntity<>(new AllVideo("success", "영상 전송 성공", videoAllResponseDtos), HttpStatus.OK);
     }
 
@@ -62,15 +64,16 @@ public class BoardRestController {
     }
 
     //** 10번 게시글 상세 페이지 불러오기 (구현 완료)
-    @GetMapping("/board/{boardId}")
-    public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
-        // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.(로그인 안했을 때는 찜 그냥 false)
-        Boolean islLked = boardValidator.DefaultLiked(userId, boardId);
-
-        BoardResponseDto.BoardDetail boardDetailResponseDto = boardService.getDetailBoard(boardId, islLked);
-        return new ResponseEntity<>(new BoardDetail("success", "게시글 상세 불러오기 성공", boardDetailResponseDto), HttpStatus.OK);
-
-    }
+//    @GetMapping("/board/{boardId}")
+//    public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
+//        // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.(로그인 안했을 때는 찜 그냥 false)
+//
+//        Boolean islLked = boardValidator.DefaultLiked(userId, boardId);
+//
+//        BoardResponseDto.BoardDetail boardDetailResponseDto = boardService.getDetailBoard(boardId, islLked);
+//        return new ResponseEntity<>(new BoardDetail("success", "게시글 상세 불러오기 성공", boardDetailResponseDto), HttpStatus.OK);
+//
+//    }
 
     //** 11번 게시판 수정 (구현 완료)
     @PatchMapping("/board/{boardId}")
@@ -96,9 +99,16 @@ public class BoardRestController {
         return boardService.deleteboard(boardId, user.get("userId"));
     }
 
-    //13번 메인 전체 상품 최신순 보여주기 (구현 완료)
+    //13번 메인 전체 상품 최신순 보여주기 (구현 완료) 8개만
     @GetMapping("/board")
-    public BoardResponseDto.BoardAllList getBoardList(@RequestParam(value = "userId", required = false) Optional<Long> userId) {
+    public BoardResponseDto.BoardAllList getBoardList(@RequestParam(value = "userId", required = false) Optional<Long> userId, @AuthenticationPrincipal Optional<User> user) {
+//        if(user != null){
+//            for(int i=0;i<user.get().getUserLikedList().size();i++){
+//                List<Long> userLikedList = new ArrayList<>();
+//                userLikedList.add(user.get().getUserLikedList().get(i).getBoard().getId());
+//            }
+//
+//        }
         return boardService.getAllBoard(userId);
     }
 

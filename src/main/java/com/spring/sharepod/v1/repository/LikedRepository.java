@@ -1,5 +1,6 @@
 package com.spring.sharepod.v1.repository;
 
+import com.querydsl.core.types.dsl.NumberPath;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
@@ -16,8 +17,8 @@ public interface LikedRepository extends JpaRepository<Liked, Long> {
     Liked findByUserAndBoard(User user, Board board);
 
     //userid와 boardid를 통한
-    @Query("select c from Liked c where c.board.id=:boardid and c.user.id=:userid")
-    Liked findByLiked(Long boardid, Long userid);
+    @Query(nativeQuery = true, value = "select exists (SELECT c.id From liked c where c.userid=:userId and c.boardid=:boardId)")
+    int existLiked(Long userId, Long boardId);
 
     @Query("select c from Liked c where c.user.id =:userid")
     List<Liked> findByUserId(Long userid);
