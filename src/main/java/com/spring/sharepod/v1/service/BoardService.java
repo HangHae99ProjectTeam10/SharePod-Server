@@ -8,8 +8,9 @@ import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
+import com.spring.sharepod.v1.dto.response.BoardAllResponseDto;
 import com.spring.sharepod.v1.dto.response.BoardResponseDto;
-import com.spring.sharepod.v1.dto.response.VideoAll;
+import com.spring.sharepod.v1.dto.response.VideoAllResponseDto;
 import com.spring.sharepod.v1.repository.AmountRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.ImgFilesRepository;
@@ -44,13 +45,13 @@ public class BoardService {
 
     //8번 API 릴스 video 전체 GET(Limit) (구현 완료)
     @Transactional
-    public List<VideoAll> getAllVideo() {
+    public List<VideoAllResponseDto> getAllVideo() {
 
-        TypedQuery<VideoAll> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAll(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i INNER JOIN b.user as u", VideoAll.class);
+        TypedQuery<VideoAllResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAllResponseDto(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i INNER JOIN b.user as u", VideoAllResponseDto.class);
         //Long randomIdx = Math.random()/query
         //query.setFirstResult()
         query.setMaxResults(3);
-        List<VideoAll> resultList = query.getResultList();
+        List<VideoAllResponseDto> resultList = query.getResultList();
 
 
         //모든 릴스 가져오기
@@ -269,27 +270,44 @@ public class BoardService {
     //API 13번 메인 페이지 전체 게시글 불러오기 (구현 완료)
     @Transactional
     public BoardResponseDto.BoardAllList getAllBoard(Optional<Long> userId) {
-//        TypeQuery<BoardResponseDto.BoardAll> query =
-//                em.createQuery("SELECT new test.jpql.UserDTO(m.username, m.age)
-//                        FROM Member m", UserDTO.class);
-//
-//        List<BoardResponseDto.BoardAll> boardlist = query.getResultList();
+//        TypedQuery<BoardAllResponseDto> query = entityManager.createQuery("SELECT new com.spring.sharepod.v1.dto.response.BoardAllResponseDto(b.id,b.imgFiles.firstImgUrl,b.title,b.category,b.amount.dailyRentalFee,b.boardRegion,b.boardTag,b.modifiedAt) FROM Board b", BoardAllResponseDto.class);
+//        query.setMaxResults(8);
+//        List<BoardAllResponseDto> boardlist = query.getResultList();
+        //int resultCount = boardlist.size();
+
+        Boolean isLiked = false;
+        List<BoardAllResponseDto> querydslBoardList = boardRepository.searchAllBoard();
+
+        int resultCount = querydslBoardList.size();
+
+
+        for (int i = 0; i < resultCount; i++) {
+            System.out.println(querydslBoardList.get(i).getId() + "boardID");
+            isLiked = boardValidator.DefaultLiked(userId,querydslBoardList.get(i).getId());
+            querydslBoardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
+        }
 
         // 모든 게시글 가져오기
-        List<Board> boardList = boardRepository.findAllByOrderByModifiedAtDesc();
+        //List<BoardAllResponseDto> boardList = boardRepository.findAllByOrderByModifiedAtDesc();
+        BoardResponseDto.BoardAllList boardAllList = BoardResponseDto.BoardAllList.builder()
+                .result("success")
+                .msg("메인 페이지 게시글 반환 성공")
+                .resultCount(resultCount)
+                .listData(querydslBoardList)
+                .build();
 
-        return getBoardService(boardList,8, userId);
+        return boardAllList;
     }
 
 
     //15번 카테고리 정렬별 보여주기 (구현 완료)
     @Transactional
     public BoardResponseDto.BoardAllList getSortedBoard(String filterType, String category, String boardRegion, int startNum, String searchTitle, Optional<Long> userId) {
-        List<Board> boardList = new ArrayList<>();
-        System.out.println("filterType : " + filterType);
-        System.out.println("category : " + category);
-        System.out.println("boardRegion :" + boardRegion);
-        System.out.println("limitCount" + startNum);
+        List<BoardAllResponseDto> boardList = new ArrayList<>();
+//        System.out.println("filterType : " + filterType);
+//        System.out.println("category : " + category);
+//        System.out.println("boardRegion :" + boardRegion);
+//        System.out.println("limitCount" + startNum);
 
         int boardLength = 0;
         switch (filterType) {
@@ -299,6 +317,7 @@ public class BoardService {
                         .category(category)
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion).build());
+                boardLength = boardList.size();
                 break;
 
             case "cost":
@@ -319,8 +338,14 @@ public class BoardService {
                 boardLength = boardList.size();
 
         }
+        BoardResponseDto.BoardAllList boardAllList = BoardResponseDto.BoardAllList.builder()
+                .result("success")
+                .msg("메인 페이지 게시글 반환 성공")
+                .resultCount(boardLength)
+                .listData(boardList)
+                .build();
 
-        return getBoardService(boardList, boardLength, userId);
+        return boardAllList;
     }
 
 
@@ -350,43 +375,43 @@ public class BoardService {
 
 
     //////////////////반복되는 로직을 처리해주는 함수들
-    public BoardResponseDto.BoardAllList getBoardService(List<Board> boardList, int resultCount, Optional<Long> userId) {
-
-
-        // 게시글을 반환해서 저장할 리스트
-        List<BoardResponseDto.BoardAll> boardResponseDtos = new ArrayList<>();
-
-        // 게시글 해쳐서 for문을 통해 하나씩 넣어주기
-        for (Board board : boardList) {
-            Long boardId = board.getId();
-
-            //로그인을 했을 경우에는 좋아요 보이도록
-            Boolean isLiked = boardValidator.DefaultLiked(userId, boardId);
-
-            // BoardResponseDto 생성
-            BoardResponseDto.BoardAll boardResponseDto = BoardResponseDto.BoardAll.builder()
-                    .boardId(board.getId())
-                    .category(board.getCategory())
-                    .title(board.getTitle())
-                    .firstImgUrl(board.getImgFiles().getFirstImgUrl())
-                    .dailyRentalFee(board.getAmount().getDailyRentalFee())
-                    .boardRegion(board.getBoardRegion())
-                    .boardTag(board.getBoardTag())
-                    .isLiked(isLiked)
-                    .category(board.getCategory())
-                    .modifiedAt(board.getModifiedAt())
-                    .build();
-
-            // 반환할 리스트에 저장하기
-            boardResponseDtos.add(boardResponseDto);
-        }
-
-        return BoardResponseDto.BoardAllList.builder()
-                .result("success")
-                .msg("게시글 반환 성공")
-                .resultCount(resultCount)
-                .listData(boardResponseDtos)
-                .build();
-    }
+//    public BoardResponseDto.BoardAllList getBoardService(List<BoardResponseDto.BoardAll> boardList, int resultCount, Optional<Long> userId) {
+//
+//
+//        // 게시글을 반환해서 저장할 리스트
+//        List<BoardResponseDto.BoardAll> boardResponseDtos = new ArrayList<>();
+//
+//        // 게시글 해쳐서 for문을 통해 하나씩 넣어주기
+//        for (Board board : boardList) {
+//            Long boardId = board.getId();
+//
+//            //로그인을 했을 경우에는 좋아요 보이도록
+//            Boolean isLiked = boardValidator.DefaultLiked(userId, boardId);
+//
+//            // BoardResponseDto 생성
+//            BoardResponseDto.BoardAll boardResponseDto = BoardResponseDto.BoardAll.builder()
+//                    .boardId(board.getId())
+//                    .category(board.getCategory())
+//                    .title(board.getTitle())
+//                    .firstImgUrl(board.getImgFiles().getFirstImgUrl())
+//                    .dailyRentalFee(board.getAmount().getDailyRentalFee())
+//                    .boardRegion(board.getBoardRegion())
+//                    .boardTag(board.getBoardTag())
+//                    .isLiked(isLiked)
+//                    .category(board.getCategory())
+//                    .modifiedAt(board.getModifiedAt())
+//                    .build();
+//
+//            // 반환할 리스트에 저장하기
+//            boardResponseDtos.add(boardResponseDto);
+//        }
+//
+//        return BoardResponseDto.BoardAllList.builder()
+//                .result("success")
+//                .msg("게시글 반환 성공")
+//                .resultCount(resultCount)
+//                .listData(boardResponseDtos)
+//                .build();
+//    }
 
 }

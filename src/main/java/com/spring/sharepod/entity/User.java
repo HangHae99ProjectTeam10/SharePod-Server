@@ -45,7 +45,6 @@ public class User extends Timestamped implements UserDetails {
     @Column
     private String userRegion;
 
-
     //Auth : User => 해당 authbuyer 요청 목록을 가져오기 위한 양방향 설정
     @Builder.Default
     @OneToMany(mappedBy = "authBuyer")
@@ -79,6 +78,10 @@ public class User extends Timestamped implements UserDetails {
     @Builder.Default
     @OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
     private List<Notice> noticeSellerList = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Liked> userLikedList = new ArrayList<>();
 
 
     //유저 이미지가 변경 되었을 때
