@@ -36,11 +36,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
         return getBoardBySearchFormRecent(searchForm).fetch();
     }
 
-
     @Override
     public List<BoardAllResponseDto> searchAllBoard() {
         return getAllBoard().fetch();
     }
+
 
     private JPAQuery<BoardAllResponseDto> getAllBoard() {
         return jpaQueryFactory
