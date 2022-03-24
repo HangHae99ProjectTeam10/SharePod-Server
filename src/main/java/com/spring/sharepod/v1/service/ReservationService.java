@@ -146,6 +146,7 @@ public class ReservationService {
         //보드 테이블 appear - false변경
         board.setAppear(false);
 
+
         //Auth 테이블 만들기
         Long authid = authRepository.save(Auth.builder()
                 .authBuyer(buyer)
