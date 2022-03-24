@@ -282,7 +282,7 @@ public class BoardService {
 
 
         for (int i = 0; i < resultCount; i++) {
-//            System.out.println(querydslBoardList.get(i).getId() + "boardID");
+            //System.out.println(querydslBoardList.get(i).getId() + "boardID");
             isLiked = boardValidator.DefaultLiked(userId,querydslBoardList.get(i).getId());
             querydslBoardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
