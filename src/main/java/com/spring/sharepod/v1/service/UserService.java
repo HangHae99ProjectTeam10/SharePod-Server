@@ -283,8 +283,8 @@ public class UserService {
     //5번 API 내가 대여한 목록 불러오기 (구현 완료)
     @Transactional
     public List<UserResponseDto.RentBuyer> getBuyList(Long userId) {
-        List<UserResponseDto.RentBuyer> rentBuyerResponseDtoList = new ArrayList<>();
 
+        List<UserResponseDto.RentBuyer> rentBuyerResponseDtoList = new ArrayList<>();
         // 없으면 for문 안돌고 빈 list가 들어간다.
         List<Auth> authList = authRepository.findByBuyerId(userId);
 

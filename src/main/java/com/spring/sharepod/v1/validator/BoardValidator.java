@@ -58,6 +58,7 @@ public class BoardValidator {
 
 
 
+
     //상세 페이지를 보여줄 떄, board가 존재하는지 아닌지에 대한 판단
     public Board ValidByBoardId(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
