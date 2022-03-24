@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     Reservation findByBuyerAndBoard(User buyer, Board board);
+
+    void deleteAllByBoard(Board board);
 }
