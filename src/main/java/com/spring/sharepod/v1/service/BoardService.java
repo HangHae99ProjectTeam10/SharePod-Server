@@ -7,10 +7,7 @@ import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
-import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
-import com.spring.sharepod.v1.dto.response.BoardAllResponseDto;
-import com.spring.sharepod.v1.dto.response.BoardResponseDto;
-import com.spring.sharepod.v1.dto.response.VideoAllResponseDto;
+import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.repository.AmountRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.ImgFilesRepository;
@@ -147,32 +144,35 @@ public class BoardService {
 //        query.setMaxResults(startCount + 3);
 //        List<VideoAll> resultList = query.getResultList();
 
+        TypedQuery<BoardDetails> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.BoardDetails(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,u.nickName,u.userRegion,b.boardRegion,b.category,b.productQuality,bl.size,u.userImg,b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i INNER JOIN b.user as u INNER JOIN b.likeNumber bl INNER JOIN b.amount ba", BoardDetails.class);
+        BoardDetails resultList = query.getSingleResult();
+
         //보드가 존재하지 않을 시 메시지 호출
-        Board board = boardValidator.ValidByBoardId(boardId);
+        //Board board = boardValidator.ValidByBoardId(boardId);
         List<String> fileNameList = new ArrayList<>();
-        fileNameList.add(board.getImgFiles().getFirstImgUrl());
-        fileNameList.add(board.getImgFiles().getSecondImgUrl());
-        fileNameList.add(board.getImgFiles().getLastImgUrl());
+        fileNameList.add(resultList.getFirstImg());
+        fileNameList.add(resultList.getSecondImg());
+        fileNameList.add(resultList.getLastImg());
         fileNameList.removeAll(Arrays.asList("", null));
 
         // 존재한다면 받아온 내용들을 담아서 보내주기
         BoardResponseDto.BoardDetail boardDetailResponseDto = BoardResponseDto.BoardDetail.builder()
-                .Title(board.getTitle())
-                .videoUrl(board.getImgFiles().getVideoUrl())
+                .Title(resultList.getBoardTitle())
+                .videoUrl(resultList.getVideoUrl())
                 .imgFiles(fileNameList)
-                .contents(board.getContents())
-                .originPrice(board.getAmount().getOriginPrice())
-                .dailyRentalFee(board.getAmount().getDailyRentalFee())
-                .boardTag(board.getBoardTag())
-                .nickName(board.getUser().getNickName())
-                .sellerRegion(board.getUser().getUserRegion())
-                .boardRegion(board.getBoardRegion())
-                .category(board.getCategory())
-                .boardQuaility(board.getProductQuality())
+                .contents(resultList.getBoardContents())
+                .originPrice(resultList.getOriginPrice())
+                .dailyRentalFee(resultList.getDailyRentalFee())
+                .boardTag(resultList.getBoardTag())
+                .nickName(resultList.getUserNickName())
+                .sellerRegion(resultList.getSellerRegion())
+                .boardRegion(resultList.getBoardRegion())
+                .category(resultList.getCategory())
+                .boardQuaility(resultList.getProductQuality())
                 .isLiked(isLiked)
-                .likeCount(board.getLikeNumber().size())
-                .sellerImg(board.getUser().getUserImg())
-                .modifiedAt(board.getModifiedAt())
+                .likeCount(resultList.getLikeNumberSize())
+                .sellerImg(resultList.getSellerImg())
+                .modifiedAt(resultList.getModifiedAt())
                 .build();
 
         return boardDetailResponseDto;
@@ -232,6 +232,8 @@ public class BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new ErrorCodeException(BOARD_NOT_FOUND)
         );
+
+
 
         //받아온 userid와 boardid의 작성자가 다를때
         if (!Objects.equals(userId, board.getUser().getId())) {
@@ -310,6 +312,7 @@ public class BoardService {
 //        System.out.println("limitCount" + startNum);
 
         int boardLength = 0;
+        Boolean isLiked = false;
         switch (filterType) {
             case "quality":
                 boardList = boardRepository.searchFormQuality(SearchForm.builder()
@@ -318,6 +321,11 @@ public class BoardService {
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion).build());
                 boardLength = boardList.size();
+                for (int i = 0; i < boardLength; i++) {
+                    //System.out.println(querydslBoardList.get(i).getId() + "boardID");
+                    isLiked = boardValidator.DefaultLiked(userId,boardList.get(i).getId());
+                    boardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
+                }
                 break;
 
             case "cost":
@@ -327,6 +335,11 @@ public class BoardService {
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion).build());
                 boardLength = boardList.size();
+                for (int i = 0; i < boardLength; i++) {
+                    //System.out.println(querydslBoardList.get(i).getId() + "boardID");
+                    isLiked = boardValidator.DefaultLiked(userId,boardList.get(i).getId());
+                    boardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
+                }
                 break;
 
             default:
@@ -336,6 +349,11 @@ public class BoardService {
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion).build());
                 boardLength = boardList.size();
+                for (int i = 0; i < boardLength; i++) {
+                    //System.out.println(querydslBoardList.get(i).getId() + "boardID");
+                    isLiked = boardValidator.DefaultLiked(userId,boardList.get(i).getId());
+                    boardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
+                }
 
         }
         BoardResponseDto.BoardAllList boardAllList = BoardResponseDto.BoardAllList.builder()
