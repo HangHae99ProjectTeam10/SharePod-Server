@@ -54,7 +54,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.modifiedAt
                 ))
                 .from(board)
-                .orderBy(board.modifiedAt.asc())
+                .where(board.mainAppear.eq(true))
+                .orderBy(board.modifiedAt.desc())
                 .limit(8);
     }
 
@@ -66,7 +67,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
 
     private JPAQuery<BoardAllResponseDto> getBoardBySearchFormRecent(SearchForm searchForm) {
         return jpaQueryFactory
-                .select(Projections.constructor(BoardAllResponseDto.class,board.id,board.imgFiles.firstImgUrl,board.title,board.category,board.amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
+                .select(Projections.bean(BoardAllResponseDto.class,board.id,board.imgFiles.firstImgUrl,board.title,board.category,board.amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
                 .from(board)
                 .orderBy(board.modifiedAt.asc())
                 .offset(searchForm.getStartNum())
@@ -84,7 +85,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
 
     private JPAQuery<BoardAllResponseDto> getBoardBySearchFormCost(SearchForm searchForm) {
         return jpaQueryFactory
-                .select(Projections.constructor(BoardAllResponseDto.class,board.id,board.imgFiles.firstImgUrl,board.title,board.category,board.amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
+                .select(Projections.bean(BoardAllResponseDto.class,board.id,board.imgFiles.firstImgUrl,board.title,board.category,board.amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
                 .from(board)
                 .orderBy(board.amount.dailyRentalFee.asc())
                 .offset(searchForm.getStartNum())
@@ -101,7 +102,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
 
     private JPAQuery<BoardAllResponseDto> getBoardBySearchFormQuality(SearchForm searchForm) {
         return jpaQueryFactory
-                .select(Projections.constructor(BoardAllResponseDto.class,board.id,board.imgFiles.firstImgUrl,board.title,board.category,board.amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
+                .select(Projections.bean(BoardAllResponseDto.class,board.id,board.imgFiles.firstImgUrl,board.title,board.category,board.amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
                 .from(board)
                 .orderBy(board.productQuality.asc())
                 .offset(searchForm.getStartNum())

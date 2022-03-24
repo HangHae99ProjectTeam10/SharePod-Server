@@ -227,6 +227,7 @@ public class UserService {
         List<Liked> userlikeList = likedRepository.findByUserId(userid);
 
         for (Liked liked : userlikeList) {
+            System.out.println("getTitle" + liked.getBoard().getTitle());
             LikedResponseDto.Liked likedResponseDto = LikedResponseDto.Liked.builder()
                     .boardId(liked.getBoard().getId())
                     .boardTitle(liked.getBoard().getTitle())

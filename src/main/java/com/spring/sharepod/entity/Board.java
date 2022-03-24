@@ -57,15 +57,15 @@ public class Board extends Timestamped {
     private User user;
 
     //Board : ImgFiles => 1 : 1 엔터티
-    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private ImgFiles imgFiles;
 
     //Board : Auth => 1 : 1 엔터티
-    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Auth auth;
 
     //Board : Amount => 1 : 1 엔터티
-    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Amount amount;
 
 
