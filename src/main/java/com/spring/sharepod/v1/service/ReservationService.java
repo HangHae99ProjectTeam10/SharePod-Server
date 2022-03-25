@@ -100,7 +100,7 @@ public class ReservationService {
                 .build();
     }
 
-    //API 19번 거래요청 수락/거절 (구현 중)
+    //API 19번 거래요청 수락/거절
     @Transactional
     public ReservationResponseDto.accReservationDTO resResponseService(Long boardId, ReservationRequestDto.AcceptOrNot acceptNotDTO) throws ParseException {
         //buyer
@@ -146,6 +146,7 @@ public class ReservationService {
         //보드 테이블 appear - false변경
         board.setAppear(false);
 
+
         //Auth 테이블 만들기
         Long authid = authRepository.save(Auth.builder()
                 .authBuyer(buyer)
@@ -177,7 +178,8 @@ public class ReservationService {
 
 
         //거래 내역 DB에서 삭제
-        reservationRepository.deleteById(reservation.getId());
+//        reservationRepository.deleteById(reservation.getId());
+        reservationRepository.deleteAllByBoard(board);
 
         //거래 수락 알림 보내기 => 알림 추가(ooo님이 거래 요청을 하였습니다)
         noticeRepository.save(Notice.builder()
