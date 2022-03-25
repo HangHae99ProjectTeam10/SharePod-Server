@@ -11,6 +11,7 @@ import com.spring.sharepod.v1.service.AwsS3Service;
 import com.spring.sharepod.v1.service.UserService;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import com.spring.sharepod.v1.validator.UserValidator;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,12 +78,42 @@ public class UserRestController {
 
         //각각의 데이터 받아오기
         UserInfoResponseDto userInfo = userService.getUserInfo(userId);
-        List<LikedListResponseDto> userLikeBoard = userService.getUserLikeBoard(userId);
-        List<MyBoardResponseDto> userMyBoard = userService.getMyBoard(userId);
-        List<RentBuyer> rentBuyList = userService.getBuyList(userId);
-        List<RentSeller> rentSellList = userService.getSellList(userId);
-        return new ResponseEntity<>(new UserInfo("success", "마이페이지 불러오기 성공", userInfo, userLikeBoard, userMyBoard, rentBuyList, rentSellList), HttpStatus.OK);
+        //List<LikedListResponseDto> userLikeBoard = userService.getUserLikeBoard(userId);
+        //List<MyBoardResponseDto> userMyBoard = userService.getMyBoard(userId);
+        //List<RentBuyer> rentBuyList = userService.getBuyList(userId);
+        //List<RentSeller> rentSellList = userService.getSellList(userId);
+        return new ResponseEntity<>(new UserInfo("success", "마이페이지 불러오기 성공", userInfo), HttpStatus.OK);
     }
+
+    @GetMapping("/user/like/{userId}")
+    public UserResponseDto.UserLikedList userLikedList(@PathVariable Long userId,@AuthenticationPrincipal User user){
+        tokenValidator.userIdCompareToken(userId,user.getId());
+        return userService.getUserLikeBoard(userId);
+    }
+    @GetMapping("/user/board/{userId}")
+    public UserResponseDto.UserMyBoardList userMyBoardList(@PathVariable Long userId,@AuthenticationPrincipal User user){
+        tokenValidator.userIdCompareToken(userId,user.getId());
+        return userService.getMyBoard(userId);
+    }
+    @GetMapping("/user/buy/{userId}")
+    public UserResponseDto.UserBuyerList userBuyerList(@PathVariable Long userId,@AuthenticationPrincipal User user){
+        tokenValidator.userIdCompareToken(userId,user.getId());
+        return userService.getBuyList(userId);
+    }
+    @GetMapping("/user/sell/{userId}")
+    public UserResponseDto.UserSellerList userSellerList(@PathVariable Long userId,@AuthenticationPrincipal User user){
+        tokenValidator.userIdCompareToken(userId,user.getId());
+        return userService.getSellList(userId);
+    }
+
+    @GetMapping("/user/reservation/{userId}")
+    public UserResponseDto.UserReservationList userReservationList(@PathVariable Long userId,@AuthenticationPrincipal User user){
+        tokenValidator.userIdCompareToken(userId,user.getId());
+        return userService.getReservationList(userId);
+    }
+
+
+
 
     //6번 회원 정보 수정하기 (구현 완료)
     @PatchMapping("/user/{userId}")

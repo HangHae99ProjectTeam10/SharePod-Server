@@ -188,6 +188,13 @@ public class ReservationService {
                 .noticeInfo("거래 수락을 하였습니다.")
                 .build()).getId();
 
+//        for(int i=0;i...)
+//        noticeRepository.save(Notice.builder()
+//                        .buyer(buyer)
+//                        .seller(seller)
+//                        .noticeInfo("거래가 거절되었습니다.")
+//                .build());
+
         return ReservationResponseDto.accReservationDTO.builder()
                 .result("success")
                 .msg("거래 수락완료")

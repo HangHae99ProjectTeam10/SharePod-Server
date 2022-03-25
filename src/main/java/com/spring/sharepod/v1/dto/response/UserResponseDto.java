@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class UserResponseDto {
 
@@ -47,5 +48,54 @@ public class UserResponseDto {
     }
 
 
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserLikedList {
+        private String result;
+        private String msg;
+        private List<LikedListResponseDto> userLikedBoard;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserMyBoardList {
+        private String result;
+        private String msg;
+        private List<MyBoardResponseDto> userMyBoard;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserBuyerList {
+        private String result;
+        private String msg;
+        private List<RentBuyer> rentBuyerList;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserSellerList {
+        private String result;
+        private String msg;
+        private List<RentSeller> rentSellerList;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserReservationList {
+        private String result;
+        private String msg;
+        private List<UserReservation> userReservationList;
+    }
 
 }

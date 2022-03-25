@@ -14,9 +14,5 @@ public class UserInfo {
     private String result;
     private String msg;
     private UserInfoResponseDto userInfo;
-    private List<LikedListResponseDto> userLikedBoard;
-    private List<MyBoardResponseDto> userMyBoard;
-    private List<RentBuyer> rentBuyList;
-    private List<RentSeller> rentSellList;
 
 }

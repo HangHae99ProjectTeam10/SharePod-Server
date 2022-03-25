@@ -74,6 +74,11 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Liked> likeNumber = new ArrayList<>();
 
+    //Board : Liked => 해당 boardid를 좋아요 누른 목록을 가져오기 위한 양방향 설정
+    @Builder.Default
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<Reservation> reservationList = new ArrayList<>();
+
 
     //메인 페이지에 보이게 하려면 setApper를 해주는 작업
     public void setAppear(boolean mainAppear) {
