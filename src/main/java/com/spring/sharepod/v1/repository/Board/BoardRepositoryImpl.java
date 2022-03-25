@@ -171,8 +171,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
     //searchFormRecent
     private JPAQuery<BoardAllResponseDto> getBoardBySearchFormRecent(SearchForm searchForm) {
         return jpaQueryFactory
-                .select(Projections.bean(BoardAllResponseDto.class,board.id,board.imgFiles.firstImgUrl,board.title,board.category,board.amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
+                .select(Projections.bean(BoardAllResponseDto.class,board.id,imgFiles.firstImgUrl,board.title,board.category,amount.dailyRentalFee,board.boardRegion,board.boardTag,board.modifiedAt))
                 .from(board)
+                .innerJoin(imgFiles)
+                .on(board.id.eq(imgFiles.board.id))
+                .innerJoin(amount)
+                .on(imgFiles.board.id.eq(amount.board.id))
                 .orderBy(board.modifiedAt.asc())
                 .offset(searchForm.getStartNum())
                 .limit(16)

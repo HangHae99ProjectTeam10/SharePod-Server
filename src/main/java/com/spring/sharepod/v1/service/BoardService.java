@@ -44,7 +44,7 @@ public class BoardService {
     @Transactional
     public List<VideoAllResponseDto> getAllVideo() {
 
-        TypedQuery<VideoAllResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAllResponseDto(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i INNER JOIN b.user as u", VideoAllResponseDto.class);
+        TypedQuery<VideoAllResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAllResponseDto(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.user as u on b.user = u ", VideoAllResponseDto.class);
         //Long randomIdx = Math.random()/query
         //query.setFirstResult()
         query.setMaxResults(3);
@@ -342,11 +342,6 @@ public class BoardService {
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion).build());
                 boardLength = boardList.size();
-                for (int i = 0; i < boardLength; i++) {
-                    //System.out.println(querydslBoardList.get(i).getId() + "boardID");
-                    isLiked = boardValidator.DefaultLiked(userId,boardList.get(i).getId());
-                    boardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
-                }
                 break;
 
             case "cost":
@@ -356,11 +351,6 @@ public class BoardService {
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion).build());
                 boardLength = boardList.size();
-                for (int i = 0; i < boardLength; i++) {
-                    //System.out.println(querydslBoardList.get(i).getId() + "boardID");
-                    isLiked = boardValidator.DefaultLiked(userId,boardList.get(i).getId());
-                    boardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
-                }
                 break;
 
             default:
@@ -370,13 +360,13 @@ public class BoardService {
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion).build());
                 boardLength = boardList.size();
-                for (int i = 0; i < boardLength; i++) {
-                    //System.out.println(querydslBoardList.get(i).getId() + "boardID");
-                    isLiked = boardValidator.DefaultLiked(userId,boardList.get(i).getId());
-                    boardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
-                }
-
         }
+
+        for (int i = 0; i < boardLength; i++) {
+            isLiked = boardValidator.DefaultLiked(userId,boardList.get(i).getId());
+            boardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
+        }
+
         BoardResponseDto.BoardAllList boardAllList = BoardResponseDto.BoardAllList.builder()
                 .result("success")
                 .msg("메인 페이지 게시글 반환 성공")

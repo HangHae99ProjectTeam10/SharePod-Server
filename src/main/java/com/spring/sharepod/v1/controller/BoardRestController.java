@@ -4,10 +4,8 @@ package com.spring.sharepod.v1.controller;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.model.AllVideo;
 import com.spring.sharepod.model.BoardDetail;
-import com.spring.sharepod.model.BoardList;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
-import com.spring.sharepod.v1.dto.response.BoardAllResponseDto;
 import com.spring.sharepod.v1.dto.response.BoardResponseDto;
 import com.spring.sharepod.v1.dto.response.VideoAllResponseDto;
 import com.spring.sharepod.v1.service.AwsS3Service;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
