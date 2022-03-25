@@ -330,6 +330,31 @@ public class UserService {
         for (int i=0;i<resultCount;i++){
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentBuyerList.get(i).getBoardId());
             querydslRentBuyerList.get(i).setIsLiked(Optional.ofNullable(isLiked));
+
+//     public List<UserResponseDto.RentBuyer> getBuyList(Long userId) {
+
+//         List<UserResponseDto.RentBuyer> rentBuyerResponseDtoList = new ArrayList<>();
+//         // 없으면 for문 안돌고 빈 list가 들어간다.
+//         List<Auth> authList = authRepository.findByBuyerId(userId);
+
+//         for (Auth auth : authList) {
+//             //Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),auth.getBoard().getId());
+
+//             UserResponseDto.RentBuyer rentBuyerResponseDto = UserResponseDto.RentBuyer.builder()
+//                     .boardId(auth.getBoard().getId())
+//                     .boardTitle(auth.getBoard().getTitle())
+//                     .boardTag(auth.getBoard().getBoardTag())
+//                     .boardRegion(auth.getBoard().getBoardRegion())
+//             //        .isLiked(isLiked)
+//                     .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
+//                     .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
+//                     .startRental(auth.getStartRental())
+//                     .nickName(auth.getAuthSeller().getNickName())
+//                     .authId(auth.getId())
+//                     .category(auth.getBoard().getCategory())
+//                     .build();
+//             rentBuyerResponseDtoList.add(rentBuyerResponseDto);
+
         }
 
 //        List<UserResponseDto.RentBuyer> rentBuyerResponseDtoList = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.spring.sharepod.v1.repository;
 
 import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Board;
+import com.spring.sharepod.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,9 @@ public interface AuthRepository extends JpaRepository<Auth, Long> {
     @Transactional
     @Query("delete from Board b where b.id=:boardid")
     void deleteByBoardId(Long boardid);
+
+    List<Auth> findAllByAuthBuyer(User buyer);
+
 }
+
+
