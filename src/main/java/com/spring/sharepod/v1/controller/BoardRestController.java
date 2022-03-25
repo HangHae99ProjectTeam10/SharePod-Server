@@ -6,6 +6,7 @@ import com.spring.sharepod.model.AllVideo;
 import com.spring.sharepod.model.BoardDetail;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
+import com.spring.sharepod.v1.dto.response.BoardDetails;
 import com.spring.sharepod.v1.dto.response.BoardResponseDto;
 import com.spring.sharepod.v1.dto.response.VideoAllResponseDto;
 import com.spring.sharepod.v1.service.AwsS3Service;

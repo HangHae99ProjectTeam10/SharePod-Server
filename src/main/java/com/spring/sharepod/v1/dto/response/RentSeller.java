@@ -1,9 +1,7 @@
 package com.spring.sharepod.v1.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -12,9 +10,13 @@ import java.util.Optional;
 @Setter
 @Builder
 @AllArgsConstructor
-public  class RentSeller {
-    private Long boardId;
-    private String boardTitle;
+@NoArgsConstructor
+public class RentSeller {
+    @JsonProperty(value="boardId")
+    private Long id;
+
+    @JsonProperty(value="boardTitle")
+    private String title;
     private String boardRegion;
     private String boardTag;
     private String FirstImgUrl;
@@ -22,6 +24,7 @@ public  class RentSeller {
     private LocalDate startRental;
     private LocalDate endRental;
     private String nickName;
+
     private String category;
     private Long authId;
     private Optional<Boolean> isLiked;

@@ -141,32 +141,33 @@ public class BoardService {
         Boolean isLiked = boardValidator.DefaultLiked(userId, boardId);
 
         TypedQuery<BoardDetails> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.BoardDetails(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.user.nickName,b.user.userRegion,b.boardRegion,b.category,b.productQuality,b.likeNumber.size,b.user.userImg,b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardDetails.class);
+        //query.setParameter("isLiked",isLiked);
         query.setParameter("boardId",boardId);
         BoardDetails resultList = query.getSingleResult();
 
         List<String> fileNameList = new ArrayList<>();
-        fileNameList.add(resultList.getFirstImg());
-        fileNameList.add(resultList.getSecondImg());
-        fileNameList.add(resultList.getLastImg());
+        fileNameList.add(resultList.getFirstImgUrl());
+        fileNameList.add(resultList.getSecondImgUrl());
+        fileNameList.add(resultList.getLastImgUrl());
         fileNameList.removeAll(Arrays.asList("", null));
 
         // 존재한다면 받아온 내용들을 담아서 보내주기
         BoardResponseDto.BoardDetail boardDetailResponseDto = BoardResponseDto.BoardDetail.builder()
-                .Title(resultList.getBoardTitle())
+                .Title(resultList.getTitle())
                 .videoUrl(resultList.getVideoUrl())
                 .imgFiles(fileNameList)
-                .contents(resultList.getBoardContents())
+                .contents(resultList.getContents())
                 .originPrice(resultList.getOriginPrice())
                 .dailyRentalFee(resultList.getDailyRentalFee())
                 .boardTag(resultList.getBoardTag())
-                .nickName(resultList.getUserNickName())
-                .sellerRegion(resultList.getSellerRegion())
+                .nickName(resultList.getNickName())
+                .sellerRegion(resultList.getUserRegion())
                 .boardRegion(resultList.getBoardRegion())
                 .category(resultList.getCategory())
                 .boardQuaility(resultList.getProductQuality())
                 .isLiked(isLiked)
                 .likeCount(resultList.getLikeNumberSize())
-                .sellerImg(resultList.getSellerImg())
+                .sellerImg(resultList.getUserImg())
                 .modifiedAt(resultList.getModifiedAt())
                 .build();
 

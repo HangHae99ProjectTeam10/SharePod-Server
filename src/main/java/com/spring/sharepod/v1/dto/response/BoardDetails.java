@@ -1,31 +1,32 @@
 package com.spring.sharepod.v1.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class BoardDetails {
-    private String firstImg;
-    private String secondImg;
-    private String lastImg;
+    private String firstImgUrl;
+    private String secondImgUrl;
+    private String lastImgUrl;
     private String videoUrl;
-    private String boardTitle;
-    private String boardContents;
+    private String title;
+    private String contents;
     private int originPrice;
     private int dailyRentalFee;
     private String boardTag;
-    private String userNickName;
-    private String sellerRegion;
+    private String nickName;
+    private String userRegion;
     private String boardRegion;
     private String category;
     private String productQuality;
     private int likeNumberSize;
-    private String sellerImg;
+    private String userImg;
     private LocalDateTime modifiedAt;
+    //private Boolean isLiked;
 
 }
