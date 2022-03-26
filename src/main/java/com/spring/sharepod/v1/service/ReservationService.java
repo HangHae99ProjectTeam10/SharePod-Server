@@ -50,7 +50,7 @@ public class ReservationService {
                 .board(board)
                 .startRental(LocalDate.parse(requestDTO.getStartRental()))
                 .endRental(LocalDate.parse(requestDTO.getEndRental()))
-                .build()).getId();
+                .build());
 
 
         //알림 추가(ooo님이 거래 요청을 하였습니다)
@@ -58,7 +58,7 @@ public class ReservationService {
                 .buyer(buyer)
                 .seller(board.getUser())
                 .noticeInfo("거래 요청을 하였습니다.")
-                .build()).getId();
+                .build());
 
 
         return ReservationResponseDto.ReservationDeal.builder()
@@ -205,6 +205,4 @@ public class ReservationService {
                 .check(acceptNotDTO.isCheck())
                 .build();
     }
-
-
 }
