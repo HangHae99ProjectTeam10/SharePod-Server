@@ -185,7 +185,6 @@ public class ReservationService {
 
 
         List<Reservation> reservationList = reservationRepository.findAllByBoard(board);
-
         for (Reservation reser: reservationList){
             //나머지 거절된 거래들에 대해서 알림 보내기 => 알림 추가("어떤어떤 제목"의 거래가 이미 대여되어 거절 되었습니다)
             noticeRepository.save(Notice.builder()
@@ -196,13 +195,6 @@ public class ReservationService {
         }
         //거래 내역 DB에서 삭제
         reservationRepository.deleteAllByBoard(board);
-
-        //거래 수락 알림 보내기 => 알림 추가(ooo님이 거래 요청을 하였습니다)
-//        noticeRepository.save(Notice.builder()
-//                .buyer(buyer)
-//                .seller(seller)
-//                .noticeInfo("거래 수락을 하였습니다.")
-//                .build());
 
         return ReservationResponseDto.accReservationDTO.builder()
                 .result("success")
