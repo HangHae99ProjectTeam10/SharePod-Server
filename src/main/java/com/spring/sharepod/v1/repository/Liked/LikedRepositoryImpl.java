@@ -1,7 +1,6 @@
 package com.spring.sharepod.v1.repository.Liked;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.spring.sharepod.v1.repository.Board.BoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -18,12 +17,12 @@ public class LikedRepositoryImpl implements LikedRepositoryCustom {
         return getLikedByBoolean(userId,boardId);
     }
 
-
     private Boolean getLikedByBoolean(Long userId, Long boardId){
         return jpaQueryFactory.
-                from(liked)
+                select(liked.id)
+                .from(liked)
                 .where(liked.user.id.eq(userId),liked.board.id.eq(boardId))
-                .select(liked.id).fetchFirst() != null;
+                .fetchFirst() != null;
     }
 
 }

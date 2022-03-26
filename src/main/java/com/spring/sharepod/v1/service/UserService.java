@@ -203,7 +203,7 @@ public class UserService {
     //5번 API userinfo 불러오기 (구현 완료)
     @Transactional
     public UserInfoResponseDto getUserInfo(Long userid) {
-        TypedQuery<UserInfoResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.UserInfoResponseDto(u.id,u.username,u.nickName,u.userRegion,u.userImg)  FROM User u where u.id=:userId", UserInfoResponseDto.class);
+        TypedQuery<UserInfoResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.UserInfoResponseDto(u.id,u.username,u.nickName,u.userRegion,u.userImg,u.createdAt)  FROM User u where u.id=:userId", UserInfoResponseDto.class);
         query.setParameter("userId",userid);
         UserInfoResponseDto resultList = query.getSingleResult();
 
@@ -268,9 +268,12 @@ public class UserService {
 
         Boolean isLiked = false;
         List<MyBoardResponseDto> querydslMyBoardList = boardRepository.getMyBoard(userId);
+        //System.out.println("querydslMyBoardList" + querydslMyBoardList);
         int resultCount = querydslMyBoardList.size();
+        //System.out.println("resultCount"+ resultCount);
         for (int i=0;i<resultCount;i++){
-            isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslMyBoardList.get(i).getBoardId());
+            //System.out.println("querydslMyBoardList.get(i).getBoardId()"+querydslMyBoardList.get(i).getBoardId());
+            isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslMyBoardList.get(i).getId());
             querydslMyBoardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
 
@@ -328,7 +331,7 @@ public class UserService {
         List<RentBuyer> querydslRentBuyerList = boardRepository.getRentBuyer(userId);
         int resultCount = querydslRentBuyerList.size();
         for (int i=0;i<resultCount;i++){
-            isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentBuyerList.get(i).getBoardId());
+            isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentBuyerList.get(i).getId());
             querydslRentBuyerList.get(i).setIsLiked(Optional.ofNullable(isLiked));
 
 //     public List<UserResponseDto.RentBuyer> getBuyList(Long userId) {
@@ -391,7 +394,7 @@ public class UserService {
         List<RentSeller> querydslRentSellerList = boardRepository.getRentSeller(userId);
         int resultCount = querydslRentSellerList.size();
         for (int i=0;i<resultCount;i++){
-            isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentSellerList.get(i).getBoardId());
+            isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentSellerList.get(i).getId());
             querydslRentSellerList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
 

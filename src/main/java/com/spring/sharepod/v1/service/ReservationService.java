@@ -74,9 +74,9 @@ public class ReservationService {
 
     //18번 거래요청 목록 (구현 완료)
     @Transactional
-    public ReservationResponseDto.ReservationGetFinalDTO reservationGetService(Long seller) {
+    public ReservationResponseDto.ReservationGetFinalDTO reservationGetService(Long sellerId) {
         //유저 userid로 검색해 유저객체 가져오기
-        User user = userRepository.findById(seller).orElseThrow(
+        User user = userRepository.findById(sellerId).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND)
         );
 

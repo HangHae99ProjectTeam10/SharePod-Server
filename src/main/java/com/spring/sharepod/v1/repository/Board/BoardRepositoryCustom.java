@@ -1,9 +1,7 @@
 package com.spring.sharepod.v1.repository.Board;
 
-import com.spring.sharepod.v1.dto.response.BoardAllResponseDto;
-import com.spring.sharepod.v1.dto.response.MyBoardResponseDto;
-import com.spring.sharepod.v1.dto.response.RentBuyer;
-import com.spring.sharepod.v1.dto.response.RentSeller;
+import com.spring.sharepod.model.BoardDetail;
+import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.repository.SearchForm;
 
 import java.util.List;
@@ -22,4 +20,6 @@ public interface BoardRepositoryCustom {
     List<RentBuyer> getRentBuyer(Long userId);
 
     List<RentSeller> getRentSeller(Long userId);
+
+    //BoardDetails getBoardDetails(Boolean isLiked, Long boardId);
 }
