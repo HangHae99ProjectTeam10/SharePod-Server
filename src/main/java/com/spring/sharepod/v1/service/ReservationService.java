@@ -128,7 +128,7 @@ public class ReservationService {
                     .buyer(buyer)
                     .seller(seller)
                     .noticeInfo(board.getTitle() + "거래 거절을 하였습니다.")
-                    .build()).getId();
+                    .build());
 
             return ReservationResponseDto.accReservationDTO.builder()
                     .result("success")
@@ -171,8 +171,7 @@ public class ReservationService {
                     .authImgUrl(null)
                     .checkImgBox(false)
                     .auth(auth)
-                    .build()).getId();
-
+                    .build());
         }
 
         //첫번째로 거래를 수락한 사람의 Reservation DB행 지우기
