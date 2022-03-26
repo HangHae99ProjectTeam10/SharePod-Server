@@ -4,7 +4,6 @@ import com.spring.sharepod.entity.*;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.ReservationRequestDto;
-import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
 import com.spring.sharepod.v1.dto.response.ReservationResponseDto;
 import com.spring.sharepod.v1.repository.*;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
@@ -104,7 +103,7 @@ public class ReservationService {
     @Transactional
     public ReservationResponseDto.accReservationDTO resResponseService(Long boardId, ReservationRequestDto.AcceptOrNot acceptNotDTO) throws ParseException {
         //buyer
-        User buyer = userRepository.findByNickName(acceptNotDTO.getBuyerNickname()).orElseThrow(
+        User buyer = userRepository.findByNickName(acceptNotDTO.getBuyerNickName()).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
         //seller
         User seller = userRepository.findById(acceptNotDTO.getSellerId()).orElseThrow(
@@ -128,7 +127,7 @@ public class ReservationService {
             noticeRepository.save(Notice.builder()
                     .buyer(buyer)
                     .seller(seller)
-                    .noticeInfo("거래 거절을 하였습니다.")
+                    .noticeInfo(board.getTitle() + "거래 거절을 하였습니다.")
                     .build()).getId();
 
             return ReservationResponseDto.accReservationDTO.builder()
@@ -136,7 +135,7 @@ public class ReservationService {
                     .msg("거래 거절완료")
                     .boardId(boardId)
                     .sellerId(acceptNotDTO.getSellerId())
-                    .buyerNickName(acceptNotDTO.getBuyerNickname())
+                    .buyerNickName(acceptNotDTO.getBuyerNickName())
                     .check(acceptNotDTO.isCheck())
                     .build();
         }
@@ -176,24 +175,42 @@ public class ReservationService {
 
         }
 
-
-        //거래 내역 DB에서 삭제
-//        reservationRepository.deleteById(reservation.getId());
-        reservationRepository.deleteAllByBoard(board);
-
-        //거래 수락 알림 보내기 => 알림 추가(ooo님이 거래 요청을 하였습니다)
+        //첫번째로 거래를 수락한 사람의 Reservation DB행 지우기
+        reservationRepository.deleteById(reservation.getId());
+        //거래 수락 알림 보내기
         noticeRepository.save(Notice.builder()
                 .buyer(buyer)
                 .seller(seller)
-                .noticeInfo("거래 수락을 하였습니다.")
-                .build()).getId();
+                .noticeInfo(board.getTitle() + "의 거래를 수락을 하였습니다.")
+                .build());
+
+
+        List<Reservation> reservationList = reservationRepository.findAllByBoard(board);
+
+        for (Reservation reser: reservationList){
+            //나머지 거절된 거래들에 대해서 알림 보내기 => 알림 추가("어떤어떤 제목"의 거래가 이미 대여되어 거절 되었습니다)
+            noticeRepository.save(Notice.builder()
+                    .buyer(reser.getBuyer())
+                    .seller(reser.getSeller())
+                    .noticeInfo(board.getTitle() + "의 거래가 이미 대여되어 거절되었습니다.")
+                    .build());
+        }
+        //거래 내역 DB에서 삭제
+        reservationRepository.deleteAllByBoard(board);
+
+        //거래 수락 알림 보내기 => 알림 추가(ooo님이 거래 요청을 하였습니다)
+//        noticeRepository.save(Notice.builder()
+//                .buyer(buyer)
+//                .seller(seller)
+//                .noticeInfo("거래 수락을 하였습니다.")
+//                .build());
 
         return ReservationResponseDto.accReservationDTO.builder()
                 .result("success")
                 .msg("거래 수락완료")
                 .boardId(boardId)
                 .sellerId(acceptNotDTO.getSellerId())
-                .buyerNickName(acceptNotDTO.getBuyerNickname())
+                .buyerNickName(acceptNotDTO.getBuyerNickName())
                 .check(acceptNotDTO.isCheck())
                 .build();
     }

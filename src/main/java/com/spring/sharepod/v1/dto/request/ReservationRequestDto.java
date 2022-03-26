@@ -9,7 +9,7 @@ public class ReservationRequestDto {
     @Setter
     public static class AcceptOrNot {
         private Long sellerId;
-        private String buyerNickname;
+        private String buyerNickName;
         private String startRental;
         private String endRental;
         private boolean check;
