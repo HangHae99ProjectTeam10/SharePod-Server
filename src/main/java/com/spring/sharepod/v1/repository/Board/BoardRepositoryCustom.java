@@ -21,5 +21,7 @@ public interface BoardRepositoryCustom {
 
     List<RentSeller> getRentSeller(Long userId);
 
+    List<UserReservation> getReservation(Long userId);
+
     //BoardDetails getBoardDetails(Boolean isLiked, Long boardId);
 }

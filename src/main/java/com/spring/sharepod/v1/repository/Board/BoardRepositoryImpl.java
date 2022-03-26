@@ -6,10 +6,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.spring.sharepod.v1.dto.response.BoardAllResponseDto;
-import com.spring.sharepod.v1.dto.response.MyBoardResponseDto;
-import com.spring.sharepod.v1.dto.response.RentBuyer;
-import com.spring.sharepod.v1.dto.response.RentSeller;
+import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.repository.SearchForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,6 +17,8 @@ import static com.spring.sharepod.entity.QAmount.amount;
 import static com.spring.sharepod.entity.QBoard.board;
 import static com.spring.sharepod.entity.QImgFiles.imgFiles;
 import static com.spring.sharepod.entity.QAuth.auth;
+import static com.spring.sharepod.entity.QUser.user;
+import static com.spring.sharepod.entity.QReservation.reservation;
 import static org.aspectj.util.LangUtil.isEmpty;
 
 @Repository
@@ -63,6 +62,39 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     @Override
     public List<RentSeller> getRentSeller(Long userId) {
         return getRentSellerList(userId).fetch();
+    }
+
+
+    @Override
+    public List<UserReservation> getReservation(Long userId) {
+        return getReservationList(userId).fetch();
+    }
+    //내가 요청한 게시글
+    private JPAQuery<UserReservation> getReservationList(Long userId) {
+        return jpaQueryFactory.select(Projections.bean(UserReservation.class,
+                        board.id,
+                        board.title,
+                        board.boardRegion,
+                        board.boardTag,
+                        imgFiles.firstImgUrl,
+                        amount.dailyRentalFee,
+                        reservation.startRental,
+                        reservation.endRental,
+                        reservation.seller.nickName,
+                        board.category,
+                        reservation.id.as("reservationId")
+                ))
+                .from(reservation)
+                .rightJoin(board)
+                .on(reservation.board.id.eq(board.id))
+                .innerJoin(imgFiles)
+                .on(board.id.eq(imgFiles.board.id))
+                .innerJoin(amount)
+                .on(imgFiles.board.id.eq(amount.board.id))
+                .where(reservation.buyer.id.eq(userId))
+                .orderBy(board.modifiedAt.desc());
+
+
     }
 
     //내가 빌린 게시글

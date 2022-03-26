@@ -247,6 +247,22 @@ public class BoardService {
                 .build();
     }
 
+    @Transactional
+    public BoardResponseDto.BoardModifiedData getModifiedBoard(Long boardId){
+        TypedQuery<BoardModifedDetail> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.BoardModifedDetail(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.boardRegion,b.category,b.productQuality,b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardModifedDetail.class);
+        //query.setParameter("isLiked",isLiked);
+        query.setParameter("boardId",boardId);
+        BoardModifedDetail resultList = query.getSingleResult();
+
+
+        return BoardResponseDto.BoardModifiedData.builder()
+                .result("success")
+                .msg(boardId + " 번 게시글 수정 전의 GET 데이터")
+                .boardData(resultList)
+                .build();
+
+    }
+
 
     //12번 API 게시판 삭제 (구현 완료)
     @Transactional

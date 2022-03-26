@@ -20,6 +20,16 @@ public class BoardResponseDto {
     @Getter
     @AllArgsConstructor
     @Builder
+    public static class BoardModifiedData {
+        private String result;
+        private String msg;
+        private BoardModifedDetail boardData;
+    }
+
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
     public static class BoardData {
 
         private Long boardId;

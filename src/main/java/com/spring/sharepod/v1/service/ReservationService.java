@@ -196,6 +196,13 @@ public class ReservationService {
         //거래 내역 DB에서 삭제
         reservationRepository.deleteAllByBoard(board);
 
+//        for(int i=0;i...)
+//        noticeRepository.save(Notice.builder()
+//                        .buyer(buyer)
+//                        .seller(seller)
+//                        .noticeInfo("거래가 거절되었습니다.")
+//                .build());
+
         return ReservationResponseDto.accReservationDTO.builder()
                 .result("success")
                 .msg("거래 수락완료")

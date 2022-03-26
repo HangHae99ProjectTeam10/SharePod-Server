@@ -87,6 +87,16 @@ public class BoardRestController {
         return boardService.updateBoard(boardId, boardPatchRequestDTOadd);
     }
 
+    //** 11번 게시판 수정 정보 받아오기(구현 완료)
+    @GetMapping("/board/modified/{userId}/{boardId}")
+    public BoardResponseDto.BoardModifiedData updateDetailBoard(@PathVariable Long boardId, @PathVariable Long userId, @AuthenticationPrincipal User user){
+        //token과 patchRequestDTO의 userid와 비교
+        tokenValidator.userIdCompareToken(userId, user.getId());
+
+        //게시판 수정 업로드
+        return boardService.getModifiedBoard(boardId);
+    }
+
     //**12번 게시판 삭제 (구현 완료)
     @DeleteMapping("/board/{boardId}")
     public BasicResponseDTO deleteBoard(@PathVariable Long boardId, @RequestBody Map<String, Long> user, @AuthenticationPrincipal User tokenUser) {
