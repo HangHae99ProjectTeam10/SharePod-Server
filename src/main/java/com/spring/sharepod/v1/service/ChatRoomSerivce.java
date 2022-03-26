@@ -92,6 +92,7 @@ public class ChatRoomSerivce {
                     lastChat = chatRoom.getChatMessageList().get(chatRoom.getChatMessageList().size() - 1).getMessage();
                 }
                 ChatRoomResponseDto.ChatRoomList chatRoomListBuilder = ChatRoomResponseDto.ChatRoomList.builder()
+                        .chatRoomId(chatRoom.getId())
                         .otherImg(chatRoom.getSeller().getUserImg())
                         .boardImg(chatRoom.getBoard().getImgFiles().getFirstImgUrl())
                         .otherNickName(chatRoom.getSeller().getNickName())
@@ -108,6 +109,7 @@ public class ChatRoomSerivce {
                     lastChat = chatRoom.getChatMessageList().get(chatRoom.getChatMessageList().size() - 1).getMessage();
                 }
                 ChatRoomResponseDto.ChatRoomList chatRoomListBuilder = ChatRoomResponseDto.ChatRoomList.builder()
+                        .chatRoomId(chatRoom.getId())
                         .otherImg(chatRoom.getBuyer().getUserImg())
                         .boardImg(chatRoom.getBoard().getImgFiles().getFirstImgUrl())
                         .otherNickName(chatRoom.getBuyer().getNickName())
