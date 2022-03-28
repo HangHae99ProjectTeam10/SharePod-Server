@@ -1,18 +1,14 @@
 package com.spring.sharepod.v1.service;
 
-import com.spring.sharepod.entity.Auth;
-import com.spring.sharepod.entity.Board;
-import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.jwt.JwtTokenProvider;
 import com.spring.sharepod.model.LogOut;
 import com.spring.sharepod.model.ReFreshToken;
-import com.spring.sharepod.model.UserInfo;
 import com.spring.sharepod.v1.dto.request.UserRequestDto;
 import com.spring.sharepod.v1.dto.response.*;
-import com.spring.sharepod.v1.repository.AuthRepository;
+import com.spring.sharepod.v1.repository.Auth.AuthRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.Liked.LikedRepository;
 import com.spring.sharepod.v1.repository.UserRepository;

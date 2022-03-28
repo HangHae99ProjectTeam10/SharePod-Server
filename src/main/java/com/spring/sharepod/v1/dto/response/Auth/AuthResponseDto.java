@@ -1,4 +1,4 @@
-package com.spring.sharepod.v1.dto.response;
+package com.spring.sharepod.v1.dto.response.Auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,19 +22,9 @@ public class AuthResponseDto {
         private LocalDate startRental;
         private LocalDate endRental;
         private boolean authAllCheck;
-        private List<AuthResponseDto.AuthData> data;
+        private List<AuthDataResponseDto> data;
 
 
-    }
-
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class AuthData {
-        private Long authImgId;
-        private String authImgUrl;
-        private boolean authImgCheck;
     }
 
     @Getter

@@ -1,7 +1,6 @@
 package com.spring.sharepod.v1.repository.Board;
 
 import com.spring.sharepod.entity.Board;
-import com.spring.sharepod.v1.dto.response.BoardResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

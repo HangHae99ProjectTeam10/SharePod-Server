@@ -1,4 +1,4 @@
-package com.spring.sharepod.v1.dto.response;
+package com.spring.sharepod.v1.dto.response.Board;
 
 import lombok.*;
 

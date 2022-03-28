@@ -1,4 +1,4 @@
-package com.spring.sharepod.v1.repository;
+package com.spring.sharepod.v1.repository.Auth;
 
 import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Board;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface AuthRepository extends JpaRepository<Auth, Long> {
+public interface AuthRepository extends JpaRepository<Auth, Long>, AuthRepositoryCustom {
     @Query("select a from Auth a where a.authBuyer.id=:buyerid ORDER BY a.endRental asc")
     List<Auth> findByBuyerId(Long buyerid);
 
