@@ -29,8 +29,8 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom{
                 notice.noticeInfo
                 )).from(notice)
                 .rightJoin(user)
-                .on(notice.buyer.id.eq(user.id).or(notice.seller.id.eq(user.id)))
-                .where(notice.buyer.id.eq(userId).or(notice.seller.id.eq(userId)),
+                .on(notice.receiver.id.eq(user.id).or(notice.sender.id.eq(user.id)))
+                .where(notice.receiver.id.eq(userId).or(notice.sender.id.eq(userId)),
                         user.id.eq(userId));
     }
 
