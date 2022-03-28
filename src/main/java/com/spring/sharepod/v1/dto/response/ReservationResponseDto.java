@@ -2,7 +2,6 @@ package com.spring.sharepod.v1.dto.response;
 
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class ReservationResponseDto {

@@ -46,9 +46,5 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
 //                .on(imgFiles.board.id.eq(amount.board.id))
                 .where(reservation.seller.id.eq(sellerId))
                 .orderBy(board.modifiedAt.desc());
-
-
     }
-
-
 }
