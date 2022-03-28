@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.repository.Board;
 
-import com.spring.sharepod.model.BoardDetail;
 import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.repository.SearchForm;
 

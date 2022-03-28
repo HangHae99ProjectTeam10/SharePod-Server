@@ -72,9 +72,20 @@ public class UserResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class UserBuyerList {
+    public static class UserMyOrderList {
         private String result;
         private String msg;
+        private List<RentBuyer> rentBuyerList;
+        private List<RentSeller> rentSellerList;
+        private List<UserReservation> userReservationList;
+    }
+
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserBuyerList {
         private List<RentBuyer> rentBuyerList;
     }
 
@@ -83,8 +94,6 @@ public class UserResponseDto {
     @AllArgsConstructor
     @Builder
     public static class UserSellerList {
-        private String result;
-        private String msg;
         private List<RentSeller> rentSellerList;
     }
 
@@ -93,8 +102,6 @@ public class UserResponseDto {
     @AllArgsConstructor
     @Builder
     public static class UserReservationList {
-        private String result;
-        private String msg;
         private List<UserReservation> userReservationList;
     }
 

@@ -8,7 +8,7 @@ import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.ReservationRequestDto;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
-import com.spring.sharepod.v1.repository.ReservationRepository;
+import com.spring.sharepod.v1.repository.Reservation.ReservationRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -69,6 +69,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     public List<UserReservation> getReservation(Long userId) {
         return getReservationList(userId).fetch();
     }
+
+
+
     //내가 요청한 게시글
     private JPAQuery<UserReservation> getReservationList(Long userId) {
         return jpaQueryFactory.select(Projections.bean(UserReservation.class,
