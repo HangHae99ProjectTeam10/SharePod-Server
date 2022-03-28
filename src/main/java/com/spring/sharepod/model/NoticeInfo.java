@@ -1,5 +1,6 @@
 package com.spring.sharepod.model;
 
+import com.spring.sharepod.v1.dto.response.NoticeInfoList;
 import com.spring.sharepod.v1.dto.response.NoticeResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,6 @@ import java.util.List;
 public class NoticeInfo {
     private String result;
     private String msg;
-    private List<NoticeResponseDto.Notice> noticeList;
+    private List<NoticeInfoList> noticeList;
 
 }

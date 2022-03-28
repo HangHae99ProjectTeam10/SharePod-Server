@@ -3,6 +3,7 @@ package com.spring.sharepod.v1.service;
 import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
+import com.spring.sharepod.v1.dto.response.AuthData;
 import com.spring.sharepod.v1.dto.response.AuthResponseDto;
 import com.spring.sharepod.v1.repository.AuthImgRepository;
 import com.spring.sharepod.v1.repository.AuthRepository;
@@ -34,6 +35,13 @@ public class AuthService {
     //20번 API 이미지 인증 창 데이터(구현 완료)
     @Transactional
     public AuthResponseDto.AuthDataAll dataAllResponseDTO(@PathVariable Long authid) {
+//        List<AuthData> authDataQueryDslList = authRepository.authDataList(authid);
+//        boolean allauthCheck = true;
+//        int resultCount = authDataQueryDslList.size();
+//        for(int i=0;i<resultCount;i++){
+//            if()
+//        }
+
         //authid로 auth가 없다면 error 메시지 호출
         Auth auth = authValidator.ValidAuthByAuthId(authid);
 

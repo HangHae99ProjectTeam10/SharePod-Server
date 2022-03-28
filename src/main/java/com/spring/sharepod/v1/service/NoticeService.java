@@ -4,14 +4,13 @@ package com.spring.sharepod.v1.service;
 import com.spring.sharepod.entity.Notice;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
-import com.spring.sharepod.v1.dto.response.NoticeResponseDto;
-import com.spring.sharepod.v1.repository.NoticeRepository;
+import com.spring.sharepod.v1.dto.response.NoticeInfoList;
+import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import com.spring.sharepod.v1.validator.NoticeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,43 +29,74 @@ public class NoticeService {
 
     //25번 알림 목록 띄우기 (구현 완료)
     @Transactional
-    public List<NoticeResponseDto.Notice> getNoticeList(Long userid) {
-        //해당하는 user의 알림에 대하여 둘 다 해당하는 모든 List<Notice>를 뽑아내고 그의 noticetype(명칭)에 따라 구분한다.
-        List<NoticeResponseDto.Notice> noticeResponseDtoList = new ArrayList<>();
+    public List<NoticeInfoList> getNoticeList(Long userId) {
+        List<NoticeInfoList> noticeInfoList = noticeRepository.noticeInfoList(userId);
+        return noticeInfoList;
+        //List<NoticeResponseDto.Notice> noticeResponseDtoLists = new ArrayList<>();
 
-        // userid에 의한 모든 경우 알림이 없다면 알림이 존재하지 않는다는 메시지를 호출한다.
-        List<Notice> noticeList = noticeValidator.ValidnoticeList(userid);
+//        for (NoticeInfoList notice : noticeInfoList) {
+//            //거래 요청의 경우 buyer의 nickname이 필요하다.
+//            if (Objects.equals(notice.getNoticeInfo(), "거래 요청을 하였습니다.")) {
+//                notice.setNickName();
+//            }
+//            //거래 거절의 경우 seller의 nickname이 필요하다.
+//            if (Objects.equals(notice.getNoticeInfo(), "거래 거절을 하였습니다.")) {
+//                NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
+//                        .noticeId(notice.getId())
+//                        .noticeName(notice.getSeller().getNickName())
+//                        .noticeMsg(notice.getNoticeInfo())
+//                        .build();
+//                noticeResponseDtoLists.add(noticeResponseDto);
+//            }
+//            //거래 수락의 경우 seller의 nickname이 필요하다.
+//            if (Objects.equals(notice.getNoticeInfo(), "거래 수락을 하였습니다.")) {
+//                NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
+//                        .noticeId(notice.getId())
+//                        .noticeName(notice.getSeller().getNickName())
+//                        .noticeMsg(notice.getNoticeInfo())
+//                        .build();
+//                noticeResponseDtoLists.add(noticeResponseDto);
+//            }
+//        }
 
-        for (Notice notice : noticeList) {
-            //거래 요청의 경우 buyer의 nickname이 필요하다.
-            if (Objects.equals(notice.getNoticeInfo(), "거래 요청을 하였습니다.")) {
-                NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
-                        .noticeId(notice.getId())
-                        .noticeName(notice.getBuyer().getNickName())
-                        .noticeMsg(notice.getNoticeInfo())
-                        .build();
-                noticeResponseDtoList.add(noticeResponseDto);
-            }
-            //거래 거절의 경우 seller의 nickname이 필요하다.
-            if (Objects.equals(notice.getNoticeInfo(), "거래 거절을 하였습니다.")) {
-                NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
-                        .noticeId(notice.getId())
-                        .noticeName(notice.getSeller().getNickName())
-                        .noticeMsg(notice.getNoticeInfo())
-                        .build();
-                noticeResponseDtoList.add(noticeResponseDto);
-            }
-            //거래 수락의 경우 seller의 nickname이 필요하다.
-            if (Objects.equals(notice.getNoticeInfo(), "거래 수락을 하였습니다.")) {
-                NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
-                        .noticeId(notice.getId())
-                        .noticeName(notice.getSeller().getNickName())
-                        .noticeMsg(notice.getNoticeInfo())
-                        .build();
-                noticeResponseDtoList.add(noticeResponseDto);
-            }
-        }
-        return noticeResponseDtoList;
+
+
+//        //해당하는 user의 알림에 대하여 둘 다 해당하는 모든 List<Notice>를 뽑아내고 그의 noticetype(명칭)에 따라 구분한다.
+//        List<NoticeResponseDto.Notice> noticeResponseDtoList = new ArrayList<>();
+//
+//        // userid에 의한 모든 경우 알림이 없다면 알림이 존재하지 않는다는 메시지를 호출한다.
+//        List<Notice> noticeList = noticeValidator.ValidnoticeList(userId);
+//
+//        for (Notice notice : noticeList) {
+//            //거래 요청의 경우 buyer의 nickname이 필요하다.
+//            if (Objects.equals(notice.getNoticeInfo(), "거래 요청을 하였습니다.")) {
+//                NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
+//                        .noticeId(notice.getId())
+//                        .noticeName(notice.getBuyer().getNickName())
+//                        .noticeMsg(notice.getNoticeInfo())
+//                        .build();
+//                noticeResponseDtoList.add(noticeResponseDto);
+//            }
+//            //거래 거절의 경우 seller의 nickname이 필요하다.
+//            if (Objects.equals(notice.getNoticeInfo(), "거래 거절을 하였습니다.")) {
+//                NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
+//                        .noticeId(notice.getId())
+//                        .noticeName(notice.getSeller().getNickName())
+//                        .noticeMsg(notice.getNoticeInfo())
+//                        .build();
+//                noticeResponseDtoList.add(noticeResponseDto);
+//            }
+//            //거래 수락의 경우 seller의 nickname이 필요하다.
+//            if (Objects.equals(notice.getNoticeInfo(), "거래 수락을 하였습니다.")) {
+//                NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
+//                        .noticeId(notice.getId())
+//                        .noticeName(notice.getSeller().getNickName())
+//                        .noticeMsg(notice.getNoticeInfo())
+//                        .build();
+//                noticeResponseDtoList.add(noticeResponseDto);
+//            }
+//        }
+//        return noticeResponseDtoList;
     }
 
     //알림 확인 삭제
