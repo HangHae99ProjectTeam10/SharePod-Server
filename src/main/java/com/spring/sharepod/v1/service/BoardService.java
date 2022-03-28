@@ -280,24 +280,50 @@ public class BoardService {
             throw new ErrorCodeException(BOARD_NOT_EQUAL_WRITER);
         }
 
-        //DB에 존재하는 풀 길이의 Url을 받아와서 제거하기 위한 키를 만들어준다.
+
         String firstImg = board.getImgFiles().getFirstImgUrl();
         String secondImg = board.getImgFiles().getSecondImgUrl();
         String lastImg = board.getImgFiles().getLastImgUrl();
         String videoUrl = board.getImgFiles().getVideoUrl();
 
+        //DB에 존재하는 풀 길이의 Url을 받아와서 제거하기 위한 키를 만들어준다.
+        if(board.getImgFiles().getSecondImgUrl() == null){
+
+        }else{
+            secondImg = secondImg.substring(secondImg.lastIndexOf("/") + 1);
+        }
+
+        if(board.getImgFiles().getLastImgUrl() == null){
+
+        }else{
+            lastImg = lastImg.substring(lastImg.lastIndexOf("/") + 1);
+        }
+
+        if(board.getImgFiles().getVideoUrl() == null){
+
+        }else {
+            videoUrl = videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
+        }
+
+
+
         firstImg = firstImg.substring(firstImg.lastIndexOf("/") + 1);
-        secondImg = secondImg.substring(secondImg.lastIndexOf("/") + 1);
-        lastImg = lastImg.substring(lastImg.lastIndexOf("/") + 1);
-        videoUrl = videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
 
-        //리스트에 담에서 넣어주기
-        String[] imgs = {firstImg, secondImg, lastImg, videoUrl};
+//        //리스트에 담에서 넣어주기
+//        String[] imgs = {firstImg, secondImg, lastImg, videoUrl};
+//
+//        List<String> fileName = Arrays.asList(imgs);
+//        fileName.removeAll(Collections.singletonList(null));
 
-        List<String> fileName = Arrays.asList(imgs);
+        List<String> fileNameList = new ArrayList<>();
+        fileNameList.add(firstImg);
+        fileNameList.add(secondImg);
+        fileNameList.add(lastImg);
+        fileNameList.add(videoUrl);
+        fileNameList.removeAll(Arrays.asList("", null));
 
 
-        awsS3Service.deleteBoardFiles(fileName);
+        awsS3Service.deleteBoardFiles(fileNameList);
 
 
         //게시글 삭제

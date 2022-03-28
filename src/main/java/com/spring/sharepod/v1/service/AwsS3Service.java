@@ -169,7 +169,7 @@ public class AwsS3Service {
 
 
         //비디오파일 있는지 확인
-        if (Objects.equals(videoFile.getOriginalFilename(), "")) {
+        if (Objects.equals(videoFile.getOriginalFilename(), null)) {
             patchRequestDTO.setVideoUrl(board.getImgFiles().getVideoUrl());
         } else {
             //기존 이미지 삭제
