@@ -30,4 +30,9 @@ public class Notice extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SELLERID")
     private User seller;
+
+    //Notice : User => N: 1 seller 외래키를 뜻함
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BOARDID")
+    private Board board;
 }

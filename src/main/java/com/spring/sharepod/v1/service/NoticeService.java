@@ -69,24 +69,34 @@ public class NoticeService {
         // userid에 의한 모든 경우 알림이 없다면 알림이 존재하지 않는다는 메시지를 호출한다.
         List<Notice> noticeList = noticeValidator.ValidnoticeList(userId);
 
-        for (Notice notice : noticeList) {
-            Long buyerId = notice.getBuyer().getId();
-            Long sellerId = notice.getSeller().getId();
+        for (int i =0; i <noticeList.size();i++) {
+            Long buyerId = noticeList.get(i).getBuyer().getId();
+            Long sellerId = noticeList.get(i).getSeller().getId();
             //거래 요청의 경우 buyer의 nickname이 필요하다.
-            if (Objects.equals(buyerId, userId)) {
+            if (Objects.equals(sellerId, userId)) {
                 NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
-                        .noticeId(notice.getId())
-                        .noticeName(notice.getBuyer().getNickName())
-                        .noticeMsg(notice.getNoticeInfo())
+                        .noticeId(noticeList.get(i).getId())
+                        .noticeName(noticeList.get(i).getBuyer().getNickName())
+                        .userRegion(noticeList.get(i).getBuyer().getUserRegion())
+                        //.startRental(noticeList.get(i).getBoard().getReservationList().get(i).getStartRental())
+                        //.endRental(noticeList.get(i).getBoard().getReservationList().get(i).getEndRental())
+                        .otherUserImg(noticeList.get(i).getBuyer().getUserImg())
+                        .noticeMsg(noticeList.get(i).getNoticeInfo())
+                        .boardId(noticeList.get(i).getBoard().getId())
                         .build();
                 noticeResponseDtoList.add(noticeResponseDto);
             }
             //거래 거절의 경우 seller의 nickname이 필요하다.
-            if (Objects.equals(sellerId, userId)) {
+            if (Objects.equals(buyerId,userId)) {
                 NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
-                        .noticeId(notice.getId())
-                        .noticeName(notice.getSeller().getNickName())
-                        .noticeMsg(notice.getNoticeInfo())
+                        .noticeId(noticeList.get(i).getId())
+                        .noticeName(noticeList.get(i).getSeller().getNickName())
+                        .userRegion(noticeList.get(i).getSeller().getUserRegion())
+                        //.startRental(noticeList.get(i).getBoard().getReservationList().get(i).getStartRental())
+                        //.endRental(noticeList.get(i).getBoard().getReservationList().get(i).getEndRental())
+                        .otherUserImg(noticeList.get(i).getSeller().getUserImg())
+                        .noticeMsg(noticeList.get(i).getNoticeInfo())
+                        .boardId(noticeList.get(i).getBoard().getId())
                         .build();
                 noticeResponseDtoList.add(noticeResponseDto);
             }

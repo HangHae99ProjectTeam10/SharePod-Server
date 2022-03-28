@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class NoticeResponseDto {
 
@@ -16,9 +16,8 @@ public class NoticeResponseDto {
         private Long noticeId;
         private String noticeName;
         private String userRegion;
-        private LocalDateTime startRental;
-        private LocalDateTime endRental;
         private String otherUserImg;
         private String noticeMsg;
+        private Long boardId;
     }
 }
