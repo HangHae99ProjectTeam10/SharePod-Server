@@ -334,7 +334,7 @@ public class UserService {
 
     //5번 API 내가 대여한 목록 불러오기 (구현 완료)
     @Transactional
-    public UserResponseDto.UserBuyerList getBuyList(Long userId) {
+    public List<RentBuyer> getBuyList(Long userId) {
         Boolean isLiked = false;
         List<RentBuyer> querydslRentBuyerList = boardRepository.getRentBuyer(userId);
         int resultCount = querydslRentBuyerList.size();
@@ -390,17 +390,13 @@ public class UserService {
 //                    .build();
 //            rentBuyerResponseDtoList.add(rentBuyerResponseDto);
 //        }
-        return UserResponseDto.UserBuyerList.builder()
-                .result("success")
-                .msg("대여한 게시글 GET 성공")
-                .rentBuyerList(querydslRentBuyerList)
-                .build();
+        return querydslRentBuyerList;
     }
 
 
     //5번 API 내가 빌려준 목록 불러오기 (구현 완료)
     @Transactional
-    public UserResponseDto.UserSellerList getSellList(Long userId) {
+    public List<RentSeller> getSellList(Long userId) {
         Boolean isLiked = false;
         List<RentSeller> querydslRentSellerList = boardRepository.getRentSeller(userId);
         int resultCount = querydslRentSellerList.size();
@@ -433,15 +429,13 @@ public class UserService {
 //                    .build();
 //            rentSellerResponseDtoList.add(rentSellerResponseDto);
 //        }
-        return UserResponseDto.UserSellerList.builder()
-                .result("success")
-                .msg("빌려준 게시글 GET 성공")
-                .rentSellerList(querydslRentSellerList)
-                .build();
+        return querydslRentSellerList;
     }
     @Transactional
-    public UserResponseDto.UserReservationList getReservationList(Long userId) {
+    public List<UserReservation> getReservationList(Long userId) {
         Boolean isLiked = false;
+
+
         List<UserReservation> querydslResrvationList = boardRepository.getReservation(userId);
         int resultCount = querydslResrvationList.size();
         System.out.println(querydslResrvationList+"querydslResrvationList");
@@ -449,11 +443,7 @@ public class UserService {
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslResrvationList.get(i).getId());
             querydslResrvationList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
-        return UserResponseDto.UserReservationList.builder()
-                .result("success")
-                .msg("거래요청 게시글 GET 성공")
-                .userReservationList(querydslResrvationList)
-                .build();
+        return querydslResrvationList;
     }
 
 

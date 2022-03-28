@@ -1,10 +1,7 @@
 package com.spring.sharepod.v1.controller;
 
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.model.LogOut;
-import com.spring.sharepod.model.ReFreshToken;
-import com.spring.sharepod.model.Success;
-import com.spring.sharepod.model.UserInfo;
+import com.spring.sharepod.model.*;
 import com.spring.sharepod.v1.dto.request.UserRequestDto;
 import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.service.AwsS3Service;
@@ -95,22 +92,26 @@ public class UserRestController {
         tokenValidator.userIdCompareToken(userId,user.getId());
         return userService.getMyBoard(userId);
     }
-    @GetMapping("/user/buy/{userId}")
-    public UserResponseDto.UserBuyerList userBuyerList(@PathVariable Long userId,@AuthenticationPrincipal User user){
+    @GetMapping("/user/order/{userId}")
+    public ResponseEntity<UserOrder> userBuyerList(@PathVariable Long userId, @AuthenticationPrincipal User user){
         tokenValidator.userIdCompareToken(userId,user.getId());
-        return userService.getBuyList(userId);
-    }
-    @GetMapping("/user/sell/{userId}")
-    public UserResponseDto.UserSellerList userSellerList(@PathVariable Long userId,@AuthenticationPrincipal User user){
-        tokenValidator.userIdCompareToken(userId,user.getId());
-        return userService.getSellList(userId);
+        List<RentBuyer> rentBuyerList = userService.getBuyList(userId);
+        List<RentSeller> rentSellerList = userService.getSellList(userId);
+        List<UserReservation> userReservationList = userService.getReservationList(userId);
+        return new ResponseEntity<>(new UserOrder("success", "마이페이지 불러오기 성공", rentBuyerList,rentSellerList,userReservationList), HttpStatus.OK);
     }
 
-    @GetMapping("/user/reservation/{userId}")
-    public UserResponseDto.UserReservationList userReservationList(@PathVariable Long userId,@AuthenticationPrincipal User user){
-        tokenValidator.userIdCompareToken(userId,user.getId());
-        return userService.getReservationList(userId);
-    }
+//    @GetMapping("/user/sell/{userId}")
+//    public UserResponseDto.UserSellerList userSellerList(@PathVariable Long userId,@AuthenticationPrincipal User user){
+//        tokenValidator.userIdCompareToken(userId,user.getId());
+//        return userService.getSellList(userId);
+//    }
+//
+//    @GetMapping("/user/reservation/{userId}")
+//    public UserResponseDto.UserReservationList userReservationList(@PathVariable Long userId,@AuthenticationPrincipal User user){
+//        tokenValidator.userIdCompareToken(userId,user.getId());
+//        return userService.getReservationList(userId);
+//    }
 
 
 
