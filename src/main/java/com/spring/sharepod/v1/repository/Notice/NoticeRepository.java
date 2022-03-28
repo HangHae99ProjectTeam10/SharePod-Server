@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.From;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,10 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>,NoticeRepo
 //    @Query("select n from Notice n where n.buyer.id=:userid or n.seller.id=:userid")
 //    List<Notice> findByBuyerOrSellerId(Long userid);
 
-    @Query("select n from Notice n where n.receiver.id=:userId")
-    List<Notice> findByRecieverId(Long userId);
+    @Query(nativeQuery = true, value ="select exists (SELECT n.id from notice n where n.receiverid=:userId)")
+    int findByRecieverId(Long userId);
+
+
 
 
     @Modifying
