@@ -1,4 +1,4 @@
-package com.spring.sharepod.v1.repository;
+package com.spring.sharepod.v1.repository.Notice;
 
 import com.spring.sharepod.entity.Notice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-public interface NoticeRepository extends JpaRepository<Notice, Long> {
+public interface NoticeRepository extends JpaRepository<Notice, Long>,NoticeRepositoryCustom {
     //알림 갯수
     @Query(nativeQuery = true, value = "select COUNT(n.id) from notice n where n.buyerId=:userid or n.sellerId=:userid")
     int findByCOUNTBuyerOrSellerId(Long userid);

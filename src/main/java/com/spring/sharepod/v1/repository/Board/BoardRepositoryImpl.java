@@ -88,7 +88,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         reservation.id.as("reservationId")
                 ))
                 .from(reservation)
-                .rightJoin(board)
+                .leftJoin(board)
                 .on(reservation.board.id.eq(board.id))
                 .innerJoin(imgFiles)
                 .on(board.id.eq(imgFiles.board.id))
