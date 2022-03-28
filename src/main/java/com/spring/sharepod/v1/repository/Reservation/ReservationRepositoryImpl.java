@@ -72,10 +72,10 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
 //    }
 
     //19번
-    private JPAQuery<ReservationNoticeList> getNoticeReservationList(Long reservationId){
+    private JPAQuery<ReservationNoticeList> getNoticeReservationList(Long reservationId) {
         return jpaQueryFactory.select(Projections.constructor(ReservationNoticeList.class,
-                reservation.buyer,
-                reservation.seller
+                        reservation.buyer,
+                        reservation.seller
                 )).from(reservation)
                 .where(reservation.id.eq(reservationId));
     }

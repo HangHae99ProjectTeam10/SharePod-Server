@@ -20,7 +20,7 @@ public class NoticeValidator {
     public List<Notice> ValidnoticeList(Long userid) {
         //userid로 notice를 찾는다
         List<Notice> noticeList = noticeRepository.findByBuyerOrSellerId(userid);
-
+        System.out.println("noticeList" + noticeList);
         //알림이 하나도 없다면 메시지를 중간에 호출한다.
         if (noticeList == null) {
             throw new ErrorCodeException(NOTICELIST_NOT_EXIST);
