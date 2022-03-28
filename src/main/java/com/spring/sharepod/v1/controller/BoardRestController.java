@@ -45,6 +45,12 @@ public class BoardRestController {
     }
 
     //** 9번 게시판 작성 (구현 완료)
+
+    //유저에게 받아온 정보를 (BoardRequestDto.WriteBoard)를 통하여 컨트롤러를러에서 토큰과, RequestPart를 이용하여 비디오,이미지 파일을 받은 후
+    //토큰을 비교하고나서 (awsS3Service.boardUpload)에서 파일들과 정보들을 저장하고, (boardService.wirteBoard)에서는 작성자의 user를 찾은 후
+    //board의 정보들을 db에 저장하고 저장한 board id 를 통하여 imgfiles와 amount를 db에 저장한다.
+    // 그후 서비스에서 (BoardResponseDto.BoardWrite)를 통해 저장 결과 값을 유저에게 보내준다.
+
     @PostMapping("/board")
     public BoardResponseDto.BoardWrite writeBoard(@RequestPart BoardRequestDto.WriteBoard boardWriteRequestDTO,
                                                   @RequestPart(required = false) MultipartFile[] imgFiles,
@@ -62,6 +68,8 @@ public class BoardRestController {
     }
 
     //** 10번 게시글 상세 페이지 불러오기 (구현 완료)
+
+
     @GetMapping("/board/{boardId}")
     public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
         // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.(로그인 안했을 때는 찜 그냥 false)
