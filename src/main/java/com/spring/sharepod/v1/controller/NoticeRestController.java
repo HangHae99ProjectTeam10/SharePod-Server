@@ -5,6 +5,7 @@ import com.spring.sharepod.entity.User;
 import com.spring.sharepod.model.NoticeCount;
 import com.spring.sharepod.model.NoticeInfo;
 import com.spring.sharepod.model.Success;
+import com.spring.sharepod.v1.dto.response.NoticeInfoList;
 import com.spring.sharepod.v1.dto.response.NoticeResponseDto;
 import com.spring.sharepod.v1.service.NoticeService;
 import com.spring.sharepod.v1.validator.TokenValidator;
@@ -40,7 +41,7 @@ public class NoticeRestController {
         //userid와 토큰 비교 validator
         tokenValidator.userIdCompareToken(userId,user.getId());
 
-        List<NoticeResponseDto.Notice> noticeList = noticeService.getNoticeList(userId);
+        List<NoticeInfoList> noticeList = noticeService.getNoticeList(userId);
         return new ResponseEntity<>(new NoticeInfo("success", "알림 목록 데이터 전송 성공",noticeList), HttpStatus.OK);
     }
 

@@ -14,6 +14,5 @@ public class NoticeResponseDto {
         private Long noticeId;
         private String noticeName;
         private String noticeMsg;
-
     }
 }

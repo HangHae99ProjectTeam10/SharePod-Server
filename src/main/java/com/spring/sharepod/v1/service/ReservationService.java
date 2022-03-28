@@ -5,9 +5,11 @@ import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.ReservationRequestDto;
 import com.spring.sharepod.v1.dto.response.ReservationGetDTO;
+import com.spring.sharepod.v1.dto.response.ReservationNoticeList;
 import com.spring.sharepod.v1.dto.response.ReservationResponseDto;
 import com.spring.sharepod.v1.repository.*;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
+import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import com.spring.sharepod.v1.repository.Reservation.ReservationRepository;
 import com.spring.sharepod.v1.validator.ReservationValidator;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +60,7 @@ public class ReservationService {
         noticeRepository.save(Notice.builder()
                 .buyer(buyer)
                 .seller(board.getUser())
-                .noticeInfo("거래 요청을 하였습니다.")
+                .noticeInfo(board.getTitle() + "거래 요청을 하였습니다.")
                 .build());
 
 
@@ -122,7 +124,9 @@ public class ReservationService {
                 () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
         );
 
+
         Reservation reservation = reservationRepository.findByBuyerAndBoard(buyer, board);
+        Long reservationId = reservation.getId();
         if (reservation == null) {
             throw new ErrorCodeException(ErrorCode.RESERVATION_NOT_EXIST);
         }
@@ -193,12 +197,12 @@ public class ReservationService {
                 .build());
 
 
-        List<Reservation> reservationList = reservationRepository.findAllByBoard(board);
-        for (Reservation reser: reservationList){
+        List<ReservationNoticeList> reservationList = reservationRepository.reservationNoticeList(reservationId);
+        for (ReservationNoticeList reservationNoticeList: reservationList){
             //나머지 거절된 거래들에 대해서 알림 보내기 => 알림 추가("어떤어떤 제목"의 거래가 이미 대여되어 거절 되었습니다)
             noticeRepository.save(Notice.builder()
-                    .buyer(reser.getBuyer())
-                    .seller(reser.getSeller())
+                    .buyer(reservationNoticeList.getBuyer())
+                    .seller(reservationNoticeList.getSeller())
                     .noticeInfo(board.getTitle() + "의 거래가 이미 대여되어 거절되었습니다.")
                     .build());
         }
