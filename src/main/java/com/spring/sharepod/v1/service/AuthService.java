@@ -47,6 +47,7 @@ public class AuthService {
 
 
         boolean allauthcheck = true;
+
         //data[] 값 넣어주기
         List<AuthResponseDto.AuthData> authDataResponseDTOList = new ArrayList<>();
         for (int i = 0; i < auth.getAuthImgList().size(); i++) {
