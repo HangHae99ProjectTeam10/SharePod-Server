@@ -2,10 +2,9 @@ package com.spring.sharepod.v1.service;
 
 import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Board;
-import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
+import com.spring.sharepod.v1.dto.response.AuthData;
 import com.spring.sharepod.v1.dto.response.AuthResponseDto;
-import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
 import com.spring.sharepod.v1.repository.AuthImgRepository;
 import com.spring.sharepod.v1.repository.AuthRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
@@ -13,15 +12,10 @@ import com.spring.sharepod.v1.validator.AuthValidator;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +35,19 @@ public class AuthService {
     //20번 API 이미지 인증 창 데이터(구현 완료)
     @Transactional
     public AuthResponseDto.AuthDataAll dataAllResponseDTO(@PathVariable Long authid) {
+//        List<AuthData> authDataQueryDslList = authRepository.authDataList(authid);
+//        boolean allauthCheck = true;
+//        int resultCount = authDataQueryDslList.size();
+//        for(int i=0;i<resultCount;i++){
+//            if()
+//        }
+
         //authid로 auth가 없다면 error 메시지 호출
         Auth auth = authValidator.ValidAuthByAuthId(authid);
 
 
         boolean allauthcheck = true;
+
         //data[] 값 넣어주기
         List<AuthResponseDto.AuthData> authDataResponseDTOList = new ArrayList<>();
         for (int i = 0; i < auth.getAuthImgList().size(); i++) {

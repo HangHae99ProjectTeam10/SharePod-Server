@@ -1,7 +1,6 @@
 package com.spring.sharepod.model;
 
-import com.spring.sharepod.v1.dto.response.BoardAllResponseDto;
-import com.spring.sharepod.v1.dto.response.BoardResponseDto;
+import com.spring.sharepod.v1.dto.response.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +10,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BoardList {
+public class UserOrder {
     private String result;
     private String msg;
-    private List<BoardAllResponseDto> listdata;
+    private List<RentBuyer> rentBuyerList;
+    private List<RentSeller> rentSellerList;
+    private List<UserReservation> userReservationList;
+
 }

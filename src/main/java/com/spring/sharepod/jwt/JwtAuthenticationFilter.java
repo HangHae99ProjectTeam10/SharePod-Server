@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //        System.out.println(token);
         String token = jwtTokenProvider.resolveToken(request);
         //String token = getToken(request);
-        System.out.println(token);
+        //System.out.println(token);
         try {
             if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token,request)) {
                 System.out.println(token + "if문 안에 들어옴");

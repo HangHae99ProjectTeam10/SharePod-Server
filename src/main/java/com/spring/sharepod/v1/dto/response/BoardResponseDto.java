@@ -20,6 +20,16 @@ public class BoardResponseDto {
     @Getter
     @AllArgsConstructor
     @Builder
+    public static class BoardModifiedData {
+        private String result;
+        private String msg;
+        private BoardModifedDetail boardData;
+    }
+
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
     public static class BoardData {
 
         private Long boardId;
@@ -36,22 +46,6 @@ public class BoardResponseDto {
 
     }
 
-
-    @Getter
-    @AllArgsConstructor
-    @Builder
-    public static class BoardAll {
-
-        private Long boardId;
-        private String firstImgUrl;
-        private String title;
-        private String category;
-        private int dailyRentalFee;
-        private String boardRegion;
-        private String boardTag;
-        private LocalDateTime modifiedAt;
-        private Boolean isLiked;
-    }
 
     @Getter
     @NoArgsConstructor
@@ -114,7 +108,7 @@ public class BoardResponseDto {
         private String result;
         private String msg;
         private int resultCount;
-        private List<BoardResponseDto.BoardAll> listData;
+        private List<BoardAllResponseDto> listData;
 
     }
 

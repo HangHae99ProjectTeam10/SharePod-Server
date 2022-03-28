@@ -1,12 +1,12 @@
 package com.spring.sharepod.v1.dto.response;
 
-import com.spring.sharepod.entity.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class UserResponseDto {
 
@@ -33,58 +33,6 @@ public class UserResponseDto {
         private Long refreshTokenExpirationTime;
     }
 
-    @Getter
-    @AllArgsConstructor
-    @Builder
-    public static class UserInfo {
-        private Long userId;
-        private String username;
-        private String nickName;
-        private String userRegion;
-        private String userImg;
-    }
-
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class RentBuyer {
-        private Long boardId;
-        private String boardTitle;
-        private String boardRegion;
-        private String boardTag;
-        private String FirstImgUrl;
-        private int dailyRentalFee;
-        private LocalDate startRental;
-        private LocalDate endRental;
-        private String nickName;
-        private String category;
-        private Long authId;
-        private Boolean isLiked;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class RentSeller {
-        private Long boardId;
-        private String boardTitle;
-        private String boardRegion;
-        private String boardTag;
-        private String FirstImgUrl;
-        private int dailyRentalFee;
-        private LocalDate startRental;
-        private LocalDate endRental;
-        private String nickName;
-        private String category;
-        private Long authId;
-        private Boolean isLiked;
-
-
-//        public static RentSeller toDto(Board board){
-//
-//        }
-    }
 
     @Builder
     @Getter
@@ -100,5 +48,61 @@ public class UserResponseDto {
     }
 
 
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserLikedList {
+        private String result;
+        private String msg;
+        private List<LikedListResponseDto> userLikedBoard;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserMyBoardList {
+        private String result;
+        private String msg;
+        private List<MyBoardResponseDto> userMyBoard;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserMyOrderList {
+        private String result;
+        private String msg;
+        private List<RentBuyer> rentBuyerList;
+        private List<RentSeller> rentSellerList;
+        private List<UserReservation> userReservationList;
+    }
+
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserBuyerList {
+        private List<RentBuyer> rentBuyerList;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserSellerList {
+        private List<RentSeller> rentSellerList;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserReservationList {
+        private List<UserReservation> userReservationList;
+    }
 
 }
