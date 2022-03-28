@@ -2,11 +2,9 @@ package com.spring.sharepod.v1.service;
 
 import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Board;
-import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
 import com.spring.sharepod.v1.dto.response.AuthData;
 import com.spring.sharepod.v1.dto.response.AuthResponseDto;
-import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
 import com.spring.sharepod.v1.repository.AuthImgRepository;
 import com.spring.sharepod.v1.repository.AuthRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
@@ -14,15 +12,10 @@ import com.spring.sharepod.v1.validator.AuthValidator;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

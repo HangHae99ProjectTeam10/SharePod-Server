@@ -13,6 +13,7 @@ import java.util.List;
 import static com.spring.sharepod.entity.QBoard.board;
 import static com.spring.sharepod.entity.QImgFiles.imgFiles;
 import static com.spring.sharepod.entity.QReservation.reservation;
+import static com.spring.sharepod.entity.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -36,7 +37,7 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
     //거래 요청 목록 리스트(여기에 user를 어떻게 받아야할지 현재는 reservation.buyer.nickName을 받지만 user.nickName으로 받고 싶다)
     private JPAQuery<ReservationGetDTO> getReservationList(Long sellerId) {
         return jpaQueryFactory.select(Projections.constructor(ReservationGetDTO.class,
-                        reservation.buyer.nickName,
+                        user.nickName,
                         reservation.startRental,
                         reservation.endRental,
                         board.title,
@@ -44,15 +45,14 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                         imgFiles.firstImgUrl
                 ))
                 .from(reservation)
-                .leftJoin(board)
+                .innerJoin(board)
                 .on(reservation.board.id.eq(board.id))
                 .innerJoin(imgFiles)
                 .on(board.id.eq(imgFiles.board.id))
-//                .innerJoin(amount)
-//                .on(imgFiles.board.id.eq(amount.board.id))
+                .innerJoin(user)
+                .on(reservation.buyer.id.eq(user.id))
                 .where(reservation.seller.id.eq(sellerId))
                 .orderBy(board.modifiedAt.desc());
-
     }
 
     //19번
