@@ -35,4 +35,8 @@ public class Notice extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARDID")
     private Board board;
+
+    @Column
+    private Boolean isChat;
+
 }

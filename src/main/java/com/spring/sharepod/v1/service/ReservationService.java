@@ -65,6 +65,7 @@ public class ReservationService {
                 .sender(buyer)
                 .board(board)
                 .noticeInfo(board.getTitle() + "거래 요청을 하였습니다.")
+                .isChat(false)
                 .build());
 
 
@@ -150,6 +151,7 @@ public class ReservationService {
                     .receiver(buyer)
                     .sender(seller)
                     .noticeInfo(board.getTitle() + "거래 거절을 하였습니다.")
+                    .isChat(false)
                     .build());
 
             return ReservationResponseDto.accReservationDTO.builder()
@@ -204,6 +206,7 @@ public class ReservationService {
                 .receiver(buyer)
                 .sender(seller)
                 .noticeInfo(board.getTitle() + "의 거래를 수락을 하였습니다.")
+                .isChat(false)
                 .build());
 
 

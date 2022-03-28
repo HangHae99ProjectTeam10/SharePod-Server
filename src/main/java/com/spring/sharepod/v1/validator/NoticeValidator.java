@@ -17,15 +17,10 @@ public class NoticeValidator {
 
 
     //알림 목록 valid
-    public List<Notice> ValidnoticeList(Long userid) {
+    public int ValidnoticeList(Long userid) {
         //userid로 notice를 찾는다
-        List<Notice> noticeList = noticeRepository.findByRecieverId(userid);
-        System.out.println("noticeList" + noticeList);
-        //알림이 하나도 없다면 메시지를 중간에 호출한다.
-        if (noticeList == null) {
-            throw new ErrorCodeException(NOTICELIST_NOT_EXIST);
-        }
-        return noticeList;
+        int noticeExist = noticeRepository.findByRecieverId(userid);
+        return noticeExist;
     }
 
     //알림 삭제 valid

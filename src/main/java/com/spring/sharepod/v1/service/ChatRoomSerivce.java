@@ -62,6 +62,7 @@ public class ChatRoomSerivce {
                 .receiver(board.getUser())
                 .sender(buyer)
                 .noticeInfo(board.getTitle() + "채팅을 요청했습니다.")
+                .isChat(true)
                 .build());
 
         ChatRoomResponseDto.ChatRoomData chatRoomData = ChatRoomResponseDto.ChatRoomData.builder()
@@ -144,10 +145,9 @@ public class ChatRoomSerivce {
 
         User another = new User();
         //내가 buyer인지 seller인지 구별하기 위한 코드
-        if(Objects.equals(chatRoom.getBuyer().getId(),userId)){
+        if (Objects.equals(chatRoom.getBuyer().getId(), userId)) {
             another = chatRoom.getSeller();
-        }
-        else{
+        } else {
             another = chatRoom.getBuyer();
         }
 
