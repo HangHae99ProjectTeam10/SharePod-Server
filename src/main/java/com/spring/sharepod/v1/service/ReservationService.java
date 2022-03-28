@@ -4,9 +4,11 @@ import com.spring.sharepod.entity.*;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.ReservationRequestDto;
+import com.spring.sharepod.v1.dto.response.ReservationGetDTO;
 import com.spring.sharepod.v1.dto.response.ReservationResponseDto;
 import com.spring.sharepod.v1.repository.*;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
+import com.spring.sharepod.v1.repository.Reservation.ReservationRepository;
 import com.spring.sharepod.v1.validator.ReservationValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,6 @@ import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -74,29 +75,37 @@ public class ReservationService {
     //18번 거래요청 목록 (구현 완료)
     @Transactional
     public ReservationResponseDto.ReservationGetFinalDTO reservationGetService(Long sellerId) {
-        //유저 userid로 검색해 유저객체 가져오기
-        User user = userRepository.findById(sellerId).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND)
-        );
-
-        List<ReservationResponseDto.ReservationGetDTO> reservationGetDTOList = new ArrayList<>();
-
-        //ReservationGetDTO에 데이터 담아주기
-        for (int i = 0; i < user.getReservation().size(); i++) {
-            reservationGetDTOList.add(ReservationResponseDto.ReservationGetDTO.builder()
-                    .nickName(user.getReservation().get(i).getBuyer().getNickName())
-                    .startRental(user.getReservation().get(i).getStartRental())
-                    .endRental(user.getReservation().get(i).getEndRental())
-                    .boardId(user.getReservation().get(i).getBoard().getId())
-                    .boardTitle(user.getReservation().get(i).getBoard().getTitle())
-                    .boardImg(user.getReservation().get(i).getBoard().getImgFiles().getFirstImgUrl())
-                    .build());
-        }
+//        //유저 userid로 검색해 유저객체 가져오기
+//        User user = userRepository.findById(sellerId).orElseThrow(
+//                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND)
+//        );
+//
+//        List<ReservationResponseDto.ReservationGetDTO> reservationGetDTOList = new ArrayList<>();
+//
+//        //ReservationGetDTO에 데이터 담아주기
+//        for (int i = 0; i < user.getReservation().size(); i++) {
+//            reservationGetDTOList.add(ReservationResponseDto.ReservationGetDTO.builder()
+//                    .nickName(user.getReservation().get(i).getBuyer().getNickName())
+//                    .startRental(user.getReservation().get(i).getStartRental())
+//                    .endRental(user.getReservation().get(i).getEndRental())
+//                    .boardId(user.getReservation().get(i).getBoard().getId())
+//                    .boardTitle(user.getReservation().get(i).getBoard().getTitle())
+//                    .boardImg(user.getReservation().get(i).getBoard().getImgFiles().getFirstImgUrl())
+//                    .build());
+//        }
+//
+//        return ReservationResponseDto.ReservationGetFinalDTO.builder()
+//                .result("success")
+//                .reservationList(reservationGetDTOList)
+//                .build();
+        List<ReservationGetDTO> querydslReservationList = reservationRepository.reservationList(sellerId);
 
         return ReservationResponseDto.ReservationGetFinalDTO.builder()
-                .result("success")
-                .reservationList(reservationGetDTOList)
+                .result("suceess")
+                .msg("거래 목록 리스트 반환")
+                .reservationList(querydslReservationList)
                 .build();
+
     }
 
     //API 19번 거래요청 수락/거절

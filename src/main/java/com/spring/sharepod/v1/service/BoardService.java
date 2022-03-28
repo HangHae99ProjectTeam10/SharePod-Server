@@ -293,6 +293,7 @@ public class BoardService {
 
         //리스트에 담에서 넣어주기
         String[] imgs = {firstImg, secondImg, lastImg, videoUrl};
+
         List<String> fileName = Arrays.asList(imgs);
 
 

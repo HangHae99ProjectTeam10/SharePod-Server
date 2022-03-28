@@ -8,25 +8,12 @@ import java.util.List;
 public class ReservationResponseDto {
 
     @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class ReservationGetDTO {
-        private String nickName;
-        private LocalDate startRental;
-        private LocalDate endRental;
-        private String boardTitle;
-        private Long boardId;
-        private String boardImg;
-    }
-
-    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class ReservationGetFinalDTO {
         private String result;
+        private String msg;
         private List<ReservationGetDTO> reservationList;
     }
 
