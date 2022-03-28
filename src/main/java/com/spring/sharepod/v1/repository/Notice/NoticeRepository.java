@@ -15,8 +15,11 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>,NoticeRepo
     int findByCOUNTBuyerOrSellerId(Long userid);
 
     //알림 목록
-    @Query("select n from Notice n where n.buyer.id=:userid or n.seller.id=:userid")
-    List<Notice> findByBuyerOrSellerId(Long userid);
+//    @Query("select n from Notice n where n.buyer.id=:userid or n.seller.id=:userid")
+//    List<Notice> findByBuyerOrSellerId(Long userid);
+
+    @Query("select n from Notice n where n.receiver.id=:userId")
+    List<Notice> findByRecieverId(Long userId);
 
 
     @Modifying
@@ -25,6 +28,6 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>,NoticeRepo
     void deleteByNoticeId(Long noticeid);
 
 
-    @Query("select n from Notice n where n.buyer.id=:userid or n.seller.id=:userid")
+    @Query("select n from Notice n where n.receiver.id=:userid or n.sender.id=:userid")
     Notice findByUserId(Long userid);
 }

@@ -1,10 +1,7 @@
 package com.spring.sharepod.v1.service;
 
 
-import com.spring.sharepod.entity.Board;
-import com.spring.sharepod.entity.ChatMessage;
-import com.spring.sharepod.entity.ChatRoom;
-import com.spring.sharepod.entity.User;
+import com.spring.sharepod.entity.*;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.ChatRoomRequestDto;
@@ -12,6 +9,7 @@ import com.spring.sharepod.v1.dto.response.ChatRoomResponseDto;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.ChatMessageRepository;
 import com.spring.sharepod.v1.repository.ChatRoomRepository;
+import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,7 @@ public class ChatRoomSerivce {
     private final ChatMessageRepository chatMessageRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final NoticeRepository noticeRepository;
 
     // 채팅방 생성
     @Transactional
@@ -56,6 +55,14 @@ public class ChatRoomSerivce {
 
         //chatRoom 정보 저장
         Long chatRoomId = chatRoomRepository.save(chatRoom).getId();
+
+        //거래 거절 알림 보내기 => 알림 추가(ooo님이 거래 거절을 하였습니다)
+        noticeRepository.save(Notice.builder()
+                .board(board)
+                .receiver(board.getUser())
+                .sender(buyer)
+                .noticeInfo(board.getTitle() + "채팅을 요청했습니다.")
+                .build());
 
         ChatRoomResponseDto.ChatRoomData chatRoomData = ChatRoomResponseDto.ChatRoomData.builder()
                 .sellerNickName(chatRoom.getSeller().getNickName())

@@ -62,44 +62,24 @@ public class NoticeService {
 //        }
 
 
-
         //해당하는 user의 알림에 대하여 둘 다 해당하는 모든 List<Notice>를 뽑아내고 그의 noticetype(명칭)에 따라 구분한다.
         List<NoticeResponseDto.Notice> noticeResponseDtoList = new ArrayList<>();
 
         // userid에 의한 모든 경우 알림이 없다면 알림이 존재하지 않는다는 메시지를 호출한다.
         List<Notice> noticeList = noticeValidator.ValidnoticeList(userId);
 
-        for (int i =0; i <noticeList.size();i++) {
-            Long buyerId = noticeList.get(i).getBuyer().getId();
-            Long sellerId = noticeList.get(i).getSeller().getId();
-            //거래 요청의 경우 buyer의 nickname이 필요하다.
-            if (Objects.equals(sellerId, userId)) {
-                NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
-                        .noticeId(noticeList.get(i).getId())
-                        .noticeName(noticeList.get(i).getBuyer().getNickName())
-                        .userRegion(noticeList.get(i).getBuyer().getUserRegion())
-                        //.startRental(noticeList.get(i).getBoard().getReservationList().get(i).getStartRental())
-                        //.endRental(noticeList.get(i).getBoard().getReservationList().get(i).getEndRental())
-                        .otherUserImg(noticeList.get(i).getBuyer().getUserImg())
-                        .noticeMsg(noticeList.get(i).getNoticeInfo())
-                        .boardId(noticeList.get(i).getBoard().getId())
-                        .build();
-                noticeResponseDtoList.add(noticeResponseDto);
-            }
-            //거래 거절의 경우 seller의 nickname이 필요하다.
-            if (Objects.equals(buyerId,userId)) {
-                NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
-                        .noticeId(noticeList.get(i).getId())
-                        .noticeName(noticeList.get(i).getSeller().getNickName())
-                        .userRegion(noticeList.get(i).getSeller().getUserRegion())
-                        //.startRental(noticeList.get(i).getBoard().getReservationList().get(i).getStartRental())
-                        //.endRental(noticeList.get(i).getBoard().getReservationList().get(i).getEndRental())
-                        .otherUserImg(noticeList.get(i).getSeller().getUserImg())
-                        .noticeMsg(noticeList.get(i).getNoticeInfo())
-                        .boardId(noticeList.get(i).getBoard().getId())
-                        .build();
-                noticeResponseDtoList.add(noticeResponseDto);
-            }
+        for (Notice notice : noticeList) {
+            NoticeResponseDto.Notice noticeResponseDto = NoticeResponseDto.Notice.builder()
+                    .noticeId(notice.getId())
+                    .noticeName(notice.getSender().getNickName())
+                    .userRegion(notice.getSender().getUserRegion())
+                    //.startRental(noticeList.get(i).getBoard().getReservationList().get(i).getStartRental())
+                    //.endRental(noticeList.get(i).getBoard().getReservationList().get(i).getEndRental())
+                    .otherUserImg(notice.getSender().getUserImg())
+                    .noticeMsg(notice.getNoticeInfo())
+                    .boardId(notice.getBoard().getId())
+                    .build();
+            noticeResponseDtoList.add(noticeResponseDto);
         }
         return noticeResponseDtoList;
     }
@@ -110,15 +90,13 @@ public class NoticeService {
         //알림이 존재하지 않을 시 에러 메시지 호출
         Notice findNoticeId = noticeValidator.ValidDeleteNotice(noticeId);
 
-
-
         //findNoticeId를 통해 token으로 받은 정보와 일치하는지 확인한다.
-         if(Objects.equals(userId, findNoticeId.getSeller().getId()) || Objects.equals(userId, findNoticeId.getBuyer().getId())){
-             //존재할 시 해당 id로 알림 삭제
-             noticeRepository.deleteByNoticeId(noticeId);
-         }else {
-             throw new ErrorCodeException(ErrorCode.USER_NOT_FOUND);
-         }
+        if (Objects.equals(userId, findNoticeId.getReceiver().getId()) || Objects.equals(userId, findNoticeId.getSender().getId())) {
+            //존재할 시 해당 id로 알림 삭제
+            noticeRepository.deleteByNoticeId(noticeId);
+        } else {
+            throw new ErrorCodeException(ErrorCode.USER_NOT_FOUND);
+        }
 
     }
 

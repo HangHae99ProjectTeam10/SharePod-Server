@@ -72,11 +72,11 @@ public class User extends Timestamped implements UserDetails {
 
     //Notice: User => 회원탈퇴 시 글에 대한 삭제를 위한 양방향 설정
     @Builder.Default
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.REMOVE)
     private List<Notice> noticeBuyerList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.REMOVE)
     private List<Notice> noticeSellerList = new ArrayList<>();
 
     @Builder.Default
