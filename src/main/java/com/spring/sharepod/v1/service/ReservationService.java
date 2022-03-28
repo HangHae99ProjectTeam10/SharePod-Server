@@ -15,6 +15,8 @@ import com.spring.sharepod.v1.validator.ReservationValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,6 +34,7 @@ public class ReservationService {
     private final AuthRepository authRepository;
     private final AuthImgRepository authImgRepository;
     private final ReservationValidator reservationValidator;
+    private final EntityManager entityManager;
 
     //17번 거래 요청 (구현 완료)
     @Transactional
@@ -101,6 +104,10 @@ public class ReservationService {
 //                .reservationList(reservationGetDTOList)
 //                .build();
         List<ReservationGetDTO> querydslReservationList = reservationRepository.reservationList(sellerId);
+//        TypedQuery<ReservationGetDTO> query = entityManager.createQuery(
+//                "SELECT NEW com.spring.sharepod.v1.dto.response.ReservationGetDTO(user.nickName,reservation.startRental,reservation.endRental, board.title,board.id, img_files.firstImgUrl) FROM Reservation as reservation INNER JOIN Board as board on reservation.board.id = board.id INNER JOIN ImgFiles as img_files on board.id = img_files.board.id INNER JOIN User as user on reservation.buyer.id = user.id where reservation.seller.id  = 16", ReservationGetDTO.class);
+//
+//        List<ReservationGetDTO> querydslReservationList = query.getResultList();
 
         return ReservationResponseDto.ReservationGetFinalDTO.builder()
                 .result("suceess")
@@ -198,7 +205,7 @@ public class ReservationService {
 
 
         List<ReservationNoticeList> reservationList = reservationRepository.reservationNoticeList(reservationId);
-        for (ReservationNoticeList reservationNoticeList: reservationList){
+        for (ReservationNoticeList reservationNoticeList : reservationList) {
             //나머지 거절된 거래들에 대해서 알림 보내기 => 알림 추가("어떤어떤 제목"의 거래가 이미 대여되어 거절 되었습니다)
             noticeRepository.save(Notice.builder()
                     .buyer(reservationNoticeList.getBuyer())
