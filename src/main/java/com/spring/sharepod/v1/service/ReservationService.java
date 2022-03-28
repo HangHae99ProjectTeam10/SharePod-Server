@@ -61,8 +61,9 @@ public class ReservationService {
 
         //알림 추가(ooo님이 거래 요청을 하였습니다)
         noticeRepository.save(Notice.builder()
-                .buyer(buyer)
-                .seller(board.getUser())
+                .receiver(board.getUser())
+                .sender(buyer)
+                .board(board)
                 .noticeInfo(board.getTitle() + "거래 요청을 하였습니다.")
                 .build());
 
@@ -143,10 +144,11 @@ public class ReservationService {
             //거래 내역 DB에서 삭제
             reservationRepository.deleteById(reservation.getId());
 
-            //거래 거절 알림 보내기 => 알림 추가(ooo님이 거래 요청을 하였습니다)
+            //거래 거절 알림 보내기 => 알림 추가(ooo님이 거래 거절을 하였습니다)
             noticeRepository.save(Notice.builder()
-                    .buyer(buyer)
-                    .seller(seller)
+                    .board(board)
+                    .receiver(buyer)
+                    .sender(seller)
                     .noticeInfo(board.getTitle() + "거래 거절을 하였습니다.")
                     .build());
 
@@ -198,8 +200,9 @@ public class ReservationService {
         reservationRepository.deleteById(reservation.getId());
         //거래 수락 알림 보내기
         noticeRepository.save(Notice.builder()
-                .buyer(buyer)
-                .seller(seller)
+                .board(board)
+                .receiver(buyer)
+                .sender(seller)
                 .noticeInfo(board.getTitle() + "의 거래를 수락을 하였습니다.")
                 .build());
 
@@ -208,8 +211,9 @@ public class ReservationService {
         for (ReservationNoticeList reservationNoticeList : reservationList) {
             //나머지 거절된 거래들에 대해서 알림 보내기 => 알림 추가("어떤어떤 제목"의 거래가 이미 대여되어 거절 되었습니다)
             noticeRepository.save(Notice.builder()
-                    .buyer(reservationNoticeList.getBuyer())
-                    .seller(reservationNoticeList.getSeller())
+                    .board(board)
+                    .receiver(reservationNoticeList.getBuyer())
+                    .sender(reservationNoticeList.getSeller())
                     .noticeInfo(board.getTitle() + "의 거래가 이미 대여되어 거절되었습니다.")
                     .build());
         }
