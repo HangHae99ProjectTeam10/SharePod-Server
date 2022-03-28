@@ -14,6 +14,6 @@ import java.util.List;
 public class NoticeInfo {
     private String result;
     private String msg;
-    private List<NoticeInfoList> noticeList;
+    private List<NoticeResponseDto.Notice> noticeList;
 
 }

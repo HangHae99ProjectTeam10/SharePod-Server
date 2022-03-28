@@ -79,6 +79,10 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Reservation> reservationList = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<Notice> noticeList = new ArrayList<>();
+
 
     //메인 페이지에 보이게 하려면 setApper를 해주는 작업
     public void setAppear(boolean mainAppear) {

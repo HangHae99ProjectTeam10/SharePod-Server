@@ -41,7 +41,7 @@ public class NoticeRestController {
         //userid와 토큰 비교 validator
         tokenValidator.userIdCompareToken(userId,user.getId());
 
-        List<NoticeInfoList> noticeList = noticeService.getNoticeList(userId);
+        List<NoticeResponseDto.Notice> noticeList = noticeService.getNoticeList(userId);
         return new ResponseEntity<>(new NoticeInfo("success", "알림 목록 데이터 전송 성공",noticeList), HttpStatus.OK);
     }
 
