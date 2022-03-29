@@ -1,7 +1,6 @@
 package com.spring.sharepod.v1.controller;
 
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.model.*;
 import com.spring.sharepod.v1.dto.request.UserRequestDto;
 import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.dto.response.User.UserInfoResponseDto;
@@ -12,8 +11,6 @@ import com.spring.sharepod.v1.service.UserService;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import com.spring.sharepod.v1.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -44,44 +41,44 @@ public class UserRestController {
 
     //2번 API 토큰 재발급을 위한 api (구현 완료)
     @PostMapping("/reissue")
-    public ResponseEntity<ReFreshToken> reissue(@RequestBody UserRequestDto.Reissue reissue, HttpServletResponse res, HttpServletRequest req) {
+    public BasicResponseDTO reissue(@RequestBody UserRequestDto.Reissue reissue, HttpServletResponse res, HttpServletRequest req) {
         return userService.reissue(reissue, res, req);
     }
 
     //3번 API 로그아웃 (구현 완료)
     @PostMapping("/user/logout")
-    public ResponseEntity<LogOut> logout(@RequestBody UserRequestDto.Reissue reIssueRequestDto, HttpServletRequest req) {
+    public BasicResponseDTO logout(@RequestBody UserRequestDto.Reissue reIssueRequestDto, HttpServletRequest req) {
         return userService.logout(reIssueRequestDto, req);
     }
 
 
     //4번 API 회원가입 (구현 완료)
     @PostMapping("/user/register")
-    public ResponseEntity<Success> UserRegister(@RequestPart UserRequestDto.Register userRegisterRequestDto,
+    public BasicResponseDTO UserRegister(@RequestPart UserRequestDto.Register userRegisterRequestDto,
                                                 @RequestPart MultipartFile imgFile) throws IOException {
         //유저 프로필 업로드
         String userimg = awsS3Service.upload(userRegisterRequestDto, imgFile);
         userRegisterRequestDto.setUserImg(userimg);
 
         //회원가입 완료
-        String NickName = userService.registerUser(userRegisterRequestDto);
-        return new ResponseEntity<>(new Success("success", NickName + "님! 회원 가입 성공하였습니다."), HttpStatus.OK);
+        //String NickName = userService.registerUser(userRegisterRequestDto);
+        return userService.registerUser(userRegisterRequestDto);
     }
 
     //5번 API 마이페이지 불러오기 (구현 완료)
     @GetMapping("/user/{userId}")
-    public ResponseEntity<UserInfo> getBoardList(@PathVariable Long userId, @AuthenticationPrincipal User user) {
+    public UserMyInfoResponseDto getBoardList(@PathVariable Long userId, @AuthenticationPrincipal User user) {
 
         //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userId, user.getId());
 
         //각각의 데이터 받아오기
-        UserInfoResponseDto userInfo = userService.getUserInfo(userId);
+        //UserInfoResponseDto userInfo = userService.getUserInfo(userId);
         //List<LikedListResponseDto> userLikeBoard = userService.getUserLikeBoard(userId);
         //List<MyBoardResponseDto> userMyBoard = userService.getMyBoard(userId);
         //List<RentBuyer> rentBuyList = userService.getBuyList(userId);
         //List<RentSeller> rentSellList = userService.getSellList(userId);
-        return new ResponseEntity<>(new UserInfo("success", "마이페이지 불러오기 성공", userInfo), HttpStatus.OK);
+        return userService.getUserInfo(userId);
     }
 
     @GetMapping("/user/like/{userId}")
@@ -95,12 +92,18 @@ public class UserRestController {
         return userService.getMyBoard(userId);
     }
     @GetMapping("/user/order/{userId}")
-    public ResponseEntity<UserOrder> userBuyerList(@PathVariable Long userId, @AuthenticationPrincipal User user){
+    public UserOrderResponseDto userBuyerList(@PathVariable Long userId, @AuthenticationPrincipal User user){
         tokenValidator.userIdCompareToken(userId,user.getId());
         List<RentBuyer> rentBuyerList = userService.getBuyList(userId);
         List<RentSeller> rentSellerList = userService.getSellList(userId);
         List<UserReservation> userReservationList = userService.getReservationList(userId);
-        return new ResponseEntity<>(new UserOrder("success", "마이페이지 불러오기 성공", rentBuyerList,rentSellerList,userReservationList), HttpStatus.OK);
+        return UserOrderResponseDto.builder()
+                .result("success")
+                .msg("내 정보 조회 성공")
+                .rentBuyerList(rentBuyerList)
+                .rentSellerList(rentSellerList)
+                .userReservationList(userReservationList)
+                .build();
     }
 
 //    @GetMapping("/user/sell/{userId}")
@@ -145,12 +148,12 @@ public class UserRestController {
 
     //7번 API 회원 탈퇴하기 (구현 완료)
     @DeleteMapping("/user/{userId}")
-    public ResponseEntity<Success> DeleteUser(@PathVariable Long userId, @RequestBody UserRequestDto.Login userDelete, @AuthenticationPrincipal User user) {
+    public BasicResponseDTO DeleteUser(@PathVariable Long userId, @RequestBody UserRequestDto.Login userDelete, @AuthenticationPrincipal User user) {
         //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userId, user.getId());
 
-        String nickname = userService.UserDelete(userId, userDelete);
-        return new ResponseEntity<>(new Success("success", nickname + " 님의 회원탈퇴 성공했습니다."), HttpStatus.OK);
+        //String nickname = userService.UserDelete(userId, userDelete);
+        return userService.UserDelete(userId, userDelete);
     }
 
 

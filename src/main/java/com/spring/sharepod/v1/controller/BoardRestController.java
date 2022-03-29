@@ -2,8 +2,8 @@ package com.spring.sharepod.v1.controller;
 
 
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.model.AllVideo;
-import com.spring.sharepod.model.BoardDetail;
+import com.spring.sharepod.v1.dto.response.Board.AllVideo;
+import com.spring.sharepod.v1.dto.response.Board.BoardDetail;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
 import com.spring.sharepod.v1.dto.response.Board.BoardResponseDto;
@@ -62,11 +62,11 @@ public class BoardRestController {
 
     //** 10번 게시글 상세 페이지 불러오기 (구현 완료)
     @GetMapping("/board/{boardId}")
-    public ResponseEntity<BoardDetail> getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
+    public BoardDetail getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
         // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.(로그인 안했을 때는 찜 그냥 false)
 
-        BoardResponseDto.BoardDetail boardDetailResponseDto = boardService.getDetailBoard(boardId,userId);
-        return new ResponseEntity<>(new BoardDetail("success", "게시글 상세 불러오기 성공", boardDetailResponseDto), HttpStatus.OK);
+        //BoardResponseDto.BoardDetail boardDetailResponseDto = boardService.getDetailBoard(boardId,userId);
+        return boardService.getDetailBoard(boardId,userId);
 
     }
 
