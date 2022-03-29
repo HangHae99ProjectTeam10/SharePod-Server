@@ -1,15 +1,12 @@
 package com.spring.sharepod.v1.controller;
 
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.model.Success;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
-import com.spring.sharepod.v1.dto.response.AuthResponseDto;
+import com.spring.sharepod.v1.dto.response.Auth.AuthResponseDto;
 import com.spring.sharepod.v1.service.AuthImgService;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import com.spring.sharepod.v1.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

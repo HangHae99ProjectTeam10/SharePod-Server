@@ -21,13 +21,22 @@ public class Notice extends Timestamped {
     @Column(nullable = false)
     private String noticeInfo;
 
-    //Notice : User => N: 1 buyer 외래키를 뜻함
+    //Notice : User => N: 1 receiver 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY )
-    @JoinColumn(name = "BUYERID")
-    private User buyer;
+    @JoinColumn(name = "RECEIVERID")
+    private User receiver;
+
+    //Notice : User => N: 1 sender 외래키를 뜻함
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SENDERID")
+    private User sender;
 
     //Notice : User => N: 1 seller 외래키를 뜻함
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SELLERID")
-    private User seller;
+    @JoinColumn(name = "BOARDID")
+    private Board board;
+
+    @Column
+    private Boolean isChat;
+
 }

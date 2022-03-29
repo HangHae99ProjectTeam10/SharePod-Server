@@ -13,22 +13,6 @@ public class LikedResponseDto {
     @Getter
     @AllArgsConstructor
     @Builder
-    public static class Liked {
-        private Long boardId;
-        private String boardTitle;
-        private String boardRegion;
-        private String boardTag;
-        private String FirstImg;
-        private Boolean isliked;
-        private LocalDateTime modifiedAt;
-        private int dailyRentalFee;
-        private String userNickName;
-        private String category;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    @Builder
     public static class LikedPost {
         private String result;
         private String msg;
