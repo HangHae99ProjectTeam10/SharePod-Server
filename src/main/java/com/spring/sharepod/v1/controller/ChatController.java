@@ -47,6 +47,7 @@ public class ChatController {
                 ChatMessageRequestDto.WirteSubscriber.builder()
                         .userId(message.getUserId())
                         .userNickname(user.getNickName())
+                        .modifiedAt(message.getModifiedAt())
                         .chatRoomId(message.getChatRoomId())
                         .message(message.getMessage())
                         .build());
