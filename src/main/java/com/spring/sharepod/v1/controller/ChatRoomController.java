@@ -53,7 +53,7 @@ public class ChatRoomController {
     }
 
     //해당 채팅방 채팅내용 반환
-    // stress_test
+    // stress_test.
     // userid = 2, chatroomid = 7
     @GetMapping("/roomslist/{userId}/{chatroomId}")
     @ResponseBody
