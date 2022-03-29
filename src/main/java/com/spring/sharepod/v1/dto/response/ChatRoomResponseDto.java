@@ -31,7 +31,6 @@ public class ChatRoomResponseDto {
     @AllArgsConstructor
     @Builder
     public static class ChatRoomList{
-        private Long chatRoomId;
         private String otherImg;
         private String boardImg;
         private String otherNickName;
