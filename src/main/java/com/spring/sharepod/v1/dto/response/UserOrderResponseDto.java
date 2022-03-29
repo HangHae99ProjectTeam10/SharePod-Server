@@ -1,5 +1,6 @@
 package com.spring.sharepod.v1.dto.response;
 
+import com.spring.sharepod.v1.dto.response.User.UserReservation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
