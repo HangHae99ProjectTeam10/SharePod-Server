@@ -29,6 +29,7 @@ public class AuthRestController {
     private final AwsS3Service awsS3Service;
 
     //20번 이미지 인증 창 데이터
+    // stress_test
     //authid = 21
     @GetMapping("/auth/img/{authId}")
     public AuthResponseDto.AuthDataAll authDataAllResponseDTO(@PathVariable Long authId, @AuthenticationPrincipal User user){
