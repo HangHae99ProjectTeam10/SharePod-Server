@@ -2,10 +2,9 @@ package com.spring.sharepod.v1.controller;
 
 
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.model.NoticeCount;
-import com.spring.sharepod.model.NoticeInfo;
-import com.spring.sharepod.model.Success;
-import com.spring.sharepod.v1.dto.response.notice.Notice;
+import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
+import com.spring.sharepod.v1.dto.response.NoticeCount;
+import com.spring.sharepod.v1.dto.response.NoticeInfoResponseDto;
 import com.spring.sharepod.v1.service.NoticeService;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,19 +33,22 @@ public class NoticeRestController {
     }
     //25번 API **알림 목록 띄우기 (구현 완료)
     @GetMapping("/notice/{userId}")
-    public ResponseEntity<NoticeInfo> NoticeList(@PathVariable Long userId, @AuthenticationPrincipal User user){
+    public NoticeInfoResponseDto NoticeList(@PathVariable Long userId, @AuthenticationPrincipal User user){
         //userid와 토큰 비교 validator
         tokenValidator.userIdCompareToken(userId,user.getId());
 
-        List<Notice> noticeList = noticeService.getNoticeList(userId);
-        return new ResponseEntity<>(new NoticeInfo("success", "알림 목록 데이터 전송 성공",noticeList), HttpStatus.OK);
+        //List<Notice> noticeList = noticeService.getNoticeList(userId);
+        return noticeService.getNoticeList(userId);
     }
 
     //26번 API 알림 확인 or 삭제 (구현 완료)
     @DeleteMapping("/notice/{noticeId}")
-    public ResponseEntity<Success> NoticeDelete(@PathVariable Long noticeId,@AuthenticationPrincipal User user){
+    public BasicResponseDTO NoticeDelete(@PathVariable Long noticeId, @AuthenticationPrincipal User user){
 
         noticeService.DeleteNotice(noticeId,user.getId());
-        return new ResponseEntity<>(new Success("success", noticeId + "번 알림 목록 삭제 완료"),HttpStatus.OK);
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg("알림 삭제 성공")
+                .build();
     }
 }

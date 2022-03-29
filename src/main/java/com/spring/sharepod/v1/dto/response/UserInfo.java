@@ -1,5 +1,6 @@
-package com.spring.sharepod.model;
+package com.spring.sharepod.v1.dto.response;
 
+import com.spring.sharepod.v1.dto.response.User.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AuthImgModel {
+public class UserInfo {
     private String result;
     private String msg;
-    private String imgurl;
-    private Long authimgboxid;
+    private UserInfoResponseDto userInfo;
+
 }
