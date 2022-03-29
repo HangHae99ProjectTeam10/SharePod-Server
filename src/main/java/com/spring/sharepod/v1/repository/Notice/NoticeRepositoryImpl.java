@@ -3,8 +3,7 @@ package com.spring.sharepod.v1.repository.Notice;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.spring.sharepod.v1.dto.response.Notice;
-import com.spring.sharepod.v1.dto.response.NoticeInfoList;
+import com.spring.sharepod.v1.dto.response.notice.Notice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.spring.sharepod.v1.repository.Notice;
 
-import com.spring.sharepod.v1.dto.response.Notice;
+import com.spring.sharepod.v1.dto.response.notice.Notice;
 
 import java.util.List;
 
