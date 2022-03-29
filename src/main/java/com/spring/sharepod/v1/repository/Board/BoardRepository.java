@@ -1,6 +1,7 @@
 package com.spring.sharepod.v1.repository.Board;
 
 import com.spring.sharepod.entity.Board;
+import com.spring.sharepod.v1.dto.response.VideoAllResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -46,6 +47,9 @@ public interface BoardRepository extends JpaRepository<Board, Long>,BoardReposit
     //마이페이지 등록한 목록을 보기 위한 쿼리
     @Query(nativeQuery = true, value = "select * from board b where b.userid=:userId and b.main_appear = true")
     List<Board> findListBoardByUserId(Long userId);
+
+//    @Query(nativeQuery = true, value = "select b.id,i.video_url,u.user_img,u.nick_name from board b inner join img_files i on b.id=i.bordid inner join user u on b.userid=u.id order by RAND() limit :startNum,3")
+//    List<VideoAllResponseDto> videoAll(int startNum);
 
 
 }
