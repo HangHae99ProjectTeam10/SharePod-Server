@@ -83,6 +83,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     private JPAQuery<VideoAllResponseDto> getVideoAll(int startNum){
         return jpaQueryFactory.select(Projections.constructor(VideoAllResponseDto.class,
                 board.id,
+                board.boardRegion,
+                board.title,
                 imgFiles.videoUrl,
                 user.userImg,
                 user.nickName
