@@ -7,11 +7,9 @@ import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
-import com.spring.sharepod.v1.dto.response.*;
-import com.spring.sharepod.v1.dto.response.Board.BoardAllResponseDto;
-import com.spring.sharepod.v1.dto.response.Board.BoardDetails;
-import com.spring.sharepod.v1.dto.response.Board.BoardModifedDetail;
-import com.spring.sharepod.v1.dto.response.Board.BoardResponseDto;
+import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
+import com.spring.sharepod.v1.dto.response.Board.*;
+import com.spring.sharepod.v1.dto.response.VideoAllResponseDto;
 import com.spring.sharepod.v1.repository.AmountRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.ImgFilesRepository;
@@ -140,7 +138,7 @@ public class BoardService {
 
     // 10번 API 상세 페이지 board GET (구현 완료)
     @Transactional
-    public BoardResponseDto.BoardDetail getDetailBoard(Long boardId,Optional<Long> userId) {
+    public BoardDetail getDetailBoard(Long boardId, Optional<Long> userId) {
 
         Boolean isLiked = boardValidator.DefaultLiked(userId, boardId);
 
@@ -203,7 +201,11 @@ public class BoardService {
 //                .modifiedAt(board.getModifiedAt())
 //                .build();
 
-        return boardDetailResponseDto;
+        return BoardDetail.builder()
+                .result("success")
+                .msg("상세 페이지 조회 성공")
+                .data(boardDetailResponseDto)
+                .build();
     }
 
 
