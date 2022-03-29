@@ -1,7 +1,7 @@
 package com.spring.sharepod.jwt;
 
 import com.spring.sharepod.exception.TokenError.TokenErrorCode;
-import com.spring.sharepod.v1.dto.response.UserResponseDto;
+import com.spring.sharepod.v1.dto.response.User.UserResponseDto;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

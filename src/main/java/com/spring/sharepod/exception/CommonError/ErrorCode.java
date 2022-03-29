@@ -40,6 +40,8 @@ public enum ErrorCode {
     LOGIN_PASSWORD_NOT_MATCH(HttpStatus.NOT_FOUND, "404_Login_2", "비밀번호가 일치하지 않습니다."),
     LOGIN_DATA_NOT_EXIST(HttpStatus.BAD_REQUEST, "404_Login_3", "로그인 정보가 비어있습니다. 다시 입력해주십시요."),
 
+
+
     // 유저 관련 에러 모음
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "404_User_1", "해당 유저는 존재하지 않습니다." ),
 
@@ -88,8 +90,9 @@ public enum ErrorCode {
     VIDEOFILE_NOT_EXIST(HttpStatus.NOT_FOUND, "404_FILE_1", "비디오 파일을 입력하지 않았습니다."),
 
     //토큰 관련 에러 모음
-    ACCTOKEN_EXPIRATION(HttpStatus.NOT_FOUND, "403_ACCTOKEN", "엑세스 토큰이 없습니다."),
-
+    ACCTOKEN_EXPIRATION(HttpStatus.NOT_FOUND, "403_ACCTOKEN_1", "엑세스 토큰이 없습니다."),
+    ACCTOKEN_REISSUE(HttpStatus.NOT_FOUND, "403_ACCTOKEN_2", "엑세스 토큰이 만료되었습니다. Reissue를 통해서 토큰을 재 발급 후 로그아웃으로 다시 와주세요."),
+    RETOKEN_REISSUE(HttpStatus.NOT_FOUND, "403_ACCTOKEN_3", "리프레쉬 토큰이 만료되었습니다. 다시 로그인 해주세요."),
     //채팅 관련 에러 모음
     CHATROOM_NOT_EXIST(HttpStatus.BAD_REQUEST, "404_CHATROOM_1", "채팅창이 없습니다!"),
     CHATROOM_EXIST(HttpStatus.BAD_REQUEST, "400_CHATROOM_2", "채팅내역이 존재합니다."),

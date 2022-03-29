@@ -4,10 +4,14 @@ import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.jwt.JwtTokenProvider;
-import com.spring.sharepod.model.LogOut;
-import com.spring.sharepod.model.ReFreshToken;
 import com.spring.sharepod.v1.dto.request.UserRequestDto;
 import com.spring.sharepod.v1.dto.response.*;
+import com.spring.sharepod.v1.dto.response.Board.MyBoardResponseDto;
+import com.spring.sharepod.v1.dto.response.Liked.LikedListResponseDto;
+import com.spring.sharepod.v1.dto.response.User.UserInfoResponseDto;
+import com.spring.sharepod.v1.dto.response.User.UserMyInfoResponseDto;
+import com.spring.sharepod.v1.dto.response.User.UserReservation;
+import com.spring.sharepod.v1.dto.response.User.UserResponseDto;
 import com.spring.sharepod.v1.repository.Auth.AuthRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.Liked.LikedRepository;
@@ -17,8 +21,6 @@ import com.spring.sharepod.v1.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -31,10 +33,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static com.spring.sharepod.exception.CommonError.ErrorCode.USER_NOT_FOUND;
+import static com.spring.sharepod.exception.CommonError.ErrorCode.*;
 
 
 @Service
@@ -96,14 +101,14 @@ public class UserService {
     }
 
     //2번 API 리프레쉬 토큰 재발급
-    public ResponseEntity<ReFreshToken> reissue(UserRequestDto.Reissue reissue, HttpServletResponse res, HttpServletRequest req) {
+    public BasicResponseDTO reissue(UserRequestDto.Reissue reissue, HttpServletResponse res, HttpServletRequest req) {
         System.out.println("reissue controller 1");
 
         System.out.println(reissue.getRefreshToken() + "refreshtoken 출력(request에서 받아온 내용)");
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken(), req)) {
             //fail로 리턴이 나올 경우 refresttoken 정보가 유효하지 않다고 보내면서 프론트가 다시 로그인 시킨다.
-            return new ResponseEntity<>(new ReFreshToken("fail", "Refresh Token 정보가 유효하지 않습니다."), HttpStatus.BAD_REQUEST);
+            throw new ErrorCodeException(RETOKEN_REISSUE);
         }
 
         System.out.println("reissue controller 2");
@@ -120,11 +125,14 @@ public class UserService {
 
         // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
         if (ObjectUtils.isEmpty(refreshToken)) {
-            return new ResponseEntity<>(new ReFreshToken("fail", "잘못된 요청입니다."), HttpStatus.BAD_REQUEST);
+            return BasicResponseDTO.builder()
+                    .result("fail")
+                    .msg("잘못된 요청입니다.")
+                    .build();
         }
 
         if (!refreshToken.equals(reissue.getRefreshToken())) {
-            return new ResponseEntity<>(new ReFreshToken("fail", "ReFreshToken의 정보가 일치하지 않습니다."), HttpStatus.BAD_REQUEST);
+            throw new ErrorCodeException(RETOKEN_REISSUE);
         }
 
         // 4. 새로운 토큰 생성
@@ -145,14 +153,17 @@ public class UserService {
         redisTemplate.opsForValue()
                 .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
-        return new ResponseEntity<>(new ReFreshToken("success", "accessToken 정보가 갱신되었습니다."), HttpStatus.OK);
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg("accessToken 정보가 갱신되었습니다.")
+                .build();
     }
 
     //3번 API 로그아웃(구현 완료)
-    public ResponseEntity<LogOut> logout(UserRequestDto.Reissue reIssueRequestDto, HttpServletRequest req) {
+    public BasicResponseDTO logout(UserRequestDto.Reissue reIssueRequestDto, HttpServletRequest req) {
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(reIssueRequestDto.getAccessToken(), req)) {
-            return new ResponseEntity<>(new LogOut("fail", "엑세스 토큰이 만료되었습니다. Reissue를 통해서 토큰을 재 발급 후 로그아웃으로 다시 와주세요."), HttpStatus.BAD_REQUEST);
+            throw new ErrorCodeException(ACCTOKEN_REISSUE);
         }
 
         // 2. Access Token 에서 User email 을 가져옵니다.
@@ -163,7 +174,7 @@ public class UserService {
             // Refresh Token 삭제
             redisTemplate.delete("RT:" + authentication.getName());
         } else {
-            return new ResponseEntity<>(new LogOut("fail", "리프레쉬이 만료되었습니다.다시 로그인 해주세요."), HttpStatus.BAD_REQUEST);
+            throw new ErrorCodeException(RETOKEN_REISSUE);
         }
 
         // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
@@ -171,13 +182,16 @@ public class UserService {
         redisTemplate.opsForValue()
                 .set(reIssueRequestDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
 
-        return new ResponseEntity<>(new LogOut("success", "로그아웃 완료"), HttpStatus.OK);
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg("로그아웃 성공")
+                .build();
     }
 
 
     //4번 API 회원가입 (구현 완료)
     @Transactional
-    public String registerUser(UserRequestDto.Register userRegisterRequestDto) {
+    public BasicResponseDTO registerUser(UserRequestDto.Register userRegisterRequestDto) {
         //회원가입 유효성 검사 validator 통해서 검증한다. 중간에 이상하거 있으면 바로 거기서 메시지 반환하도록
         userValidator.validateUserRegisterData(userRegisterRequestDto);
 
@@ -193,12 +207,15 @@ public class UserService {
 
         // 유저 저장하기
         userRepository.save(user);
-        return user.getNickName();
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg(userRegisterRequestDto.getNickName()+" 님 회원가입 성공하였습니다.")
+                .build();
     }
 
     //5번 API userinfo 불러오기 (구현 완료)
     @Transactional
-    public UserInfoResponseDto getUserInfo(Long userid) {
+    public UserMyInfoResponseDto getUserInfo(Long userid) {
         TypedQuery<UserInfoResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.UserInfoResponseDto(u.id,u.username,u.nickName,u.userRegion,u.userImg,u.createdAt)  FROM User u where u.id=:userId", UserInfoResponseDto.class);
         query.setParameter("userId",userid);
         UserInfoResponseDto resultList = query.getSingleResult();
@@ -217,7 +234,11 @@ public class UserService {
 //                .userImg(user.getUserImg())
 //                .build();
 
-        return resultList;
+        return UserMyInfoResponseDto.builder()
+                .result("success")
+                .msg("마이 페이지 불러오기 성공")
+                .userInfo(resultList)
+                .build();
     }
 
     //5번 API 찜목록 불러오기 (구현 완료)
@@ -262,7 +283,7 @@ public class UserService {
     //5번 API 등록한 목록 (구현 완료)
     @Transactional
     public UserResponseDto.UserMyBoardList getMyBoard(Long userId) {
-//        TypedQuery<MyBoardResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.MyBoardResponseDto(b.id,b.title,b.boardTag,b.boardRegion,i.firstImgUrl,b.modifiedAt,a.dailyRentalFee,b.user.nickName)  FROM Board b inner JOIN Amount a inner JOIN ImgFiles i on i.board.id = a.board.id where b.user.id=:userId", MyBoardResponseDto.class);
+//        TypedQuery<MyBoardResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Board.MyBoardResponseDto(b.id,b.title,b.boardTag,b.boardRegion,i.firstImgUrl,b.modifiedAt,a.dailyRentalFee,b.user.nickName)  FROM Board b inner JOIN Amount a inner JOIN ImgFiles i on i.board.id = a.board.id where b.user.id=:userId", MyBoardResponseDto.class);
 //        query.setParameter("userId",userId);
 //        List<MyBoardResponseDto> resultList = query.getResultList();
 
@@ -474,7 +495,7 @@ public class UserService {
 
     //7번 API 회원 탈퇴 (구현 완료)
     @Transactional
-    public String UserDelete(Long userid, UserRequestDto.Login userLoginRequest) {
+    public BasicResponseDTO UserDelete(Long userid, UserRequestDto.Login userLoginRequest) {
         //userid에 의한 user가 있는지 판단
         User user = userValidator.ValidByUserDelete(userid, userLoginRequest);
 
@@ -486,7 +507,10 @@ public class UserService {
         awsS3Service.deleteProfileImg(fileName);
 
         userRepository.deleteById(userid);
-        return user.getNickName();
+        return BasicResponseDTO.builder()
+                .result("success")
+                .msg("회원탈퇴 성공")
+                .build();
     }
 
 

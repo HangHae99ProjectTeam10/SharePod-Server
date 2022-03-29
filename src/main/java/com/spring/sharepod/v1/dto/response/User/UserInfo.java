@@ -1,18 +1,16 @@
-package com.spring.sharepod.model;
+package com.spring.sharepod.v1.dto.response.User;
 
-import com.spring.sharepod.v1.dto.response.Notice;
+import com.spring.sharepod.v1.dto.response.User.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class NoticeInfo {
+public class UserInfo {
     private String result;
     private String msg;
-    private List<Notice> noticeList;
+    private UserInfoResponseDto userInfo;
 
 }
