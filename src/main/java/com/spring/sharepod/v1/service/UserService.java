@@ -9,6 +9,7 @@ import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.dto.response.Board.MyBoardResponseDto;
 import com.spring.sharepod.v1.dto.response.Liked.LikedListResponseDto;
 import com.spring.sharepod.v1.dto.response.User.UserInfoResponseDto;
+import com.spring.sharepod.v1.dto.response.User.UserMyInfoResponseDto;
 import com.spring.sharepod.v1.dto.response.User.UserReservation;
 import com.spring.sharepod.v1.dto.response.User.UserResponseDto;
 import com.spring.sharepod.v1.repository.Auth.AuthRepository;

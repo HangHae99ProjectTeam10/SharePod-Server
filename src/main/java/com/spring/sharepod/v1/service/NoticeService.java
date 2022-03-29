@@ -4,7 +4,7 @@ package com.spring.sharepod.v1.service;
 import com.spring.sharepod.entity.Notice;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
-import com.spring.sharepod.v1.dto.response.NoticeInfoResponseDto;
+import com.spring.sharepod.v1.dto.response.notice.NoticeInfoResponseDto;
 import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import com.spring.sharepod.v1.validator.NoticeValidator;
 import lombok.RequiredArgsConstructor;
