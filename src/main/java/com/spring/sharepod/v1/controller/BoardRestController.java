@@ -67,7 +67,7 @@ public class BoardRestController {
     }
 
     //** 10번 게시글 상세 페이지 불러오기 (구현 완료)
-
+    //boardid = 70
 
     @GetMapping("/board/{boardId}")
     public BoardDetail getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
