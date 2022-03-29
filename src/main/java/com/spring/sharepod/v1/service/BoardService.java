@@ -7,7 +7,9 @@ import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
-import com.spring.sharepod.v1.dto.response.*;
+import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
+import com.spring.sharepod.v1.dto.response.Board.*;
+import com.spring.sharepod.v1.dto.response.VideoAllResponseDto;
 import com.spring.sharepod.v1.repository.AmountRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.ImgFilesRepository;
@@ -136,7 +138,7 @@ public class BoardService {
 
     // 10번 API 상세 페이지 board GET (구현 완료)
     @Transactional
-    public BoardResponseDto.BoardDetail getDetailBoard(Long boardId,Optional<Long> userId) {
+    public BoardDetail getDetailBoard(Long boardId, Optional<Long> userId) {
 
         Boolean isLiked = boardValidator.DefaultLiked(userId, boardId);
 
@@ -199,7 +201,11 @@ public class BoardService {
 //                .modifiedAt(board.getModifiedAt())
 //                .build();
 
-        return boardDetailResponseDto;
+        return BoardDetail.builder()
+                .result("success")
+                .msg("상세 페이지 조회 성공")
+                .data(boardDetailResponseDto)
+                .build();
     }
 
 
@@ -280,24 +286,50 @@ public class BoardService {
             throw new ErrorCodeException(BOARD_NOT_EQUAL_WRITER);
         }
 
-        //DB에 존재하는 풀 길이의 Url을 받아와서 제거하기 위한 키를 만들어준다.
+
         String firstImg = board.getImgFiles().getFirstImgUrl();
         String secondImg = board.getImgFiles().getSecondImgUrl();
         String lastImg = board.getImgFiles().getLastImgUrl();
         String videoUrl = board.getImgFiles().getVideoUrl();
 
+        //DB에 존재하는 풀 길이의 Url을 받아와서 제거하기 위한 키를 만들어준다.
+        if(board.getImgFiles().getSecondImgUrl() == null){
+
+        }else{
+            secondImg = secondImg.substring(secondImg.lastIndexOf("/") + 1);
+        }
+
+        if(board.getImgFiles().getLastImgUrl() == null){
+
+        }else{
+            lastImg = lastImg.substring(lastImg.lastIndexOf("/") + 1);
+        }
+
+        if(board.getImgFiles().getVideoUrl() == null){
+
+        }else {
+            videoUrl = videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
+        }
+
+
+
         firstImg = firstImg.substring(firstImg.lastIndexOf("/") + 1);
-        secondImg = secondImg.substring(secondImg.lastIndexOf("/") + 1);
-        lastImg = lastImg.substring(lastImg.lastIndexOf("/") + 1);
-        videoUrl = videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
 
-        //리스트에 담에서 넣어주기
-        String[] imgs = {firstImg, secondImg, lastImg, videoUrl};
+//        //리스트에 담에서 넣어주기
+//        String[] imgs = {firstImg, secondImg, lastImg, videoUrl};
+//
+//        List<String> fileName = Arrays.asList(imgs);
+//        fileName.removeAll(Collections.singletonList(null));
 
-        List<String> fileName = Arrays.asList(imgs);
+        List<String> fileNameList = new ArrayList<>();
+        fileNameList.add(firstImg);
+        fileNameList.add(secondImg);
+        fileNameList.add(lastImg);
+        fileNameList.add(videoUrl);
+        fileNameList.removeAll(Arrays.asList("", null));
 
 
-        awsS3Service.deleteBoardFiles(fileName);
+        awsS3Service.deleteBoardFiles(fileNameList);
 
 
         //게시글 삭제
@@ -313,7 +345,7 @@ public class BoardService {
     //API 13번 메인 페이지 전체 게시글 불러오기 (아예 완료)
     @Transactional
     public BoardResponseDto.BoardAllList getAllBoard(Optional<Long> userId) {
-//        TypedQuery<BoardAllResponseDto> query = entityManager.createQuery("SELECT new com.spring.sharepod.v1.dto.response.BoardAllResponseDto(b.id,b.imgFiles.firstImgUrl,b.title,b.category,b.amount.dailyRentalFee,b.boardRegion,b.boardTag,b.modifiedAt) FROM Board b", BoardAllResponseDto.class);
+//        TypedQuery<BoardAllResponseDto> query = entityManager.createQuery("SELECT new com.spring.sharepod.v1.dto.response.Board.BoardAllResponseDto(b.id,b.imgFiles.firstImgUrl,b.title,b.category,b.amount.dailyRentalFee,b.boardRegion,b.boardTag,b.modifiedAt) FROM Board b", BoardAllResponseDto.class);
 //        query.setMaxResults(8);
 //        List<BoardAllResponseDto> boardlist = query.getResultList();
         //int resultCount = boardlist.size();

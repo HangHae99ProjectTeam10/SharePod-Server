@@ -4,7 +4,7 @@ import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
-import com.spring.sharepod.v1.repository.AuthRepository;
+import com.spring.sharepod.v1.repository.Auth.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

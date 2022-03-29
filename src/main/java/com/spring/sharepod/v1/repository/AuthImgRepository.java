@@ -1,7 +1,6 @@
 package com.spring.sharepod.v1.repository;
 
 import com.spring.sharepod.entity.AuthImg;
-import com.spring.sharepod.model.AuthImgModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

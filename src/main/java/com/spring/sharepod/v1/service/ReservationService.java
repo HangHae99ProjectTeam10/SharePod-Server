@@ -4,10 +4,11 @@ import com.spring.sharepod.entity.*;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.ReservationRequestDto;
-import com.spring.sharepod.v1.dto.response.ReservationGetDTO;
-import com.spring.sharepod.v1.dto.response.ReservationNoticeList;
-import com.spring.sharepod.v1.dto.response.ReservationResponseDto;
+import com.spring.sharepod.v1.dto.response.Reservation.ReservationGetDTO;
+import com.spring.sharepod.v1.dto.response.Reservation.ReservationNoticeList;
+import com.spring.sharepod.v1.dto.response.Reservation.ReservationResponseDto;
 import com.spring.sharepod.v1.repository.*;
+import com.spring.sharepod.v1.repository.Auth.AuthRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import com.spring.sharepod.v1.repository.Reservation.ReservationRepository;
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -65,6 +65,7 @@ public class ReservationService {
                 .sender(buyer)
                 .board(board)
                 .noticeInfo(board.getTitle() + "거래 요청을 하였습니다.")
+                .isChat(false)
                 .build());
 
 
@@ -106,7 +107,7 @@ public class ReservationService {
 //                .build();
         List<ReservationGetDTO> querydslReservationList = reservationRepository.reservationList(sellerId);
 //        TypedQuery<ReservationGetDTO> query = entityManager.createQuery(
-//                "SELECT NEW com.spring.sharepod.v1.dto.response.ReservationGetDTO(user.nickName,reservation.startRental,reservation.endRental, board.title,board.id, img_files.firstImgUrl) FROM Reservation as reservation INNER JOIN Board as board on reservation.board.id = board.id INNER JOIN ImgFiles as img_files on board.id = img_files.board.id INNER JOIN User as user on reservation.buyer.id = user.id where reservation.seller.id  = 16", ReservationGetDTO.class);
+//                "SELECT NEW com.spring.sharepod.v1.dto.response.Reservation.ReservationGetDTO(user.nickName,reservation.startRental,reservation.endRental, board.title,board.id, img_files.firstImgUrl) FROM Reservation as reservation INNER JOIN Board as board on reservation.board.id = board.id INNER JOIN ImgFiles as img_files on board.id = img_files.board.id INNER JOIN User as user on reservation.buyer.id = user.id where reservation.seller.id  = 16", ReservationGetDTO.class);
 //
 //        List<ReservationGetDTO> querydslReservationList = query.getResultList();
 
@@ -150,6 +151,7 @@ public class ReservationService {
                     .receiver(buyer)
                     .sender(seller)
                     .noticeInfo(board.getTitle() + "거래 거절을 하였습니다.")
+                    .isChat(false)
                     .build());
 
             return ReservationResponseDto.accReservationDTO.builder()
@@ -204,6 +206,7 @@ public class ReservationService {
                 .receiver(buyer)
                 .sender(seller)
                 .noticeInfo(board.getTitle() + "의 거래를 수락을 하였습니다.")
+                .isChat(false)
                 .build());
 
 

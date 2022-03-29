@@ -3,8 +3,8 @@ package com.spring.sharepod.v1.repository.Reservation;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.spring.sharepod.v1.dto.response.ReservationGetDTO;
-import com.spring.sharepod.v1.dto.response.ReservationNoticeList;
+import com.spring.sharepod.v1.dto.response.Reservation.ReservationGetDTO;
+import com.spring.sharepod.v1.dto.response.Reservation.ReservationNoticeList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
