@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
 public class AllVideo {
     private String result;
     private String msg;

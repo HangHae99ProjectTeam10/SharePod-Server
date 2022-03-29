@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.*;
 
@@ -44,14 +45,22 @@ public class BoardService {
 
     //8번 API 릴스 video 전체 GET(Limit) (구현 완료)
     @Transactional
-    public List<VideoAllResponseDto> getAllVideo() {
+    public List<VideoAllResponseDto> getAllVideo(int startNum) {
 
-        TypedQuery<VideoAllResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAllResponseDto(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.user as u on b.user = u ", VideoAllResponseDto.class);
+        //TypedQuery<VideoAllResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAllResponseDto(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.user as u on b.user = u order by b.modifiedAt", VideoAllResponseDto.class);
         //Long randomIdx = Math.random()/query
         //query.setFirstResult()
-        query.setMaxResults(3);
-        List<VideoAllResponseDto> resultList = query.getResultList();
+        //query.setFirstResult(startNum);
+        //query.setMaxResults(3);
+        //List<VideoAllResponseDto> resultList = query.getResultList();
 
+       List<VideoAllResponseDto> videoAllResponseDtoList = boardRepository.videoAll(startNum);
+
+//        String q ="생략";
+//        JpaResultMapper result = new JpaResultMapper();
+//        Query query = entityManager.createQuery(q);
+//        List<VideoAllResponseDto> list = result.list(query,VideoAllResponseDto.class);
+        //List<VideoAllResponseDto> resultList = this.
 
         //모든 릴스 가져오기
         //List<Board> boardList = boardRepository.findAllByVideoUrlRan();
@@ -76,7 +85,7 @@ public class BoardService {
 //            videoAllResponseDtos.add(videoAllResponseDto);
 //        }
 
-        return resultList;
+        return videoAllResponseDtoList;
     }
 
     //9번 API 게시판 작성 (구현 완료)
@@ -142,7 +151,7 @@ public class BoardService {
 
         Boolean isLiked = boardValidator.DefaultLiked(userId, boardId);
 
-        TypedQuery<BoardDetails> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.BoardDetails(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.user.nickName,b.user.userRegion,b.boardRegion,b.category,b.productQuality,b.likeNumber.size,b.user.userImg,b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardDetails.class);
+        TypedQuery<BoardDetails> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Board.BoardDetails(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.user.nickName,b.user.userRegion,b.boardRegion,b.category,b.productQuality,b.likeNumber.size,b.user.userImg,b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardDetails.class);
         //query.setParameter("isLiked",isLiked);
         query.setParameter("boardId",boardId);
         BoardDetails resultList = query.getSingleResult();
@@ -255,7 +264,7 @@ public class BoardService {
 
     @Transactional
     public BoardResponseDto.BoardModifiedData getModifiedBoard(Long boardId){
-        TypedQuery<BoardModifedDetail> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.BoardModifedDetail(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.boardRegion,b.category,b.productQuality,b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardModifedDetail.class);
+        TypedQuery<BoardModifedDetail> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Board.BoardModifedDetail(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.boardRegion,b.category,b.productQuality,b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardModifedDetail.class);
         //query.setParameter("isLiked",isLiked);
         query.setParameter("boardId",boardId);
         BoardModifedDetail resultList = query.getSingleResult();
