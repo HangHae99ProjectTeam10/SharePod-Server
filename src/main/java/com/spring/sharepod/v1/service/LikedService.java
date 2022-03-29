@@ -5,7 +5,7 @@ import com.spring.sharepod.v1.dto.request.LikeRequestDTO;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.v1.dto.response.LikedResponseDto;
+import com.spring.sharepod.v1.dto.response.Liked.LikedResponseDto;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.Liked.LikedRepository;
 import com.spring.sharepod.v1.repository.UserRepository;

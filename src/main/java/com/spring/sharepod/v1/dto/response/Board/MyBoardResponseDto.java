@@ -1,10 +1,9 @@
-package com.spring.sharepod.v1.dto.response;
-
+package com.spring.sharepod.v1.dto.response.Board;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Getter
@@ -12,22 +11,22 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserReservation {
+public class MyBoardResponseDto {
     @JsonProperty(value="boardId")
     private Long id;
 
     @JsonProperty(value="boardTitle")
     private String title;
-    private String boardRegion;
+
     private String boardTag;
+    private String boardRegion;
+
+    @JsonProperty(value="firstImg")
     private String firstImgUrl;
+
+    private LocalDateTime modifiedAt;
     private int dailyRentalFee;
-    private LocalDate startRental;
-    private LocalDate endRental;
     private String nickName;
-
     private String category;
-    private Long reservationId;
     private Optional<Boolean> isLiked;
-
 }

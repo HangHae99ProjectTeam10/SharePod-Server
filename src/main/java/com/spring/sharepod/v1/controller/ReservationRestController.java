@@ -2,8 +2,7 @@ package com.spring.sharepod.v1.controller;
 
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.request.ReservationRequestDto;
-import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
-import com.spring.sharepod.v1.dto.response.ReservationResponseDto;
+import com.spring.sharepod.v1.dto.response.Reservation.ReservationResponseDto;
 import com.spring.sharepod.v1.service.ReservationService;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;

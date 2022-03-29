@@ -1,11 +1,14 @@
-package com.spring.sharepod.v1.dto.response;
+package com.spring.sharepod.v1.dto.response.User;
 
+import com.spring.sharepod.v1.dto.response.Board.MyBoardResponseDto;
+import com.spring.sharepod.v1.dto.response.Liked.LikedListResponseDto;
+import com.spring.sharepod.v1.dto.response.RentBuyer;
+import com.spring.sharepod.v1.dto.response.RentSeller;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class UserResponseDto {

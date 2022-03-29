@@ -8,6 +8,8 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.dto.response.Board.BoardAllResponseDto;
+import com.spring.sharepod.v1.dto.response.Board.MyBoardResponseDto;
+import com.spring.sharepod.v1.dto.response.User.UserReservation;
 import com.spring.sharepod.v1.repository.SearchForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -4,7 +4,6 @@ package com.spring.sharepod.v1.service;
 import com.spring.sharepod.entity.Notice;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
-import com.spring.sharepod.v1.dto.response.NoticeResponseDto;
 import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import com.spring.sharepod.v1.validator.NoticeValidator;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,7 @@ public class NoticeService {
 
     //25번 알림 목록 띄우기 (구현 완료)
     @Transactional
-    public List<com.spring.sharepod.v1.dto.response.Notice> getNoticeList(Long userId) {
+    public List<com.spring.sharepod.v1.dto.response.notice.Notice> getNoticeList(Long userId) {
 //        List<NoticeInfoList> noticeInfoList = noticeRepository.noticeInfoList(userId);
 //        return noticeInfoList;
         //List<NoticeResponseDto.Notice> noticeResponseDtoLists = new ArrayList<>();
@@ -68,7 +67,7 @@ public class NoticeService {
 
         // userid에 의한 모든 경우 알림이 없다면 알림이 존재하지 않는다는 메시지를 호출한다.
         int noticeExist = noticeValidator.ValidnoticeList(userId);
-        List<com.spring.sharepod.v1.dto.response.Notice> noticeList = new ArrayList<>();
+        List<com.spring.sharepod.v1.dto.response.notice.Notice> noticeList = new ArrayList<>();
 
         if (noticeExist == 0) {
             throw new ErrorCodeException(NOTICELIST_NOT_EXIST);

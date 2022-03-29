@@ -8,6 +8,11 @@ import com.spring.sharepod.model.LogOut;
 import com.spring.sharepod.model.ReFreshToken;
 import com.spring.sharepod.v1.dto.request.UserRequestDto;
 import com.spring.sharepod.v1.dto.response.*;
+import com.spring.sharepod.v1.dto.response.Board.MyBoardResponseDto;
+import com.spring.sharepod.v1.dto.response.Liked.LikedListResponseDto;
+import com.spring.sharepod.v1.dto.response.User.UserInfoResponseDto;
+import com.spring.sharepod.v1.dto.response.User.UserReservation;
+import com.spring.sharepod.v1.dto.response.User.UserResponseDto;
 import com.spring.sharepod.v1.repository.Auth.AuthRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.Liked.LikedRepository;
@@ -262,7 +267,7 @@ public class UserService {
     //5번 API 등록한 목록 (구현 완료)
     @Transactional
     public UserResponseDto.UserMyBoardList getMyBoard(Long userId) {
-//        TypedQuery<MyBoardResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.MyBoardResponseDto(b.id,b.title,b.boardTag,b.boardRegion,i.firstImgUrl,b.modifiedAt,a.dailyRentalFee,b.user.nickName)  FROM Board b inner JOIN Amount a inner JOIN ImgFiles i on i.board.id = a.board.id where b.user.id=:userId", MyBoardResponseDto.class);
+//        TypedQuery<MyBoardResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Board.MyBoardResponseDto(b.id,b.title,b.boardTag,b.boardRegion,i.firstImgUrl,b.modifiedAt,a.dailyRentalFee,b.user.nickName)  FROM Board b inner JOIN Amount a inner JOIN ImgFiles i on i.board.id = a.board.id where b.user.id=:userId", MyBoardResponseDto.class);
 //        query.setParameter("userId",userId);
 //        List<MyBoardResponseDto> resultList = query.getResultList();
 
