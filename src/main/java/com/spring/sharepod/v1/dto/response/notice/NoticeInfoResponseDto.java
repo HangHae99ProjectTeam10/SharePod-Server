@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.dto.response.notice;
 
-import com.spring.sharepod.v1.dto.response.notice.Notice;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
