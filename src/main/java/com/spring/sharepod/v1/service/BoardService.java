@@ -8,6 +8,10 @@ import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.dto.response.*;
+import com.spring.sharepod.v1.dto.response.Board.BoardAllResponseDto;
+import com.spring.sharepod.v1.dto.response.Board.BoardDetails;
+import com.spring.sharepod.v1.dto.response.Board.BoardModifedDetail;
+import com.spring.sharepod.v1.dto.response.Board.BoardResponseDto;
 import com.spring.sharepod.v1.repository.AmountRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.ImgFilesRepository;
@@ -339,7 +343,7 @@ public class BoardService {
     //API 13번 메인 페이지 전체 게시글 불러오기 (아예 완료)
     @Transactional
     public BoardResponseDto.BoardAllList getAllBoard(Optional<Long> userId) {
-//        TypedQuery<BoardAllResponseDto> query = entityManager.createQuery("SELECT new com.spring.sharepod.v1.dto.response.BoardAllResponseDto(b.id,b.imgFiles.firstImgUrl,b.title,b.category,b.amount.dailyRentalFee,b.boardRegion,b.boardTag,b.modifiedAt) FROM Board b", BoardAllResponseDto.class);
+//        TypedQuery<BoardAllResponseDto> query = entityManager.createQuery("SELECT new com.spring.sharepod.v1.dto.response.Board.BoardAllResponseDto(b.id,b.imgFiles.firstImgUrl,b.title,b.category,b.amount.dailyRentalFee,b.boardRegion,b.boardTag,b.modifiedAt) FROM Board b", BoardAllResponseDto.class);
 //        query.setMaxResults(8);
 //        List<BoardAllResponseDto> boardlist = query.getResultList();
         //int resultCount = boardlist.size();

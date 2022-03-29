@@ -8,6 +8,7 @@ import com.spring.sharepod.v1.dto.response.ReservationGetDTO;
 import com.spring.sharepod.v1.dto.response.ReservationNoticeList;
 import com.spring.sharepod.v1.dto.response.ReservationResponseDto;
 import com.spring.sharepod.v1.repository.*;
+import com.spring.sharepod.v1.repository.Auth.AuthRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import com.spring.sharepod.v1.repository.Reservation.ReservationRepository;
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

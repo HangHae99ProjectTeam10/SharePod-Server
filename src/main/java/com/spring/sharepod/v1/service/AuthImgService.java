@@ -1,14 +1,11 @@
 package com.spring.sharepod.v1.service;
 
 import com.spring.sharepod.entity.AuthImg;
-import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
-import com.spring.sharepod.v1.dto.response.AuthResponseDto;
-import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
+import com.spring.sharepod.v1.dto.response.Auth.AuthResponseDto;
 import com.spring.sharepod.v1.validator.AuthImgValidator;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

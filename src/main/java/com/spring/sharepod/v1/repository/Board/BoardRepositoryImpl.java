@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.sharepod.v1.dto.response.*;
+import com.spring.sharepod.v1.dto.response.Board.BoardAllResponseDto;
 import com.spring.sharepod.v1.repository.SearchForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,6 @@ import static com.spring.sharepod.entity.QAmount.amount;
 import static com.spring.sharepod.entity.QBoard.board;
 import static com.spring.sharepod.entity.QImgFiles.imgFiles;
 import static com.spring.sharepod.entity.QAuth.auth;
-import static com.spring.sharepod.entity.QUser.user;
 import static com.spring.sharepod.entity.QReservation.reservation;
 import static org.aspectj.util.LangUtil.isEmpty;
 

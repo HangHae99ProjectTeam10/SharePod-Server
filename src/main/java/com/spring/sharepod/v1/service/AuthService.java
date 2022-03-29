@@ -3,10 +3,10 @@ package com.spring.sharepod.v1.service;
 import com.spring.sharepod.entity.Auth;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
-import com.spring.sharepod.v1.dto.response.AuthData;
-import com.spring.sharepod.v1.dto.response.AuthResponseDto;
+import com.spring.sharepod.v1.dto.response.Auth.AuthDataResponseDto;
+import com.spring.sharepod.v1.dto.response.Auth.AuthResponseDto;
 import com.spring.sharepod.v1.repository.AuthImgRepository;
-import com.spring.sharepod.v1.repository.AuthRepository;
+import com.spring.sharepod.v1.repository.Auth.AuthRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.validator.AuthValidator;
 import com.spring.sharepod.v1.validator.BoardValidator;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,35 +34,35 @@ public class AuthService {
     //20번 API 이미지 인증 창 데이터(구현 완료)
     @Transactional
     public AuthResponseDto.AuthDataAll dataAllResponseDTO(@PathVariable Long authid) {
-//        List<AuthData> authDataQueryDslList = authRepository.authDataList(authid);
-//        boolean allauthCheck = true;
-//        int resultCount = authDataQueryDslList.size();
-//        for(int i=0;i<resultCount;i++){
-//            if()
-//        }
 
         //authid로 auth가 없다면 error 메시지 호출
         Auth auth = authValidator.ValidAuthByAuthId(authid);
 
-
+        //전부다 true면 true로 하나라도 false면 false로 출력
         boolean allauthcheck = true;
+        if(authRepository.authtest(authid)){
+            allauthcheck = false;
+        }
+//        System.out.println(allauthcheck);
+        auth.setSellectAllImg(allauthcheck);
 
         //data[] 값 넣어주기
-        List<AuthResponseDto.AuthData> authDataResponseDTOList = new ArrayList<>();
-        for (int i = 0; i < auth.getAuthImgList().size(); i++) {
-            //allauthcheck 하나라도 false 있으면 false로 교체
-            if (!auth.getAuthImgList().get(i).isCheckImgBox()) {
-                allauthcheck = false;
-            }
+//        List<AuthDataResponseDto> authDataResponseDtoResponseDTOList = new ArrayList<>();
+//        for (int i = 0; i < auth.getAuthImgList().size(); i++) {
+//            //allauthcheck 하나라도 false 있으면 false로 교체
+////            if (!auth.getAuthImgList().get(i).isCheckImgBox()) {
+////                allauthcheck = false;
+////            }
+//
+//            authDataResponseDtoResponseDTOList.add(AuthDataResponseDto.builder()
+//                    .authImgId(auth.getAuthImgList().get(i).getId())
+//                    .authImgUrl(auth.getAuthImgList().get(i).getAuthImgUrl())
+//                    .authImgCheck(auth.getAuthImgList().get(i).isCheckImgBox())
+//                    .build());
+//        }
 
-            authDataResponseDTOList.add(AuthResponseDto.AuthData.builder()
-                    .authImgId(auth.getAuthImgList().get(i).getId())
-                    .authImgUrl(auth.getAuthImgList().get(i).getAuthImgUrl())
-                    .authImgCheck(auth.getAuthImgList().get(i).isCheckImgBox())
-                    .build());
-        }
+        List<AuthDataResponseDto> authDataResponseDtoResponseDTOList = authRepository.getauthresponse(authid);
 
-        auth.setSellectAllImg(allauthcheck);
 
         return AuthResponseDto.AuthDataAll.builder()
                 .result("success")
@@ -73,7 +72,7 @@ public class AuthService {
                 .authAllCheck(allauthcheck)
                 .startRental(auth.getStartRental())
                 .endRental(auth.getEndRental())
-                .data(authDataResponseDTOList)
+                .data(authDataResponseDtoResponseDTOList)
                 .build();
     }
 
