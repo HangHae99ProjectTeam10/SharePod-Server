@@ -2,10 +2,10 @@ package com.spring.sharepod.v1.controller;
 
 
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.model.NoticeCount;
-import com.spring.sharepod.model.NoticeInfo;
+import com.spring.sharepod.v1.dto.response.NoticeCount;
+import com.spring.sharepod.v1.dto.response.NoticeInfo;
 import com.spring.sharepod.model.Success;
-import com.spring.sharepod.v1.dto.response.notice.Notice;
+import com.spring.sharepod.v1.dto.response.Notice;
 import com.spring.sharepod.v1.service.NoticeService;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
