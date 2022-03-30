@@ -61,21 +61,11 @@
 <br>
 
 ### 📌 주요 기능
-#### Security
-- SSL
-- CORS 
-#### 로그인
-- Spring Security + JWT 기반 일반 로그인
-- OAuth2 Kakao 소셜 로그인
-- 비밀번호 찾기 Mail 발송
+#### 검색
 #### Member
-- Profile 정보 변경
-- Trilog 작성 유도 Mail
-- Grade Up
-#### Trils (영상 릴스)
-- 게시물, 좋아요, 해쉬태그 CRUD
-- 스트리밍 서비스 제공
-#### Trilog (블로그) 
+
+#### 영상 릴스(Shorts)
+#### 1:1 채팅
 - 게시물, 댓글, 대댓글, 좋아요 CRUD
 - Toast UI Editor (WSYSWYG) 에디터 활용
 - 페이징 및 검색 기능
