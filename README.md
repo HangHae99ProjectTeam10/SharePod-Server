@@ -33,8 +33,12 @@
 [![Video Label](.jpg)](https://youtu.be/)
 
 
-### 프로젝트 구성
-## 백엔드 아키텍처
+
+
+## 프로젝트 구성
+### 백엔드 아키텍처
+ <img src="https://user-images.githubusercontent.com/59475849/160796220-c55b19f4-7f08-4095-8686-1a5ea2725eb8.png">
+
 
 
 ### ⚙️ 개발 환경
@@ -44,8 +48,8 @@
 - **ETC** : AWS S3, AWS Cloudfront, AWS LoadBalancer, AWS ROUTE 53, AWS IAM
 
 ### 📝 공통 문서
-- **ERD(Entity Relationship Diagram)** - <a href="https://github.com/iamzin/SpringBoot-Project-Triport/wiki/ERDiagram" >상세보기 - WIKI 이동</a>  
-- **API(Application Programming Interface)** - <a href="https://github.com/iamzin/SpringBoot-Project-Triport/wiki/API" >상세보기 - WIKI 이동</a>
+- **ERD(Entity Relationship Diagram)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/ERD" >상세보기 - WIKI 이동</a>  
+- **API(Application Programming Interface)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/API" >상세보기 - WIKI 이동</a>
 
 ### 📌 주요 기능
 #### Security
