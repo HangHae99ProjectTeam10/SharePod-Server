@@ -67,3 +67,4 @@
 - Toast UI Editor (WSYSWYG) 에디터 활용
 - 페이징 및 검색 기능
 
+### 📌 에러 핸들링
