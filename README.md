@@ -77,3 +77,4 @@
 - #### 1:1 채팅 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/controller/ChatController.java" >상세 코드 (32 ~ line)</a>
 
 ### 📌 에러 핸들링
+
