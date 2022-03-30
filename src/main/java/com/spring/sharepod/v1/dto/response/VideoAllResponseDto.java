@@ -11,7 +11,8 @@ import lombok.Getter;
 public class VideoAllResponseDto {
     @JsonProperty("boardId")
     private Long id;
-
+    private String boardRegion;
+    private String title;
     private String videoUrl;
     private String userImg;
     private String nickName;

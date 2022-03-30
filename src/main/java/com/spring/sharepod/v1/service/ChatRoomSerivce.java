@@ -157,20 +157,28 @@ public class ChatRoomSerivce {
 
         List<ChatRoomResponseDto.ChatMessageData> chatMessageDataList = new ArrayList<>();
 
+//        //me you 구별
+//        for (ChatMessage chatMessage : chatMessageList) {
+//            if (Objects.equals(chatMessage.getWriter().getId(), userId)) {
+//                chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
+//                        .message(chatMessage.getMessage())
+//                        .who("me")
+//                        .modifiedAt(chatMessage.getModifiedAt())
+//                        .build());
+//            } else {
+//                chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
+//                        .message(chatMessage.getMessage())
+//                        .who("you")
+//                        .modifiedAt(chatMessage.getModifiedAt())
+//                        .build());
+//            }
+//        }
         for (ChatMessage chatMessage : chatMessageList) {
-            if (Objects.equals(chatMessage.getWriter().getId(), userId)) {
-                chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
-                        .message(chatMessage.getMessage())
-                        .who("me")
-                        .modifiedAt(chatMessage.getModifiedAt())
-                        .build());
-            } else {
-                chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
-                        .message(chatMessage.getMessage())
-                        .who("you")
-                        .modifiedAt(chatMessage.getModifiedAt())
-                        .build());
-            }
+            chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
+                    .message(chatMessage.getMessage())
+                    .userNickname(chatMessage.getWriter().getNickName())
+                    .modifiedAt(chatMessage.getModifiedAt())
+                    .build());
         }
 
         return ChatRoomResponseDto.ChatMessageListData.builder()
