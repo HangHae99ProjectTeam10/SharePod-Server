@@ -16,40 +16,49 @@
 </div>
 
 <br>
+
+
 ## 팀 소개
-
-> <br>할말적기라는 의미로 외부 라이브러리를 사용하지 않겠다는 굳은 의지를 표현하였습니다.<br>
-> 할말적기.
-
-|이름|역할|
+ <div align="center">
+ 
+|이름|깃허브|
 |:--------:|:--------:|
-|송민혁|:--------:|
-|이승수|:--------:|
-|김도엽|:--------:|
+|송민혁|https://github.com/thdals83|
+|이승수|https://github.com/leeseungsoo0701|
+|김도엽|https://github.com/kkamangdol|
+ 
+</div>
+
 <br>
 
 ## ⚒️ 기능 소개
 => 썸네일, 영상 변경
 [![Video Label](.jpg)](https://youtu.be/)
 
-
+<br>
 
 
 ## 프로젝트 구성
 ### 백엔드 아키텍처
- <img src="https://user-images.githubusercontent.com/59475849/160796220-c55b19f4-7f08-4095-8686-1a5ea2725eb8.png">
+ <div align="center">
+ <img src="https://user-images.githubusercontent.com/59475849/160796220-c55b19f4-7f08-4095-8686-1a5ea2725eb8.png" height="400">
+</div>
 
-
+<br>
 
 ### ⚙️ 개발 환경
-- **Server** : AWS EC2(Ubuntu 20.04 LTS)  
-- **Framework** : Springboot  
+- **Server** : AWS EC2(Ubuntu 18.82 LTS)  
+- **Framework** : Springboot
 - **Database** : Mysql (AWS RDS)  
-- **ETC** : AWS S3, AWS Cloudfront, AWS LoadBalancer, AWS ROUTE 53, AWS IAM
+- **ETC** : AWS S3, Redis
+
+<br>
 
 ### 📝 공통 문서
 - **ERD(Entity Relationship Diagram)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/ERD" >상세보기 - WIKI 이동</a>  
 - **API(Application Programming Interface)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/API" >상세보기 - WIKI 이동</a>
+
+<br>
 
 ### 📌 주요 기능
 #### Security
