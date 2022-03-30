@@ -24,6 +24,7 @@ public class ChatRoomResponseDto {
         private int dailyRentalFee;
         private Long boardId;
         private Long buyerId;
+        private Long ChatRoomId;
     }
 
     @Getter
