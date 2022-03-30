@@ -61,13 +61,37 @@
 <br>
 
 ### 📌 주요 기능
-#### 검색
-#### 로그인
-#### 찜하기
-#### 알림 기능
-#### 품질 인증
-#### 영상 릴스(Shorts)
-#### 1:1 채팅
+#### 검색 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
+- 게시물, 댓글, 대댓글, 좋아요 CRUD
+- Toast UI Editor (WSYSWYG) 에디터 활용
+- 페이징 및 검색 기능
+- 
+#### 로그인 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/UserService.java" >상세 코드 (64 line)</a>
+- 게시물, 댓글, 대댓글, 좋아요 CRUD
+- Toast UI Editor (WSYSWYG) 에디터 활용
+- 페이징 및 검색 기능
+- 
+#### 찜하기 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
+- 게시물, 댓글, 대댓글, 좋아요 CRUD
+- Toast UI Editor (WSYSWYG) 에디터 활용
+- 페이징 및 검색 기능
+- 
+#### 알림 기능 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
+- 게시물, 댓글, 대댓글, 좋아요 CRUD
+- Toast UI Editor (WSYSWYG) 에디터 활용
+- 페이징 및 검색 기능
+- 
+#### 품질 인증 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
+- 게시물, 댓글, 대댓글, 좋아요 CRUD
+- Toast UI Editor (WSYSWYG) 에디터 활용
+- 페이징 및 검색 기능
+- 
+#### 영상 릴스(Shorts) - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
+- 게시물, 댓글, 대댓글, 좋아요 CRUD
+- Toast UI Editor (WSYSWYG) 에디터 활용
+- 페이징 및 검색 기능
+- 
+#### 1:1 채팅 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
 - 게시물, 댓글, 대댓글, 좋아요 CRUD
 - Toast UI Editor (WSYSWYG) 에디터 활용
 - 페이징 및 검색 기능
