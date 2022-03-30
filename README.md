@@ -52,48 +52,23 @@
 - **Database** : Mysql (AWS RDS)  
 - **ETC** : AWS S3, Redis
 
-<br>
-
 ### 📝 공통 문서
 - **ERD(Entity Relationship Diagram)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/ERD" >상세보기 - WIKI 이동</a>  
 - **API(Application Programming Interface)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/API" >상세보기 - WIKI 이동</a>
 
-<br>
+### 📌 주요 기능 - 상세보기 WIKI
+- #### 검색 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
 
-### 📌 주요 기능
-#### 검색 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
-- 게시물, 댓글, 대댓글, 좋아요 CRUD
-- Toast UI Editor (WSYSWYG) 에디터 활용
-- 페이징 및 검색 기능
-- 
-#### 로그인 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/UserService.java" >상세 코드 (64 line)</a>
-- 게시물, 댓글, 대댓글, 좋아요 CRUD
-- Toast UI Editor (WSYSWYG) 에디터 활용
-- 페이징 및 검색 기능
-- 
-#### 찜하기 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
-- 게시물, 댓글, 대댓글, 좋아요 CRUD
-- Toast UI Editor (WSYSWYG) 에디터 활용
-- 페이징 및 검색 기능
-- 
-#### 알림 기능 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
-- 게시물, 댓글, 대댓글, 좋아요 CRUD
-- Toast UI Editor (WSYSWYG) 에디터 활용
-- 페이징 및 검색 기능
-- 
-#### 품질 인증 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
-- 게시물, 댓글, 대댓글, 좋아요 CRUD
-- Toast UI Editor (WSYSWYG) 에디터 활용
-- 페이징 및 검색 기능
-- 
-#### 영상 릴스(Shorts) - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
-- 게시물, 댓글, 대댓글, 좋아요 CRUD
-- Toast UI Editor (WSYSWYG) 에디터 활용
-- 페이징 및 검색 기능
-- 
-#### 1:1 채팅 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
-- 게시물, 댓글, 대댓글, 좋아요 CRUD
-- Toast UI Editor (WSYSWYG) 에디터 활용
-- 페이징 및 검색 기능
+- #### 로그인 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/UserService.java" >상세 코드 (64 line)</a>
+
+- #### 찜하기 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/NoticeService.java" >상세 코드 (27 ~ line)</a>
+
+- #### 알림 기능 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/NoticeService.java" >상세 코드 (26 ~ line)</a>
+
+- #### 품질 인증 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/AuthService.java" >상세 코드 (34 ~ line)</a>
+
+- #### 영상 릴스(Shorts) - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (47 line)</a>
+
+- #### 1:1 채팅 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/controller/ChatController.java" >상세 코드 (32 ~ line)</a>
 
 ### 📌 에러 핸들링
