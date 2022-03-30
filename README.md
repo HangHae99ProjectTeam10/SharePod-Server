@@ -64,18 +64,18 @@
 #### Security
 - SSL
 - CORS 
-#### 로그인 - <a href="https://github.com/iamzin/SpringBoot-Project-Triport/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(Login)" >상세보기 - WIKI 이동</a>
+#### 로그인
 - Spring Security + JWT 기반 일반 로그인
 - OAuth2 Kakao 소셜 로그인
 - 비밀번호 찾기 Mail 발송
-#### Member - <a href="https://github.com/iamzin/SpringBoot-Project-Triport/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(Member)" >상세보기 - WIKI 이동</a>
+#### Member
 - Profile 정보 변경
 - Trilog 작성 유도 Mail
 - Grade Up
-#### Trils (영상 릴스) - <a href="https://github.com/iamzin/SpringBoot-Project-Triport/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(Trils_%EC%98%81%EC%83%81)" >상세보기 - WIKI 이동</a>
+#### Trils (영상 릴스)
 - 게시물, 좋아요, 해쉬태그 CRUD
 - 스트리밍 서비스 제공
-#### Trilog (블로그) - <a href="https://github.com/iamzin/SpringBoot-Project-Triport/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(Trillog_%EB%B8%94%EB%A1%9C%EA%B7%B8)" >상세보기 - WIKI 이동</a>
+#### Trilog (블로그) 
 - 게시물, 댓글, 대댓글, 좋아요 CRUD
 - Toast UI Editor (WSYSWYG) 에디터 활용
 - 페이징 및 검색 기능
