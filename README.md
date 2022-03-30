@@ -56,7 +56,8 @@
 - **ERD(Entity Relationship Diagram)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/ERD" >상세보기 - WIKI 이동</a>  
 - **API(Application Programming Interface)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/API" >상세보기 - WIKI 이동</a>
 
-### 📌 주요 기능 - 상세보기 WIKI
+
+### 📌 주요 기능 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5" >상세보기 - WIKI 이동</a>
 - #### 검색 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/BoardService.java" >상세 코드 (354 line)</a>
 
 - #### 로그인 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/blob/main/src/main/java/com/spring/sharepod/v1/service/UserService.java" >상세 코드 (64 line)</a>
