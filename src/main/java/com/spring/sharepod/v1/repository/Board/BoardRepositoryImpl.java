@@ -4,6 +4,8 @@ package com.spring.sharepod.v1.repository.Board;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.sharepod.v1.dto.response.*;
@@ -21,6 +23,7 @@ import static com.spring.sharepod.entity.QBoard.board;
 import static com.spring.sharepod.entity.QImgFiles.imgFiles;
 import static com.spring.sharepod.entity.QAuth.auth;
 import static com.spring.sharepod.entity.QReservation.reservation;
+import static com.spring.sharepod.entity.QUser.user;
 import static org.aspectj.util.LangUtil.isEmpty;
 
 @Repository
@@ -72,7 +75,29 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return getReservationList(userId).fetch();
     }
 
+    @Override
+    public List<VideoAllResponseDto> videoAll(int startNum) {
+        return getVideoAll(startNum).fetch();
+    }
 
+    private JPAQuery<VideoAllResponseDto> getVideoAll(int startNum){
+        return jpaQueryFactory.select(Projections.constructor(VideoAllResponseDto.class,
+                board.id,
+                board.boardRegion,
+                board.title,
+                imgFiles.videoUrl,
+                user.userImg,
+                user.nickName
+                ))
+                .from(board)
+                .innerJoin(imgFiles)
+                .on(board.id.eq(imgFiles.board.id))
+                .innerJoin(user)
+                .on(board.user.id.eq(user.id))
+                .orderBy(Expressions.numberTemplate(Double.class,"function('rand')").asc())
+                .offset(startNum)
+                .limit(3);
+    }
 
     //내가 요청한 게시글
     private JPAQuery<UserReservation> getReservationList(Long userId) {

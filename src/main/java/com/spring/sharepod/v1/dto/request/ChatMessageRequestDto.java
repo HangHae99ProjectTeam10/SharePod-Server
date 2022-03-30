@@ -11,6 +11,7 @@ public class ChatMessageRequestDto {
     public static class Wirte {
         private Long userId;
         private Long chatRoomId;
+        private String modifiedAt;
         private String message;
     }
 
@@ -22,6 +23,7 @@ public class ChatMessageRequestDto {
     public static class WirteSubscriber {
         private Long userId;
         private String userNickname;
+        private String modifiedAt;
         private Long chatRoomId;
         private String message;
     }

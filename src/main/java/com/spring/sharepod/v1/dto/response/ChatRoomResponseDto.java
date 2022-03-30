@@ -60,7 +60,7 @@ public class ChatRoomResponseDto {
     @Builder
     public static class ChatMessageData{
         private String message;
-        private String who;
+        private String userNickname;
         private LocalDateTime modifiedAt;
     }
 
