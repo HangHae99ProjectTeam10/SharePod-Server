@@ -48,12 +48,16 @@
 
 ### ⚙️ 개발 환경
 - **Server** : AWS EC2(Ubuntu 18.82 LTS)  
+
 - **Framework** : Springboot
+
 - **Database** : Mysql (AWS RDS)  
+
 - **ETC** : AWS S3, Redis
 
 ### 📝 공통 문서
-- **ERD(Entity Relationship Diagram)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/ERD" >상세보기 - WIKI 이동</a>  
+- **ERD(Entity Relationship Diagram)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/ERD" >상세보기 - WIKI 이동</a>
+  
 - **API(Application Programming Interface)** - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/API" >상세보기 - WIKI 이동</a>
 
 
