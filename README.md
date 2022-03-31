@@ -49,7 +49,7 @@
 ### ⚙️ 개발 환경
 - **Server** : AWS EC2(Ubuntu 18.82 LTS)  
 
-- **Framework** : Springboot
+- **Framework** : Springboot(2.6.4)
 
 - **Database** : Mysql (AWS RDS)  
 
