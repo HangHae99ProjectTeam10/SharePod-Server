@@ -23,4 +23,7 @@ public interface LikedRepository extends JpaRepository<Liked, Long>, LikedReposi
     @Query("select c from Liked c where c.user.id =:userid")
     List<Liked> findByUserId(Long userid);
 
+    Boolean existsByUserIdAndBoardId(Long usrId,Long BoardId);
+
+
 }

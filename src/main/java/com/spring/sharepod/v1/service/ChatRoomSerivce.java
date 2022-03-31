@@ -43,7 +43,10 @@ public class ChatRoomSerivce {
         //이미 있는지 확인
         ChatRoom chatRoomexistcehck = chatRoomRepository.findByBuyerAndAndBoard(buyer, board);
         if (chatRoomexistcehck != null) {
-            throw new ErrorCodeException(CHATROOM_EXIST);
+            //throw new ErrorCodeException(CHATROOM_EXIST);
+            return ChatRoomResponseDto.ChatRoomData.builder()
+                    .chatRoomId(chatRoomexistcehck.getId())
+                    .build();
         }
 
 
