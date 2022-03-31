@@ -23,6 +23,19 @@
 
 <br>
 
+## 팀 소개
+ <div align="center">
+
+> **Team.mOS**<br>**m**aking **O**pen **S**ource라는 의미로 외부 라이브러리를 사용하지 않겠다는 굳은 의지를 표현하였습니다.<br>
+> 저희는 페어 프로그래밍을 적극 활용하여, 구조 설계의 대부분을 **모두 함께** 진행하였습니다.
+ 
+|송민혁|이승수|김도엽|
+|:--------:|:--------:|:--------:|
+|<img src="https://cdn-icons-png.flaticon.com/512/528/528256.png" width=500>|<img src="https://i.imgur.com/BHsdsnG.jpg" width=500>|
+|https://github.com/thdals83|https://github.com/leeseungsoo0701|https://github.com/kkamangdol|
+ 
+</div>
+
 
 ## 팀 소개
  <div align="center">
