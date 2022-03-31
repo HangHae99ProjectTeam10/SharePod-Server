@@ -151,7 +151,8 @@ public class UserService {
 
         // 5. RefreshToken Redis 업데이트
         redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(),
+                        TimeUnit.MILLISECONDS);
 
         return BasicResponseDTO.builder()
                 .result("success")

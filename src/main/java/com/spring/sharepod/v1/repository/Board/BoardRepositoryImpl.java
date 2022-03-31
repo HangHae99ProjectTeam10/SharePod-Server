@@ -5,7 +5,6 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.sharepod.v1.dto.response.*;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.querydsl.jpa.JPAExpressions.select;
 import static com.spring.sharepod.entity.QAmount.amount;
 import static com.spring.sharepod.entity.QBoard.board;
 import static com.spring.sharepod.entity.QImgFiles.imgFiles;
@@ -96,7 +96,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(board.user.id.eq(user.id))
                 .orderBy(Expressions.numberTemplate(Double.class,"function('rand')").asc())
                 .offset(startNum)
-                .limit(3);
+                .limit(4);
     }
 
     //내가 요청한 게시글
@@ -292,7 +292,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     //동적 쿼리를 위한 문들
     private BooleanExpression boardRegion(String boardRegion) {
-        System.out.println(boardRegion);
         return isEmpty(boardRegion) ? null : board.boardRegion.eq(boardRegion);
     }
 
@@ -302,7 +301,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     private BooleanExpression searchTitle(String searchTitle) {
-        System.out.println(searchTitle);
         return isEmpty(searchTitle) ? null : board.title.contains(searchTitle);
     }
 

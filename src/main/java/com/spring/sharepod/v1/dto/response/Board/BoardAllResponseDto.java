@@ -25,5 +25,4 @@ public class BoardAllResponseDto {
     private LocalDateTime modifiedAt;
     private Optional<Boolean> isLiked;
 
-
 }

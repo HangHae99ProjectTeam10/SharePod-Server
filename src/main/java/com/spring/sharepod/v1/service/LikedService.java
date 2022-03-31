@@ -27,7 +27,6 @@ public class LikedService {
 
     @Transactional
     public LikedResponseDto.LikedPost islikeservice(Long boardid, LikeRequestDTO.Liked requestDTO) {
-
         //찜할 게시판 boardid로 검색해 가져오기
         Board board = boardValidator.ValidByBoardId(boardid);
 

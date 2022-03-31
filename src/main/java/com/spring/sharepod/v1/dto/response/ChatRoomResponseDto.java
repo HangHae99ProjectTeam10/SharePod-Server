@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class ChatRoomResponseDto {
 
@@ -24,7 +25,9 @@ public class ChatRoomResponseDto {
         private int dailyRentalFee;
         private Long boardId;
         private Long buyerId;
-        private Long ChatRoomId;
+
+        private Long chatRoomId;
+
     }
 
     @Getter
