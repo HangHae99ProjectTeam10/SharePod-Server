@@ -11,7 +11,6 @@ import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.dto.request.UserRequestDto;
-import com.spring.sharepod.v1.repository.AuthImgRepository;
 import com.spring.sharepod.v1.validator.AuthImgValidator;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import com.spring.sharepod.v1.validator.UserValidator;
@@ -41,25 +40,19 @@ public class AwsS3Service {
     //회원 가입 시, 유저 프로필 사진 업로드
     public String upload(UserRequestDto.Register userRegisterRequestDto, MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(file.getOriginalFilename());
-        System.out.println(fileName);
         amazonS3.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 
-
     //회원정보 수정 시, 파일이 바뀌었다면 진행되는 로직
     public String ModifiedProfileImg(String fileName, String userNickName, MultipartFile userimgfile) throws IOException {
-        System.out.println("fileName" + fileName);
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
-        System.out.println("기존 이미지 삭제 완료");
 
         String modifiedFileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(userimgfile.getOriginalFilename());
 
         amazonS3.putObject(new PutObjectRequest(bucket, modifiedFileName, userimgfile.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        System.out.println("새로운 이미지 등록 완료");
-        System.out.println(amazonS3.getUrl(bucket, modifiedFileName).toString());
 
         return amazonS3.getUrl(bucket, modifiedFileName).toString();
     }
@@ -67,9 +60,7 @@ public class AwsS3Service {
     // 회원 탈퇴 시, 진행되는 로직
     public void deleteProfileImg(String fileName) {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
-        System.out.println("이미지 삭제 완료");
     }
-
 
     //게시글 작성 시, 이미지 3개와 동영상 업로드
     public BoardRequestDto.WriteBoard boardUpload(BoardRequestDto.WriteBoard boardWriteRequestDTO,
@@ -79,15 +70,12 @@ public class AwsS3Service {
         boardValidator.validateBoardWrite(boardWriteRequestDTO, imgFiles, videoFile);
 
         //이미지 3개 처리
-        //User user = userValidator.ValidByUserId(boardWriteRequestDTO.getUserId());
-
         String[] giveUrl = new String[3];
         for (int i = 0; i < giveUrl.length; i++) {
             if (Objects.equals(null, StringUtils.getFilenameExtension(imgFiles[i].getOriginalFilename()))){
                 giveUrl[i] = null;
             } else {
                 String fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(imgFiles[i].getOriginalFilename());
-                System.out.println("fileName: " + fileName);
                 amazonS3.putObject(new PutObjectRequest(bucket, fileName, imgFiles[i].getInputStream(), null)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
                 giveUrl[i] = amazonS3.getUrl(bucket, fileName).toString();
@@ -98,19 +86,15 @@ public class AwsS3Service {
         boardWriteRequestDTO.setSecondImgUrl(giveUrl[1]);
         boardWriteRequestDTO.setLastImgUrl(giveUrl[2]);
 
-
         if (videoFile.isEmpty()) {
             boardWriteRequestDTO.setVideoUrl(null);
         } else {
             //비디오 처리
             String videoName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(videoFile.getOriginalFilename());
-
-            //videoName = user.getNickName() + videoName;
             amazonS3.putObject(new PutObjectRequest(bucket, videoName, videoFile.getInputStream(), null)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             boardWriteRequestDTO.setVideoUrl(amazonS3.getUrl(bucket, videoName).toString());
         }
-
         return boardWriteRequestDTO;
     }
 
@@ -160,13 +144,11 @@ public class AwsS3Service {
                         .withCannedAcl(CannedAccessControlList.PublicRead));
                 givenUrl[i] = amazonS3.getUrl(bucket, filename).toString();
             }
-
         }
 
         patchRequestDTO.setFirstImgUrl(givenUrl[0]);
         patchRequestDTO.setSecondImgUrl(givenUrl[1]);
         patchRequestDTO.setLastImgUrl(givenUrl[2]);
-
 
         //비디오파일 있는지 확인
         if (Objects.equals(videoFile.getOriginalFilename(), null)) {
@@ -177,17 +159,13 @@ public class AwsS3Service {
             //비디오 처리
             String videoname = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(videoFile.getOriginalFilename());
 
-            System.out.println(videoname);
-            //https://sharepod.s3.ap-northeast-2.amazonaws.com/be034d91-2265-4913-8d20-ffdf33d88961_new_profile.png
             amazonS3.putObject(new PutObjectRequest(bucket, videoname, videoFile.getInputStream(), null)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             patchRequestDTO.setVideoUrl(amazonS3.getUrl(bucket, videoname).toString());
         }
 
-
         return patchRequestDTO;
     }
-
 
     //파일 여러개 삭제(게시판 삭제)
     public void deleteBoardFiles(List<String> fileName) {
@@ -197,13 +175,10 @@ public class AwsS3Service {
                 amazonS3.deleteObject(bucket, DeleteFileName);
             }
         } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
         } catch (SdkClientException e) {
             e.printStackTrace();
         }
-
     }
-
 
     //21번 API 인증 이미지
     public String authImgCheck(Long userId, Long authImgId, MultipartFile authfile) throws IOException {

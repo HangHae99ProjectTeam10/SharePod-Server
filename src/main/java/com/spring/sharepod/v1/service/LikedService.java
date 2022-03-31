@@ -1,14 +1,12 @@
 package com.spring.sharepod.v1.service;
 
 
-import com.spring.sharepod.v1.dto.request.LikeRequestDTO;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
+import com.spring.sharepod.v1.dto.request.LikeRequestDTO;
 import com.spring.sharepod.v1.dto.response.Liked.LikedResponseDto;
-import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.Liked.LikedRepository;
-import com.spring.sharepod.v1.repository.UserRepository;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import com.spring.sharepod.v1.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +18,11 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class LikedService {
     private final LikedRepository likedRepository;
-    private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
     private final BoardValidator boardValidator;
     private final UserValidator userValidator;
 
     @Transactional
     public LikedResponseDto.LikedPost islikeservice(Long boardid, LikeRequestDTO.Liked requestDTO) {
-
         //찜할 게시판 boardid로 검색해 가져오기
         Board board = boardValidator.ValidByBoardId(boardid);
 
@@ -62,7 +57,5 @@ public class LikedService {
                     .boardId(boardid)
                     .build();
         }
-
     }
-
 }

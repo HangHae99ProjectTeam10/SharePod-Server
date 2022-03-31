@@ -4,7 +4,6 @@ import com.spring.sharepod.entity.AuthImg;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
 import com.spring.sharepod.v1.dto.response.Auth.AuthResponseDto;
 import com.spring.sharepod.v1.validator.AuthImgValidator;
-import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class AuthImgService {
-    private final TokenValidator tokenValidator;
     private final AuthImgValidator authImgValidator;
 
-
-    //21번 API 인증 사진 업로드 (구현 중)
+    //21번 API 인증 사진 업로드
     @javax.transaction.Transactional
     public AuthResponseDto.AuthUploadDTO authimguploadService(Long userId, Long authImgId, String imgUrl) {
 
@@ -35,8 +32,7 @@ public class AuthImgService {
                 .build();
     }
 
-
-    //22번 API 빌려준 사람만의 기능, 인증 성공 or 실패 (구현 중)
+    //22번 API 빌려준 사람만의 기능, 인증 성공 or 실패
     @Transactional
     public AuthResponseDto.AuthImgBoolDTO BoolAuth(AuthRequestDto.AuthImgCheck authBoolRequestDto) {
         Long sellerId = authBoolRequestDto.getSellerId();
@@ -57,7 +53,5 @@ public class AuthImgService {
                 .sellerid(authBoolRequestDto.getSellerId())
                 .check(authBoolRequestDto.getCheck())
                 .build();
-
-
     }
 }

@@ -24,7 +24,8 @@ public class ChatRoomResponseDto {
         private int dailyRentalFee;
         private Long boardId;
         private Long buyerId;
-        private Long ChatRoomId;
+
+        private Long chatRoomId;
     }
 
     @Getter
@@ -41,7 +42,6 @@ public class ChatRoomResponseDto {
         private LocalDateTime modifiedAt;
     }
 
-
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
@@ -53,7 +53,6 @@ public class ChatRoomResponseDto {
         private String myNickname;
         private List<ChatRoomList> chatRoomList;
     }
-
 
     @Getter
     @NoArgsConstructor

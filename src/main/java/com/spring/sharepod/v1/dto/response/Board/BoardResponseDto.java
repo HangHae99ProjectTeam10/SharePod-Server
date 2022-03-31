@@ -43,7 +43,6 @@ public class BoardResponseDto {
         private String boardTag;
         private String category;
         private LocalDateTime modifiedAt;
-
     }
 
 
@@ -68,8 +67,6 @@ public class BoardResponseDto {
         private boolean isLiked;
         private LocalDateTime modifiedAt;
         private int likeCount;
-
-
     }
 
     @Getter
@@ -88,7 +85,6 @@ public class BoardResponseDto {
         private Boolean isLiked;
     }
 
-
     @Getter
     @Builder
     @AllArgsConstructor
@@ -99,7 +95,6 @@ public class BoardResponseDto {
         private String nickName;
     }
 
-
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
@@ -109,9 +104,5 @@ public class BoardResponseDto {
         private String msg;
         private int resultCount;
         private List<BoardAllResponseDto> listData;
-
     }
-
-
-
 }

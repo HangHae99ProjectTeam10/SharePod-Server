@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.Optional;
-
 @Getter
 @Setter
 @Builder
@@ -25,5 +23,4 @@ public class SearchForm {
     private int startNum;
 
     private String searchTitle;
-
 }

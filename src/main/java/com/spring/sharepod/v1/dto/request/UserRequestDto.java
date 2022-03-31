@@ -42,14 +42,12 @@ public class UserRequestDto {
         public UsernamePasswordAuthenticationToken toAuthentication() {
             return new UsernamePasswordAuthenticationToken(username, password);
         }
-
     }
 
     @Getter
     @Setter
     public static class Reissue {
         private String accessToken;
-
         private String refreshToken;
     }
 
@@ -57,7 +55,6 @@ public class UserRequestDto {
     @Setter
     public static class Logout {
         private String accessToken;
-
         private String refreshToken;
     }
 
@@ -68,5 +65,4 @@ public class UserRequestDto {
         private String username;
         private String password;
     }
-
 }

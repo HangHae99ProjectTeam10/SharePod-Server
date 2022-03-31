@@ -28,7 +28,7 @@ public class UserRestController {
     private final UserValidator userValidator;
     private final AwsS3Service awsS3Service;
 
-    //1번 API 로그인 구현하기(완료)
+    //1번 API 로그인
 
     //유저에게 받아온 정보를 (UserRequestDto.Login)를 통하여 컨트롤러에서의 예외처리 후
     //(userService.login)으로 보낸 후  Refresh토큰과 Access토큰을 헤더에 담고, db에서 가져온 정보를 body에 담아
@@ -42,20 +42,20 @@ public class UserRestController {
         return userService.login(userLoginRequest, res);
     }
 
-    //2번 API 토큰 재발급을 위한 api (구현 완료)
+    //2번 API 토큰 재발급을 위한 api
     @PostMapping("/reissue")
     public BasicResponseDTO reissue(@RequestBody UserRequestDto.Reissue reissue, HttpServletResponse res, HttpServletRequest req) {
         return userService.reissue(reissue, res, req);
     }
 
-    //3번 API 로그아웃 (구현 완료)
+    //3번 API 로그아웃
     @PostMapping("/user/logout")
     public BasicResponseDTO logout(@RequestBody UserRequestDto.Reissue reIssueRequestDto, HttpServletRequest req) {
         return userService.logout(reIssueRequestDto, req);
     }
 
 
-    //4번 API 회원가입 (구현 완료)
+    //4번 API 회원가입
     @PostMapping("/user/register")
     public BasicResponseDTO UserRegister(@RequestPart UserRequestDto.Register userRegisterRequestDto,
                                                 @RequestPart MultipartFile imgFile) throws IOException {
@@ -64,23 +64,16 @@ public class UserRestController {
         userRegisterRequestDto.setUserImg(userimg);
 
         //회원가입 완료
-        //String NickName = userService.registerUser(userRegisterRequestDto);
         return userService.registerUser(userRegisterRequestDto);
     }
 
-    //5번 API 마이페이지 불러오기 (구현 완료)
+    //5번 API 마이페이지 불러오기
     @GetMapping("/user/{userId}")
     public UserMyInfoResponseDto getBoardList(@PathVariable Long userId, @AuthenticationPrincipal User user) {
 
         //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userId, user.getId());
 
-        //각각의 데이터 받아오기
-        //UserInfoResponseDto userInfo = userService.getUserInfo(userId);
-        //List<LikedListResponseDto> userLikeBoard = userService.getUserLikeBoard(userId);
-        //List<MyBoardResponseDto> userMyBoard = userService.getMyBoard(userId);
-        //List<RentBuyer> rentBuyList = userService.getBuyList(userId);
-        //List<RentSeller> rentSellList = userService.getSellList(userId);
         return userService.getUserInfo(userId);
     }
 
@@ -109,22 +102,7 @@ public class UserRestController {
                 .build();
     }
 
-//    @GetMapping("/user/sell/{userId}")
-//    public UserResponseDto.UserSellerList userSellerList(@PathVariable Long userId,@AuthenticationPrincipal User user){
-//        tokenValidator.userIdCompareToken(userId,user.getId());
-//        return userService.getSellList(userId);
-//    }
-//
-//    @GetMapping("/user/reservation/{userId}")
-//    public UserResponseDto.UserReservationList userReservationList(@PathVariable Long userId,@AuthenticationPrincipal User user){
-//        tokenValidator.userIdCompareToken(userId,user.getId());
-//        return userService.getReservationList(userId);
-//    }
-
-
-
-
-    //6번 회원 정보 수정하기 (구현 완료)
+    //6번 회원 정보 수정하기
     @PatchMapping("/user/{userId}")
     public UserResponseDto.UserModifiedInfo UserModify(@PathVariable Long userId,
                                        @RequestPart UserRequestDto.Modify userModifyRequestDTO,
@@ -138,24 +116,20 @@ public class UserRestController {
 
         //이미지가 새롭게 들어왔으면
         if (!Objects.equals(null, StringUtils.getFilenameExtension(userImgFile.getOriginalFilename()))){
-            System.out.println("if문 들어옴?");
             //변경된 사진 저장 후 기존 삭제 삭제 후 requestDto에 setUserimg 하기
             userModifyRequestDTO.setUserImg(awsS3Service.ModifiedProfileImg(user.getUserImg().substring(user.getUserImg().lastIndexOf("/") + 1), user.getNickName(), userImgFile));
         } else {
-            System.out.println("else문 들어옴?");
             userModifyRequestDTO.setUserImg(user.getUserImg());
         }
 
         return userService.usermodifyService(userId, userModifyRequestDTO);
     }
 
-    //7번 API 회원 탈퇴하기 (구현 완료)
+    //7번 API 회원 탈퇴하기
     @DeleteMapping("/user/{userId}")
     public BasicResponseDTO DeleteUser(@PathVariable Long userId, @RequestBody UserRequestDto.Login userDelete, @AuthenticationPrincipal User user) {
         //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userId, user.getId());
-
-        //String nickname = userService.UserDelete(userId, userDelete);
         return userService.UserDelete(userId, userDelete);
     }
 

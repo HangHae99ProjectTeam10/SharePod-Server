@@ -6,15 +6,13 @@ import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import java.util.List;
 
-import static com.spring.sharepod.exception.CommonError.ErrorCode.*;
+import static com.spring.sharepod.exception.CommonError.ErrorCode.NOTICE_NOT_EXIST;
 
 @Component // 선언하지 않으면 사용할 수 없다!!!!!
 @RequiredArgsConstructor
 public class NoticeValidator {
     private final NoticeRepository noticeRepository;
-
 
     //알림 목록 valid
     public int ValidnoticeList(Long userid) {
@@ -28,15 +26,7 @@ public class NoticeValidator {
         // notice id가 존재하지 않을 시, error 메시지 호출
         Notice findNoticeId = noticeRepository.findById(noticeid).orElseThrow(
                 () -> new ErrorCodeException(NOTICE_NOT_EXIST));
-
-
-        //토큰과 notice의 seller,buyer id와 일치하지 않는다면 error 메시지 호출 이거 해야함
-//        if(findNoticeId.getBuyer().getId() != user.getid() && findNoticeId.getSeller().getId() != user.getid()){
-//            throw new ErrorCodeException(NOTICE_DELETE_NOT_EXIST);
-//        }
-
         return findNoticeId;
     }
-
 }
 

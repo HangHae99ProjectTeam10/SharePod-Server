@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.dto.response.Board;
 
-import com.querydsl.core.types.dsl.NumberPath;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +23,4 @@ public class BoardAllResponseDto {
     private String boardTag;
     private LocalDateTime modifiedAt;
     private Optional<Boolean> isLiked;
-
-
 }

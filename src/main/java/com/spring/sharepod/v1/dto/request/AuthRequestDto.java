@@ -23,5 +23,4 @@ public class AuthRequestDto {
         private Long sellerId;
         private Boolean check;
     }
-
 }

@@ -5,13 +5,14 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.spring.sharepod.v1.dto.response.*;
 import com.spring.sharepod.v1.dto.response.Board.BoardAllResponseDto;
 import com.spring.sharepod.v1.dto.response.Board.MyBoardResponseDto;
+import com.spring.sharepod.v1.dto.response.RentBuyer;
+import com.spring.sharepod.v1.dto.response.RentSeller;
 import com.spring.sharepod.v1.dto.response.User.UserReservation;
+import com.spring.sharepod.v1.dto.response.VideoAllResponseDto;
 import com.spring.sharepod.v1.repository.SearchForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,9 +20,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.spring.sharepod.entity.QAmount.amount;
+import static com.spring.sharepod.entity.QAuth.auth;
 import static com.spring.sharepod.entity.QBoard.board;
 import static com.spring.sharepod.entity.QImgFiles.imgFiles;
-import static com.spring.sharepod.entity.QAuth.auth;
 import static com.spring.sharepod.entity.QReservation.reservation;
 import static com.spring.sharepod.entity.QUser.user;
 import static org.aspectj.util.LangUtil.isEmpty;
@@ -76,11 +77,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public List<VideoAllResponseDto> videoAll(int startNum) {
+    public List<VideoAllResponseDto> videoAll(Long startNum) {
         return getVideoAll(startNum).fetch();
     }
 
-    private JPAQuery<VideoAllResponseDto> getVideoAll(int startNum){
+    private JPAQuery<VideoAllResponseDto> getVideoAll(Long startNum){
         return jpaQueryFactory.select(Projections.constructor(VideoAllResponseDto.class,
                 board.id,
                 board.boardRegion,
@@ -94,9 +95,13 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(board.id.eq(imgFiles.board.id))
                 .innerJoin(user)
                 .on(board.user.id.eq(user.id))
+                .where(startNumLt(startNum))
                 .orderBy(Expressions.numberTemplate(Double.class,"function('rand')").asc())
-                .offset(startNum)
-                .limit(3);
+                .limit(4);
+    }
+
+    private BooleanExpression startNumLt(Long startNum){
+        return startNum != null ? board.id.lt(startNum): null;
     }
 
     //내가 요청한 게시글
@@ -226,11 +231,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .limit(8);
     }
 
-//    private BooleanExpression userId(Optional<Long> userId) {
-//        System.out.println(userId);
-//        return isEmpty(String.valueOf(userId)) ? null : userId.get();
-//    }
-
     //searchFormRecent
     private JPAQuery<BoardAllResponseDto> getBoardBySearchFormRecent(SearchForm searchForm) {
         return jpaQueryFactory
@@ -292,7 +292,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     //동적 쿼리를 위한 문들
     private BooleanExpression boardRegion(String boardRegion) {
-        System.out.println(boardRegion);
         return isEmpty(boardRegion) ? null : board.boardRegion.eq(boardRegion);
     }
 
@@ -302,7 +301,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     private BooleanExpression searchTitle(String searchTitle) {
-        System.out.println(searchTitle);
         return isEmpty(searchTitle) ? null : board.title.contains(searchTitle);
     }
 

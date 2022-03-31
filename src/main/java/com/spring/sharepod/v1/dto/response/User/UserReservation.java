@@ -25,9 +25,7 @@ public class UserReservation {
     private LocalDate startRental;
     private LocalDate endRental;
     private String nickName;
-
     private String category;
     private Long reservationId;
     private Optional<Boolean> isLiked;
-
 }

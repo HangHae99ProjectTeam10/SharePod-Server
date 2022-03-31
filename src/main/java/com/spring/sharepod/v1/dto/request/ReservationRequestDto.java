@@ -25,7 +25,4 @@ public class ReservationRequestDto {
         private String startRental;
         private String endRental;
     }
-
-
-
 }
