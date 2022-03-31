@@ -225,6 +225,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .where(board.mainAppear.eq(true))
                 .orderBy(board.modifiedAt.desc())
                 .limit(8);
+
     }
 
     //searchFormRecent
