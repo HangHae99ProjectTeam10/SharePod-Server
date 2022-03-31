@@ -31,9 +31,9 @@
  
 |송민혁|이승수|김도엽|
 |:--------:|:--------:|:--------:|
-|<img src="https://cdn-icons-png.flaticon.com/512/528/528256.png" width=500>|<img src="https://i.imgur.com/BHsdsnG.jpg" width=500>|
+|<img src="https://cdn-icons-png.flaticon.com/512/528/528256.png" width=500>|<img src="https://user-images.githubusercontent.com/84774696/160975814-550bf8b0-532a-4ddb-a88d-0eeca38c585b.png" width=500>|
 |https://github.com/thdals83|https://github.com/leeseungsoo0701|https://github.com/kkamangdol|
- 
+
 </div>
 
 
