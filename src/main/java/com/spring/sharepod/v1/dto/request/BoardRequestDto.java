@@ -68,9 +68,4 @@ public class BoardRequestDto {
         private String lastImgUrl;
 
     }
-
-
-
-
-
 }

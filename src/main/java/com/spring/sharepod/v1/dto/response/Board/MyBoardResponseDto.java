@@ -17,13 +17,11 @@ public class MyBoardResponseDto {
 
     @JsonProperty(value="boardTitle")
     private String title;
-
     private String boardTag;
     private String boardRegion;
 
     @JsonProperty(value="firstImg")
     private String firstImgUrl;
-
     private LocalDateTime modifiedAt;
     private int dailyRentalFee;
     private String nickName;

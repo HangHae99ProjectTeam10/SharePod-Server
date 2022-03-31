@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthImgService {
     private final AuthImgValidator authImgValidator;
 
-
-    //21번 API 인증 사진 업로드 (구현 중)
+    //21번 API 인증 사진 업로드
     @javax.transaction.Transactional
     public AuthResponseDto.AuthUploadDTO authimguploadService(Long userId, Long authImgId, String imgUrl) {
 
@@ -33,8 +32,7 @@ public class AuthImgService {
                 .build();
     }
 
-
-    //22번 API 빌려준 사람만의 기능, 인증 성공 or 실패 (구현 중)
+    //22번 API 빌려준 사람만의 기능, 인증 성공 or 실패
     @Transactional
     public AuthResponseDto.AuthImgBoolDTO BoolAuth(AuthRequestDto.AuthImgCheck authBoolRequestDto) {
         Long sellerId = authBoolRequestDto.getSellerId();
@@ -55,7 +53,5 @@ public class AuthImgService {
                 .sellerid(authBoolRequestDto.getSellerId())
                 .check(authBoolRequestDto.getCheck())
                 .build();
-
-
     }
 }

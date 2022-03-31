@@ -19,5 +19,4 @@ public class UserOrderResponseDto {
     private List<RentBuyer> rentBuyerList;
     private List<RentSeller> rentSellerList;
     private List<UserReservation> userReservationList;
-
 }

@@ -35,7 +35,7 @@ public class ReservationService {
     private final AuthImgRepository authImgRepository;
     private final ReservationValidator reservationValidator;
 
-    //17번 거래 요청 (구현 완료)
+    //17번 거래 요청
     @Transactional
     public ReservationResponseDto.ReservationDeal reserRequestService(Long boardId, ReservationRequestDto.Reservation requestDTO) {
         //거래요청 validator
@@ -78,37 +78,10 @@ public class ReservationService {
                 .build();
     }
 
-    //18번 거래요청 목록 (구현 완료)
+    //18번 거래요청 목록
     @Transactional
     public ReservationResponseDto.ReservationGetFinalDTO reservationGetService(Long sellerId) {
-//        //유저 userid로 검색해 유저객체 가져오기
-//        User user = userRepository.findById(sellerId).orElseThrow(
-//                () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND)
-//        );
-//
-//        List<ReservationResponseDto.ReservationGetDTO> reservationGetDTOList = new ArrayList<>();
-//
-//        //ReservationGetDTO에 데이터 담아주기
-//        for (int i = 0; i < user.getReservation().size(); i++) {
-//            reservationGetDTOList.add(ReservationResponseDto.ReservationGetDTO.builder()
-//                    .nickName(user.getReservation().get(i).getBuyer().getNickName())
-//                    .startRental(user.getReservation().get(i).getStartRental())
-//                    .endRental(user.getReservation().get(i).getEndRental())
-//                    .boardId(user.getReservation().get(i).getBoard().getId())
-//                    .boardTitle(user.getReservation().get(i).getBoard().getTitle())
-//                    .boardImg(user.getReservation().get(i).getBoard().getImgFiles().getFirstImgUrl())
-//                    .build());
-//        }
-//
-//        return ReservationResponseDto.ReservationGetFinalDTO.builder()
-//                .result("success")
-//                .reservationList(reservationGetDTOList)
-//                .build();
         List<ReservationGetDTO> querydslReservationList = reservationRepository.reservationList(sellerId);
-//        TypedQuery<ReservationGetDTO> query = entityManager.createQuery(
-//                "SELECT NEW com.spring.sharepod.v1.dto.response.Reservation.ReservationGetDTO(user.nickName,reservation.startRental,reservation.endRental, board.title,board.id, img_files.firstImgUrl) FROM Reservation as reservation INNER JOIN Board as board on reservation.board.id = board.id INNER JOIN ImgFiles as img_files on board.id = img_files.board.id INNER JOIN User as user on reservation.buyer.id = user.id where reservation.seller.id  = 16", ReservationGetDTO.class);
-//
-//        List<ReservationGetDTO> querydslReservationList = query.getResultList();
 
         return ReservationResponseDto.ReservationGetFinalDTO.builder()
                 .result("suceess")
@@ -162,7 +135,6 @@ public class ReservationService {
                     .check(acceptNotDTO.isCheck())
                     .build();
         }
-
 
         //거래 수락시
         //보드 테이블 appear - false변경
@@ -221,13 +193,6 @@ public class ReservationService {
         }
         //거래 내역 DB에서 삭제
         reservationRepository.deleteAllByBoard(board);
-
-//        for(int i=0;i...)
-//        noticeRepository.save(Notice.builder()
-//                        .buyer(buyer)
-//                        .seller(seller)
-//                        .noticeInfo("거래가 거절되었습니다.")
-//                .build());
 
         return ReservationResponseDto.accReservationDTO.builder()
                 .result("success")

@@ -41,14 +41,11 @@ public class ChatRoomSerivce {
         //이미 있는지 확인
         ChatRoom chatRoomexistcehck = chatRoomRepository.findByBuyerAndAndBoard(buyer, board);
         if (chatRoomexistcehck != null) {
-//            throw new ErrorCodeException(CHATROOM_EXIST);
             ChatRoomResponseDto.ChatRoomData chatRoomData = ChatRoomResponseDto.ChatRoomData.builder()
                     .chatRoomId(chatRoomexistcehck.getId())
                     .build();
             return chatRoomData;
-
         }
-
 
         ChatRoom chatRoom = ChatRoom.create(ChatRoom.builder()
                 .buyer(buyer)
@@ -89,9 +86,7 @@ public class ChatRoomSerivce {
         //내 정보 가져오기
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
-
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByUserId(userId);
-
         List<ChatRoomResponseDto.ChatRoomList> chatRoomListList = new ArrayList<>();
 
         for (ChatRoom chatRoom : chatRoomList) {
@@ -154,28 +149,11 @@ public class ChatRoomSerivce {
             another = chatRoom.getBuyer();
         }
 
-
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
         int resultCount = chatMessageList.size();
 
         List<ChatRoomResponseDto.ChatMessageData> chatMessageDataList = new ArrayList<>();
 
-//        //me you 구별
-//        for (ChatMessage chatMessage : chatMessageList) {
-//            if (Objects.equals(chatMessage.getWriter().getId(), userId)) {
-//                chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
-//                        .message(chatMessage.getMessage())
-//                        .who("me")
-//                        .modifiedAt(chatMessage.getModifiedAt())
-//                        .build());
-//            } else {
-//                chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
-//                        .message(chatMessage.getMessage())
-//                        .who("you")
-//                        .modifiedAt(chatMessage.getModifiedAt())
-//                        .build());
-//            }
-//        }
         for (ChatMessage chatMessage : chatMessageList) {
             chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
                     .message(chatMessage.getMessage())
@@ -192,7 +170,5 @@ public class ChatRoomSerivce {
                 .otherNickName(another.getNickName())
                 .chatMessageDataList(chatMessageDataList)
                 .build();
-
     }
-
 }

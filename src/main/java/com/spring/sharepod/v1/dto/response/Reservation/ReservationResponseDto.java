@@ -41,7 +41,4 @@ public class ReservationResponseDto {
         private String startRental;
         private String endRental;
     }
-
-
-
 }

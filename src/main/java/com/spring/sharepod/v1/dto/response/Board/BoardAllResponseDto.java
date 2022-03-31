@@ -23,5 +23,4 @@ public class BoardAllResponseDto {
     private String boardTag;
     private LocalDateTime modifiedAt;
     private Optional<Boolean> isLiked;
-
 }

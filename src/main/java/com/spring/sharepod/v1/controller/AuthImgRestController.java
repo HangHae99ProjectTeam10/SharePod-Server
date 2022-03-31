@@ -20,7 +20,7 @@ public class AuthImgRestController {
     private final UserValidator userValidator;
     private final AuthImgService authImgService;
 
-    //22번 빌려준 사람의 인증 성공 or 실패 (구현 성공)
+    //22번 빌려준 사람의 인증 성공 or 실패
     @PostMapping("/auth/img/bool")
     public AuthResponseDto.AuthImgBoolDTO AuthBool(@RequestBody AuthRequestDto.AuthImgCheck authBoolRequestDto, @AuthenticationPrincipal User user){
         //토큰과 authBoolRequestDto.getSellerid()가 일치하는지에 대한 판단

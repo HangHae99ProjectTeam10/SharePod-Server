@@ -44,7 +44,6 @@ public class ChatRoomController {
 
     // 채팅 리스트 받아오기
     // stress_test
-    // userid = 2
     @GetMapping("/room/{userId}")
     @ResponseBody
     public ChatRoomResponseDto.ChatRoomListData chatList(@PathVariable Long userId, @AuthenticationPrincipal User user) {
@@ -54,7 +53,6 @@ public class ChatRoomController {
 
     //해당 채팅방 채팅내용 반환
     // stress_test
-    // userid = 2, chatroomid = 7
     @GetMapping("/roomslist/{userId}/{chatroomId}")
     @ResponseBody
     public ChatRoomResponseDto.ChatMessageListData roomChatList(@PathVariable Long userId, @PathVariable Long chatroomId, @RequestParam(value = "startNum", defaultValue = "0") int startNum, @AuthenticationPrincipal User user) {

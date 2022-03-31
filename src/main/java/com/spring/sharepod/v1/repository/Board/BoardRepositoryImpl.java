@@ -231,11 +231,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .limit(8);
     }
 
-//    private BooleanExpression userId(Optional<Long> userId) {
-//        System.out.println(userId);
-//        return isEmpty(String.valueOf(userId)) ? null : userId.get();
-//    }
-
     //searchFormRecent
     private JPAQuery<BoardAllResponseDto> getBoardBySearchFormRecent(SearchForm searchForm) {
         return jpaQueryFactory

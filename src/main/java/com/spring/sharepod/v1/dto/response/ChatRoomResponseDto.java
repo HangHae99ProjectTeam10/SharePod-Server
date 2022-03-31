@@ -26,7 +26,6 @@ public class ChatRoomResponseDto {
         private Long buyerId;
 
         private Long chatRoomId;
-
     }
 
     @Getter
@@ -43,7 +42,6 @@ public class ChatRoomResponseDto {
         private LocalDateTime modifiedAt;
     }
 
-
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
@@ -55,7 +53,6 @@ public class ChatRoomResponseDto {
         private String myNickname;
         private List<ChatRoomList> chatRoomList;
     }
-
 
     @Getter
     @NoArgsConstructor
