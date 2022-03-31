@@ -6,9 +6,8 @@ import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import java.util.List;
 
-import static com.spring.sharepod.exception.CommonError.ErrorCode.*;
+import static com.spring.sharepod.exception.CommonError.ErrorCode.NOTICE_NOT_EXIST;
 
 @Component // 선언하지 않으면 사용할 수 없다!!!!!
 @RequiredArgsConstructor

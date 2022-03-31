@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.spring.sharepod.exception.CommonError.ErrorCode.CHATROOM_EXIST;
-
 @Service
 @RequiredArgsConstructor
 public class ChatRoomSerivce {

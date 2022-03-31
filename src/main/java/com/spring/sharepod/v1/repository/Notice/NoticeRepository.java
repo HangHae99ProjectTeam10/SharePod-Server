@@ -6,10 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.From;
-import java.util.List;
-import java.util.Optional;
-
 public interface NoticeRepository extends JpaRepository<Notice, Long>,NoticeRepositoryCustom {
     //알림 갯수
     @Query(nativeQuery = true, value = "select COUNT(n.id) from notice n where n.buyerId=:userid or n.sellerId=:userid")

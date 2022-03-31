@@ -11,7 +11,6 @@ import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.dto.request.UserRequestDto;
-import com.spring.sharepod.v1.repository.AuthImgRepository;
 import com.spring.sharepod.v1.validator.AuthImgValidator;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import com.spring.sharepod.v1.validator.UserValidator;
