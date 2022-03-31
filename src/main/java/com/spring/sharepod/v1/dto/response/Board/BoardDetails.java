@@ -27,6 +27,4 @@ public class BoardDetails {
     private int likeNumberSize;
     private String userImg;
     private LocalDateTime modifiedAt;
-    //private Boolean isLiked;
-
 }

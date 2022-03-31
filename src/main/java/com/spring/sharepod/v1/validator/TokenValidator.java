@@ -17,5 +17,4 @@ public class TokenValidator {
             throw new ErrorCodeException(USER_NOT_FOUND);
         }
     }
-
 }

@@ -24,5 +24,4 @@ public class LikedRepositoryImpl implements LikedRepositoryCustom {
                 .where(liked.user.id.eq(userId),liked.board.id.eq(boardId))
                 .fetchFirst() != null;
     }
-
 }

@@ -13,5 +13,4 @@ public class UserMyInfoResponseDto {
     private String result;
     private String msg;
     private UserInfoResponseDto userInfo;
-
 }

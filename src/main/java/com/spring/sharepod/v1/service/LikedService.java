@@ -57,7 +57,5 @@ public class LikedService {
                     .boardId(boardid)
                     .build();
         }
-
     }
-
 }

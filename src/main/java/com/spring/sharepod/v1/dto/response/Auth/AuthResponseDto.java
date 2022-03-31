@@ -62,5 +62,4 @@ public class AuthResponseDto {
         private Long sellerId;
         private Long authId;
     }
-
 }

@@ -13,5 +13,4 @@ public class ChatRoomRequestDto {
         private Long boardId;
         private Long buyerId;
     }
-
 }
