@@ -2,15 +2,14 @@ package com.spring.sharepod.v1.controller;
 
 
 import com.spring.sharepod.entity.User;
-import com.spring.sharepod.v1.dto.response.Board.AllVideo;
-import com.spring.sharepod.v1.dto.response.Board.BoardDetail;
 import com.spring.sharepod.v1.dto.request.BoardRequestDto;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
+import com.spring.sharepod.v1.dto.response.Board.AllVideo;
+import com.spring.sharepod.v1.dto.response.Board.BoardDetail;
 import com.spring.sharepod.v1.dto.response.Board.BoardResponseDto;
 import com.spring.sharepod.v1.dto.response.VideoAllResponseDto;
 import com.spring.sharepod.v1.service.AwsS3Service;
 import com.spring.sharepod.v1.service.BoardService;
-import com.spring.sharepod.v1.validator.BoardValidator;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +29,6 @@ public class BoardRestController {
     private final BoardService boardService;
     private final AwsS3Service awsS3Service;
     private final TokenValidator tokenValidator;
-    private final BoardValidator boardValidator;
 
 
     //8번 API 릴스 동영상 get 하는 방식 (구현 완료)
