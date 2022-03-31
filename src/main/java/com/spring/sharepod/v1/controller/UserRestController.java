@@ -29,6 +29,11 @@ public class UserRestController {
     private final AwsS3Service awsS3Service;
 
     //1번 API 로그인 구현하기(완료)
+
+    //유저에게 받아온 정보를 (UserRequestDto.Login)를 통하여 컨트롤러에서의 예외처리 후
+    //(userService.login)으로 보낸 후  Refresh토큰과 Access토큰을 헤더에 담고, db에서 가져온 정보를 body에 담아
+    //(UserResponseDto.Login)를 통해 컨트롤러로 보낸후 유저한테 보냄
+
     @PostMapping("/user/login")
     public UserResponseDto.Login Login(@RequestBody UserRequestDto.Login userLoginRequest, HttpServletResponse res) {
         //이메일이나 패스워드가 null 값일 경우의 처리

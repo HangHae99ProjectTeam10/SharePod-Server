@@ -23,6 +23,8 @@ public class NoticeRestController {
     private final TokenValidator tokenValidator;
 
     //24번 API **알림 갯수 API (구현 완료)
+    // stress_test
+    //userid = 2
     @GetMapping("/notice/count/{userId}")
     public ResponseEntity<NoticeCount> NoticeCount(@PathVariable Long userId, @AuthenticationPrincipal User user){
         //userid와 토큰 비교 validator
@@ -32,6 +34,8 @@ public class NoticeRestController {
         return new ResponseEntity<>(new NoticeCount("success", "알림 개수 전송 성공", NoticeCount), HttpStatus.OK);
     }
     //25번 API **알림 목록 띄우기 (구현 완료)
+    // stress_test
+    //userid = 2
     @GetMapping("/notice/{userId}")
     public NoticeInfoResponseDto NoticeList(@PathVariable Long userId, @AuthenticationPrincipal User user){
         //userid와 토큰 비교 validator

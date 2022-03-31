@@ -43,7 +43,10 @@ public class BoardValidator {
             //userid.get().longValue()이 존재하므로
             //tokenValidator.userIdCompareToken(userid,user.getId());
             //System.out.println(likedRepository.existLikedBoolean(userId.get(),boardId));
-            return likedRepository.existLikedBoolean(userId.get(),boardId);
+
+            //return likedRepository.existLikedBoolean(userId.get(),boardId);
+            return likedRepository.existsByUserIdAndBoardId(userId.get(),boardId);
+
 //            int result = likedRepository.existLiked(userId.get(), boardId);
 //            if(result == 1){
 //                return true;
