@@ -22,7 +22,6 @@ public class LikeRestController {
     //찜하기, 찜하기 취소
     @PostMapping("/like/{boardId}")
     public LikedResponseDto.LikedPost likecontroll(@PathVariable Long boardId, @RequestBody LikeRequestDTO.Liked requestDTO, @AuthenticationPrincipal User user){
-        System.out.println("user.getId()"+user.getId());
         tokenValidator.userIdCompareToken(requestDTO.getUserId(),user.getId());
         return likedService.islikeservice(boardId,requestDTO);
     }

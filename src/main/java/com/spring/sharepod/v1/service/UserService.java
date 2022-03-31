@@ -100,16 +100,12 @@ public class UserService {
 
     //2번 API 리프레쉬 토큰 재발급
     public BasicResponseDTO reissue(UserRequestDto.Reissue reissue, HttpServletResponse res, HttpServletRequest req) {
-        System.out.println("reissue controller 1");
 
-        System.out.println(reissue.getRefreshToken() + "refreshtoken 출력(request에서 받아온 내용)");
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken(), req)) {
             //fail로 리턴이 나올 경우 refresttoken 정보가 유효하지 않다고 보내면서 프론트가 다시 로그인 시킨다.
             throw new ErrorCodeException(RETOKEN_REISSUE);
         }
-
-        System.out.println("reissue controller 2");
 
         // 2. Access Token 에서 User email 을 가져옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
@@ -319,7 +315,7 @@ public class UserService {
 
         List<UserReservation> querydslResrvationList = boardRepository.getReservation(userId);
         int resultCount = querydslResrvationList.size();
-        System.out.println(querydslResrvationList+"querydslResrvationList");
+
         for (int i=0;i<resultCount;i++){
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslResrvationList.get(i).getId());
             querydslResrvationList.get(i).setIsLiked(Optional.ofNullable(isLiked));
@@ -335,12 +331,10 @@ public class UserService {
 
         //유저 이미지가 변경 되었을 때
         if (!Objects.equals(modifyRequestDTO.getUserImg(), user.getUserImg())) {
-            System.out.println("이미지 변경 적용 완료!");
             user.updateUserImg(modifyRequestDTO);
         }
         // 아닐때
         else {
-            System.out.println("이미지 변경 안한거 확인!");
             user.updateEtc(modifyRequestDTO);
         }
 
