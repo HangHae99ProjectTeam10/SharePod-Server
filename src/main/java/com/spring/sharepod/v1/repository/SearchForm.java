@@ -20,7 +20,7 @@ public class SearchForm {
     @Length(max = 100)
     private String boardRegion;
 
-    private int startNum;
+    private Long startNum;
 
     private String searchTitle;
 }

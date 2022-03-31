@@ -95,13 +95,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(board.id.eq(imgFiles.board.id))
                 .innerJoin(user)
                 .on(board.user.id.eq(user.id))
-                .where(startNumLt(startNum))
                 .orderBy(Expressions.numberTemplate(Double.class,"function('rand')").asc())
+                .offset(startNum)
                 .limit(4);
-    }
-
-    private BooleanExpression startNumLt(Long startNum){
-        return startNum != null ? board.id.lt(startNum): null;
     }
 
     //내가 요청한 게시글

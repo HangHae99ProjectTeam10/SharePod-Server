@@ -293,7 +293,7 @@ public class BoardService {
 
     //15번 카테고리 정렬별 보여주기
     @Transactional
-    public BoardResponseDto.BoardAllList getSortedBoard(String filterType, String category, String boardRegion, int startNum, String searchTitle, Optional<Long> userId) {
+    public BoardResponseDto.BoardAllList getSortedBoard(String filterType, String category, String boardRegion, Long startNum, String searchTitle, Optional<Long> userId) {
         List<BoardAllResponseDto> boardList = new ArrayList<>();
 
         int boardLength = 0;
