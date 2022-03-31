@@ -25,5 +25,4 @@ public interface LikedRepository extends JpaRepository<Liked, Long>, LikedReposi
 
     Boolean existsByUserIdAndBoardId(Long usrId,Long BoardId);
 
-
 }
