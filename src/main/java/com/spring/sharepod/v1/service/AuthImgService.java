@@ -4,7 +4,6 @@ import com.spring.sharepod.entity.AuthImg;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
 import com.spring.sharepod.v1.dto.response.Auth.AuthResponseDto;
 import com.spring.sharepod.v1.validator.AuthImgValidator;
-import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class AuthImgService {
-    private final TokenValidator tokenValidator;
     private final AuthImgValidator authImgValidator;
 
 

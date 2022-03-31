@@ -43,7 +43,7 @@ public class ChatRoomSerivce {
         if (chatRoomexistcehck != null) {
 //            throw new ErrorCodeException(CHATROOM_EXIST);
             ChatRoomResponseDto.ChatRoomData chatRoomData = ChatRoomResponseDto.ChatRoomData.builder()
-                    .ChatRoomId(chatRoomexistcehck.getId())
+                    .chatRoomId(chatRoomexistcehck.getId())
                     .build();
             return chatRoomData;
 

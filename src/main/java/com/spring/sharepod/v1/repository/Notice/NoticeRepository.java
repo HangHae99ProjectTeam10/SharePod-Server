@@ -25,8 +25,4 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>,NoticeRepo
     @Transactional
     @Query("delete from Notice n where n.id=:noticeid")
     void deleteByNoticeId(Long noticeid);
-
-
-    @Query("select n from Notice n where n.receiver.id=:userid or n.sender.id=:userid")
-    Notice findByUserId(Long userid);
 }

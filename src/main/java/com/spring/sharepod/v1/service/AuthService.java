@@ -5,12 +5,11 @@ import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.v1.dto.request.AuthRequestDto;
 import com.spring.sharepod.v1.dto.response.Auth.AuthDataResponseDto;
 import com.spring.sharepod.v1.dto.response.Auth.AuthResponseDto;
-import com.spring.sharepod.v1.repository.AuthImgRepository;
 import com.spring.sharepod.v1.repository.Auth.AuthRepository;
+import com.spring.sharepod.v1.repository.AuthImgRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.validator.AuthValidator;
 import com.spring.sharepod.v1.validator.BoardValidator;
-import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +25,6 @@ public class AuthService {
     private final AuthImgRepository authImgRepository;
     private final BoardValidator boardValidator;
     private final AuthValidator authValidator;
-    private final TokenValidator tokenValidator;
-    private final AuthImgService authImgService;
-    private final AwsS3Service awsS3Service;
 
 
     //20번 API 이미지 인증 창 데이터(구현 완료)

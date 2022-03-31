@@ -8,7 +8,6 @@ import com.spring.sharepod.v1.dto.response.Auth.AuthResponseDto;
 import com.spring.sharepod.v1.service.AuthImgService;
 import com.spring.sharepod.v1.service.AuthService;
 import com.spring.sharepod.v1.service.AwsS3Service;
-import com.spring.sharepod.v1.validator.AuthValidator;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import com.spring.sharepod.v1.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ public class AuthRestController {
     private final UserValidator userValidator;
     private final TokenValidator tokenValidator;
     private final AuthImgService authImgService;
-    private final AuthValidator authValidator;
     private final AwsS3Service awsS3Service;
 
     //20번 이미지 인증 창 데이터

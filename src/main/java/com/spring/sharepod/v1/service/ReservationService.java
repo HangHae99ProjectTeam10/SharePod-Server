@@ -7,16 +7,16 @@ import com.spring.sharepod.v1.dto.request.ReservationRequestDto;
 import com.spring.sharepod.v1.dto.response.Reservation.ReservationGetDTO;
 import com.spring.sharepod.v1.dto.response.Reservation.ReservationNoticeList;
 import com.spring.sharepod.v1.dto.response.Reservation.ReservationResponseDto;
-import com.spring.sharepod.v1.repository.*;
 import com.spring.sharepod.v1.repository.Auth.AuthRepository;
+import com.spring.sharepod.v1.repository.AuthImgRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import com.spring.sharepod.v1.repository.Reservation.ReservationRepository;
+import com.spring.sharepod.v1.repository.UserRepository;
 import com.spring.sharepod.v1.validator.ReservationValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,7 +34,6 @@ public class ReservationService {
     private final AuthRepository authRepository;
     private final AuthImgRepository authImgRepository;
     private final ReservationValidator reservationValidator;
-    private final EntityManager entityManager;
 
     //17번 거래 요청 (구현 완료)
     @Transactional
