@@ -44,7 +44,7 @@ public class BoardService {
 
     //8번 API 릴스 video 전체 GET(Limit) (구현 완료)
     @Transactional
-    public List<VideoAllResponseDto> getAllVideo(int startNum) {
+    public List<VideoAllResponseDto> getAllVideo(Long startNum) {
 
         //TypedQuery<VideoAllResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.VideoAllResponseDto(b.id,i.videoUrl,u.userImg,u.nickName)  FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.user as u on b.user = u order by b.modifiedAt", VideoAllResponseDto.class);
         //Long randomIdx = Math.random()/query
