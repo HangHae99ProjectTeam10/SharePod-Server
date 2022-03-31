@@ -67,7 +67,7 @@
 
 - **Framework** : Springboot(2.6.4)
 
-- **Database** : Mysql (AWS RDS)  
+- **Database** : Mysql (AWS RDS,8.0.27)  
 
 - **ETC** : AWS S3, Redis
 
