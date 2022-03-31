@@ -45,7 +45,7 @@
 ## 프로젝트 구성
 ### 백엔드 아키텍처
  <div align="center">
- <img src="https://user-images.githubusercontent.com/59475849/160796220-c55b19f4-7f08-4095-8686-1a5ea2725eb8.png" height="400">
+ <img src="https://user-images.githubusercontent.com/59475849/160796220-c55b19f4-7f08-4095-8686-1a5ea2725eb8.png" width="900" height="600">
 </div>
 
 <br>
