@@ -30,8 +30,6 @@ public class ChatController {
     @MessageMapping("/templates/chat/message")  // 웹소켓으로 들어오는 메시지 발행 처리 -> 클라이언트에서는 /pub/chat/message로 발행 요청
     @Transactional
     public void message(ChatMessageRequestDto.Wirte message) {
-        System.out.println("pub으로 들어온 메세지 확인");
-        System.out.println(message.getMessage());
 
         ChatRoom chatRoom = chatRoomRepository.findById(message.getChatRoomId()).orElseThrow(()-> new ErrorCodeException(ErrorCode.BOARD_BOARDQUILITY_NOT_EXIST));
         User user = userRepository.findById(message.getUserId()).orElseThrow(()-> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));

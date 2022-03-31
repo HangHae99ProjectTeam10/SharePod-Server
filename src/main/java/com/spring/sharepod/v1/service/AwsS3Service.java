@@ -40,7 +40,6 @@ public class AwsS3Service {
     //회원 가입 시, 유저 프로필 사진 업로드
     public String upload(UserRequestDto.Register userRegisterRequestDto, MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(file.getOriginalFilename());
-        System.out.println(fileName);
         amazonS3.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3.getUrl(bucket, fileName).toString();
@@ -48,16 +47,12 @@ public class AwsS3Service {
 
     //회원정보 수정 시, 파일이 바뀌었다면 진행되는 로직
     public String ModifiedProfileImg(String fileName, String userNickName, MultipartFile userimgfile) throws IOException {
-        System.out.println("fileName" + fileName);
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
-        System.out.println("기존 이미지 삭제 완료");
 
         String modifiedFileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(userimgfile.getOriginalFilename());
 
         amazonS3.putObject(new PutObjectRequest(bucket, modifiedFileName, userimgfile.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        System.out.println("새로운 이미지 등록 완료");
-        System.out.println(amazonS3.getUrl(bucket, modifiedFileName).toString());
 
         return amazonS3.getUrl(bucket, modifiedFileName).toString();
     }
@@ -65,7 +60,6 @@ public class AwsS3Service {
     // 회원 탈퇴 시, 진행되는 로직
     public void deleteProfileImg(String fileName) {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
-        System.out.println("이미지 삭제 완료");
     }
 
     //게시글 작성 시, 이미지 3개와 동영상 업로드
@@ -82,7 +76,6 @@ public class AwsS3Service {
                 giveUrl[i] = null;
             } else {
                 String fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(imgFiles[i].getOriginalFilename());
-                System.out.println("fileName: " + fileName);
                 amazonS3.putObject(new PutObjectRequest(bucket, fileName, imgFiles[i].getInputStream(), null)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
                 giveUrl[i] = amazonS3.getUrl(bucket, fileName).toString();
@@ -166,7 +159,6 @@ public class AwsS3Service {
             //비디오 처리
             String videoname = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(videoFile.getOriginalFilename());
 
-            System.out.println(videoname);
             amazonS3.putObject(new PutObjectRequest(bucket, videoname, videoFile.getInputStream(), null)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             patchRequestDTO.setVideoUrl(amazonS3.getUrl(bucket, videoname).toString());
@@ -183,7 +175,6 @@ public class AwsS3Service {
                 amazonS3.deleteObject(bucket, DeleteFileName);
             }
         } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
         } catch (SdkClientException e) {
             e.printStackTrace();
         }
