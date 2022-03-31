@@ -5,6 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.sharepod.v1.dto.response.Board.BoardAllResponseDto;
@@ -122,7 +123,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
-                .where(reservation.buyer.id.eq(userId))
+                //.where(reservation.buyer.id.eq(userId))
+                .where(reservation.buyer.id.in(JPAExpressions.select(reservation.buyer.id)
+                        .from(reservation)
+                        .where(reservation.buyer.id.eq(userId))))
                 .orderBy(board.modifiedAt.desc());
 
 
@@ -149,7 +153,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(auth.board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
-                .where(board.auth.authSeller.id.eq(userId))
+                //.where(board.auth.authSeller.id.eq(userId))
+                .where(auth.authSeller.id.in(JPAExpressions.select(auth.authSeller.id)
+                        .from(auth)
+                        .where(auth.authSeller.id.eq(userId))))
                 .orderBy(board.modifiedAt.desc());
 
     }
@@ -176,7 +183,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(auth.board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
-                .where(board.auth.authBuyer.id.eq(userId))
+                //.where(board.auth.authBuyer.id.eq(userId))
+                .where(auth.authBuyer.id.in(JPAExpressions.select(auth.authBuyer.id)
+                        .from(auth)
+                        .where(auth.authBuyer.id.eq(userId))))
                 .orderBy(board.modifiedAt.desc());
 
     }
@@ -199,7 +209,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
-                .where(board.user.id.eq(userId),
+//                .where(board.user.id.eq(userId),
+//                        board.mainAppear.eq(true))
+                .where(board.user.id.in(JPAExpressions.select(board.user.id)
+                        .from(board)
+                        .where(board.user.id.eq(userId))),
                         board.mainAppear.eq(true))
                 .orderBy(board.modifiedAt.desc());
     }
@@ -223,6 +237,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
                 .where(board.mainAppear.eq(true))
+//                .where(board.mainAppear.eq(JPAExpressions.select(board.mainAppear)
+//                        .from(board)
+//                        .where(board.mainAppear.eq(true))))
                 .orderBy(board.modifiedAt.desc())
                 .limit(8);
 

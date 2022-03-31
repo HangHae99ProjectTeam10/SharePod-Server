@@ -17,6 +17,9 @@ public interface AuthImgRepository extends JpaRepository<AuthImg, Long> {
     void deleteByAuthId(Long authid);
 
 
-    @Query("select a from AuthImg a where a.auth.authBuyer.id=:buyerId and a.id=:authImgId")
-    Optional<AuthImg> findByBuyerAndAuthImgId(Long buyerId, Long authImgId);
+//    @Query("select a from AuthImg a where a.auth.authBuyer.id=:buyerId and a.id=:authImgId")
+//    Optional<AuthImg> findByBuyerAndAuthImgId(Long buyerId, Long authImgId);
+//
+//    AuthImg findByAuthAuthBuyerIdAndId(Long buyerId,Long authImgId);
+
 }

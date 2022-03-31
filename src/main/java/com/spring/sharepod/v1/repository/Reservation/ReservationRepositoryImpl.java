@@ -1,6 +1,7 @@
 package com.spring.sharepod.v1.repository.Reservation;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.sharepod.v1.dto.response.Reservation.ReservationGetDTO;
@@ -51,7 +52,10 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                 .on(board.id.eq(imgFiles.board.id))
                 .innerJoin(user)
                 .on(reservation.buyer.id.eq(user.id))
-                .where(reservation.seller.id.eq(sellerId))
+//                .where(reservation.seller.id.eq(sellerId));
+                .where(reservation.seller.id.in(JPAExpressions.select(reservation.seller.id)
+                        .from(reservation)
+                        .where(reservation.seller.id.eq(sellerId))))
                 .orderBy(board.modifiedAt.desc());
     }
 

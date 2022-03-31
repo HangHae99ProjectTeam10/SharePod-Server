@@ -1,6 +1,7 @@
 package com.spring.sharepod.v1.repository.Notice;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.sharepod.v1.dto.response.notice.Notice;
@@ -38,6 +39,10 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
                 .on(notice.receiver.id.eq(user.id))
                 .innerJoin(board)
                 .on(board.id.eq(notice.board.id))
-                .where(notice.receiver.id.eq(userId));
+                //.where(notice.receiver.id.eq(userId));
+                .where(notice.receiver.id.in(JPAExpressions.select(notice.receiver.id)
+                        .from(notice)
+                        .where(notice.receiver.id.eq(userId))
+                ));
     }
 }
