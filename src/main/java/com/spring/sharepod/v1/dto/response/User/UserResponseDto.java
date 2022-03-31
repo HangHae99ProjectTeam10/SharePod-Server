@@ -36,7 +36,6 @@ public class UserResponseDto {
         private Long refreshTokenExpirationTime;
     }
 
-
     @Builder
     @Getter
     @AllArgsConstructor
@@ -49,7 +48,6 @@ public class UserResponseDto {
         private String userRegion;
         private String userModifiedImg;
     }
-
 
     @Getter
     @NoArgsConstructor
@@ -83,7 +81,6 @@ public class UserResponseDto {
         private List<UserReservation> userReservationList;
     }
 
-
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
@@ -107,5 +104,4 @@ public class UserResponseDto {
     public static class UserReservationList {
         private List<UserReservation> userReservationList;
     }
-
 }

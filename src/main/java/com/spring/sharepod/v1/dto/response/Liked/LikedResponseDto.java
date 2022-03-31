@@ -14,8 +14,5 @@ public class LikedResponseDto {
         private String msg;
         private Long userId;
         private Long boardId;
-
     }
-
-
 }

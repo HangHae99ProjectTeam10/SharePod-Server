@@ -40,5 +40,4 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
                 .on(board.id.eq(notice.board.id))
                 .where(notice.receiver.id.eq(userId));
     }
-
 }

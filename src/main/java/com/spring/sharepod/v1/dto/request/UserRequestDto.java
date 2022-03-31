@@ -42,7 +42,6 @@ public class UserRequestDto {
         public UsernamePasswordAuthenticationToken toAuthentication() {
             return new UsernamePasswordAuthenticationToken(username, password);
         }
-
     }
 
     @Getter
@@ -66,5 +65,4 @@ public class UserRequestDto {
         private String username;
         private String password;
     }
-
 }

@@ -27,5 +27,4 @@ public class ChatMessageRequestDto {
         private Long chatRoomId;
         private String message;
     }
-
 }

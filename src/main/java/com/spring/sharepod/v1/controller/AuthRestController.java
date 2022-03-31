@@ -28,7 +28,6 @@ public class AuthRestController {
 
     //20번 이미지 인증 창 데이터
     //stress_test
-    //authid = 21
     @GetMapping("/auth/img/{authId}")
     public AuthResponseDto.AuthDataAll authDataAllResponseDTO(@PathVariable Long authId, @AuthenticationPrincipal User user){
         //토큰이 존재하는지에 대한 것만 확인해야함
@@ -39,7 +38,7 @@ public class AuthRestController {
         return authService.dataAllResponseDTO(authId);
     }
 
-    //21번 buyer가 인증 이미지 저장 (구현 완료)
+    //21번 buyer가 인증 이미지 저장
     @PostMapping("/auth/img/{userId}/{authImgId}")
     public AuthResponseDto.AuthUploadDTO AuthImgUpload(@PathVariable Long userId, @PathVariable Long authImgId, @RequestPart MultipartFile authFile, @AuthenticationPrincipal User user) throws IOException {
         // 토큰과 userid 일치하는지 확인
@@ -53,7 +52,7 @@ public class AuthRestController {
     }
 
 
-    //23번 재업로드 or 삭제 api (구현 완료)
+    //23번 재업로드 or 삭제 api
     @PostMapping("/auth/reupload")
     public AuthResponseDto.AuthReUploadDTO AuthBool(@RequestBody AuthRequestDto.AuthCheckReUpload authCheckReUploadRequestDto, @AuthenticationPrincipal User user){
         //토큰과 authBoolRequestDto.getSellerid()가 일치하는지에 대한 판단

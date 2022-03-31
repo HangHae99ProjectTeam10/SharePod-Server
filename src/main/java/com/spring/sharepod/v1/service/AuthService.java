@@ -26,8 +26,7 @@ public class AuthService {
     private final BoardValidator boardValidator;
     private final AuthValidator authValidator;
 
-
-    //20번 API 이미지 인증 창 데이터(구현 완료)
+    //20번 API 이미지 인증 창 데이터
     @Transactional
     public AuthResponseDto.AuthDataAll dataAllResponseDTO(@PathVariable Long authid) {
 
@@ -39,26 +38,10 @@ public class AuthService {
         if(authRepository.authtest(authid)){
             allauthcheck = false;
         }
-//        System.out.println(allauthcheck);
         auth.setSellectAllImg(allauthcheck);
 
         //data[] 값 넣어주기
-//        List<AuthDataResponseDto> authDataResponseDtoResponseDTOList = new ArrayList<>();
-//        for (int i = 0; i < auth.getAuthImgList().size(); i++) {
-//            //allauthcheck 하나라도 false 있으면 false로 교체
-////            if (!auth.getAuthImgList().get(i).isCheckImgBox()) {
-////                allauthcheck = false;
-////            }
-//
-//            authDataResponseDtoResponseDTOList.add(AuthDataResponseDto.builder()
-//                    .authImgId(auth.getAuthImgList().get(i).getId())
-//                    .authImgUrl(auth.getAuthImgList().get(i).getAuthImgUrl())
-//                    .authImgCheck(auth.getAuthImgList().get(i).isCheckImgBox())
-//                    .build());
-//        }
-
         List<AuthDataResponseDto> authDataResponseDtoResponseDTOList = authRepository.getauthresponse(authid);
-
 
         return AuthResponseDto.AuthDataAll.builder()
                 .result("success")
@@ -72,7 +55,6 @@ public class AuthService {
                 .build();
     }
 
-
     //빌려준 사람만의 기능, 재업로드
     @Transactional
     public AuthResponseDto.AuthReUploadDTO CheckReuploadBoard(AuthRequestDto.AuthCheckReUpload authCheckReUploadRequestDto) {
@@ -80,17 +62,16 @@ public class AuthService {
         //주어진 id에 대해서 auth가 존재하는지 확인
         Auth auth = authValidator.ValidAuthByAuthId(authCheckReUploadRequestDto.getAuthId());
 
-        // authid로 board 찾기
+        //authid로 board 찾기
         Board board = boardValidator.ValidByBoardId(auth.getBoard().getId());
 
-        // auth의 sellerid와 request의 id가 일치하는지 확인
+        //auth의 sellerid와 request의 id가 일치하는지 확인
         authValidator.ValidAuthBySellerIdEqualRequestId(authCheckReUploadRequestDto, auth.getAuthSeller().getId());
-
 
         if (authCheckReUploadRequestDto.isAuthReUpload()) {
             board.setAppear(true);
         } else {
-            // 자식 엔터티부터 지우기 -> 추후 cascade로 한번에 처리 예정
+            // 자식 엔터티부터 지우기
             authImgRepository.deleteByAuthId(auth.getId());
             authRepository.deleteById(auth.getId());
             boardRepository.deleteById(auth.getBoard().getId());
@@ -99,7 +80,6 @@ public class AuthService {
         //reupload에 따라서 메시지 다르게 호출
         String result = authValidator.ValidAuthByReupload(authCheckReUploadRequestDto.isAuthReUpload());
 
-
         return AuthResponseDto.AuthReUploadDTO.builder()
                 .result("success")
                 .msg(board.getId() +"번 "+ result)
@@ -107,7 +87,5 @@ public class AuthService {
                 .sellerId(authCheckReUploadRequestDto.getSellerId())
                 .authId(authCheckReUploadRequestDto.getAuthId())
                 .build();
-
     }
-
 }

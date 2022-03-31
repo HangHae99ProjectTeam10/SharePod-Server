@@ -27,14 +27,14 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
         return getReservationList(sellerId).fetch();
     }
 
-    //19반
+    //19번
     @Override
     public List<ReservationNoticeList> reservationNoticeList(Long reservationId) {
         return getNoticeReservationList(reservationId).fetch();
     }
 
 
-    //거래 요청 목록 리스트(여기에 user를 어떻게 받아야할지 현재는 reservation.buyer.nickName을 받지만 user.nickName으로 받고 싶다)
+    //거래 요청 목록 리스트
     private JPAQuery<ReservationGetDTO> getReservationList(Long sellerId) {
         return jpaQueryFactory.select(Projections.constructor(ReservationGetDTO.class,
                         user.nickName,
@@ -55,22 +55,6 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                 .orderBy(board.modifiedAt.desc());
     }
 
-//    //비교 버전 거래 요청 목록 리스트(여기에 user를 어떻게 받아야할지 현재는 reservation.buyer.nickName을 받지만 user.nickName으로 받고 싶다)
-//    private JPAQuery<ReservationGetDTO> getReservationList(Long sellerId) {
-//        return jpaQueryFactory.select(Projections.constructor(ReservationGetDTO.class,
-//                        reservation.seller.nickName,
-//                        reservation.startRental,
-//                        reservation.endRental,
-//                        reservation.board.title,
-//                        reservation.board.id,
-//                        reservation.board.imgFiles.firstImgUrl
-//                ))
-//                .from(reservation)
-////                .innerJoin(board)
-//                .where(reservation.seller.id.eq(sellerId))
-//                .orderBy(board.modifiedAt.desc());
-//    }
-
     //19번
     private JPAQuery<ReservationNoticeList> getNoticeReservationList(Long reservationId) {
         return jpaQueryFactory.select(Projections.constructor(ReservationNoticeList.class,
@@ -79,6 +63,4 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                 )).from(reservation)
                 .where(reservation.id.eq(reservationId));
     }
-
-
 }

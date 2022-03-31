@@ -77,16 +77,12 @@ public class UserValidator {
         if (!Objects.equals(userRegisterRequestDto.getPassword(), userRegisterRequestDto.getPasswordCheck())) {
             throw new ErrorCodeException(PASSWORD_COINCIDE);
         }
-
     }
-
-
 
     //유저 id에 대한 user가 존재하는지에 대한 판단
     public User ValidByUserId(Long userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
-
     }
 
     //유저네임(이메일) 유무 확인
@@ -94,9 +90,7 @@ public class UserValidator {
         // 유저네임(이메일) 유무 확인
         userRepository.findByUsername(modifyRequestDTO.getUsername()).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
-
     }
-
 
     //회원 탈퇴
     public User ValidByUserDelete(Long userid, UserRequestDto.Login userLoginRequest) {
@@ -124,7 +118,6 @@ public class UserValidator {
             throw new ErrorCodeException(LOGIN_DATA_NOT_EXIST);
         }
     }
-
 }
 
 

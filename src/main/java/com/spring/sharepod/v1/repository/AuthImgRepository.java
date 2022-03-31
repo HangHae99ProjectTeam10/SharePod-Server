@@ -19,5 +19,4 @@ public interface AuthImgRepository extends JpaRepository<AuthImg, Long> {
 
     @Query("select a from AuthImg a where a.auth.authBuyer.id=:buyerId and a.id=:authImgId")
     Optional<AuthImg> findByBuyerAndAuthImgId(Long buyerId, Long authImgId);
-
 }

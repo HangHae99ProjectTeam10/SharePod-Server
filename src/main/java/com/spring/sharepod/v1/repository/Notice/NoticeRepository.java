@@ -12,14 +12,8 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>,NoticeRepo
     int findByCOUNTBuyerOrSellerId(Long userid);
 
     //알림 목록
-//    @Query("select n from Notice n where n.buyer.id=:userid or n.seller.id=:userid")
-//    List<Notice> findByBuyerOrSellerId(Long userid);
-
     @Query(nativeQuery = true, value ="select exists (SELECT n.id from notice n where n.receiverid=:userId)")
     int findByRecieverId(Long userId);
-
-
-
 
     @Modifying
     @Transactional

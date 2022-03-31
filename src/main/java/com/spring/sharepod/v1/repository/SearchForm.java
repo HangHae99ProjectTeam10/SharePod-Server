@@ -23,5 +23,4 @@ public class SearchForm {
     private int startNum;
 
     private String searchTitle;
-
 }
