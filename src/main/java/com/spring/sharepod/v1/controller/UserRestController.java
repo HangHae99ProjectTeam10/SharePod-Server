@@ -116,11 +116,9 @@ public class UserRestController {
 
         //이미지가 새롭게 들어왔으면
         if (!Objects.equals(null, StringUtils.getFilenameExtension(userImgFile.getOriginalFilename()))){
-            System.out.println("if문 들어옴?");
             //변경된 사진 저장 후 기존 삭제 삭제 후 requestDto에 setUserimg 하기
             userModifyRequestDTO.setUserImg(awsS3Service.ModifiedProfileImg(user.getUserImg().substring(user.getUserImg().lastIndexOf("/") + 1), user.getNickName(), userImgFile));
         } else {
-            System.out.println("else문 들어옴?");
             userModifyRequestDTO.setUserImg(user.getUserImg());
         }
 

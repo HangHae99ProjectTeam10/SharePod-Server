@@ -99,8 +99,6 @@ public class UserValidator {
                 () -> new ErrorCodeException(USER_NOT_FOUND));
 
         //이메일이 맞는지 확인
-        System.out.println(user.getUsername());
-        System.out.println(userLoginRequest.getUsername());
         if(!Objects.equals(user.getUsername(), userLoginRequest.getUsername())){
             throw new ErrorCodeException(USER_NOT_FOUND);
         }
