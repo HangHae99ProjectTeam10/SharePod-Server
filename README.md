@@ -1,7 +1,7 @@
 ## 대여 서비스 플랫폼 SharePod!
  물건을 사기엔 부담되고, 잠시 대여하고 싶을 때 사용할 수 있는 물건 대여 서비스 플랫폼입니다.
  
- <img src="https://user-images.githubusercontent.com/59475849/160775149-0be495f9-68a2-4d89-973c-e6cb1a50e5eb.png">
+ <img src="https://user-images.githubusercontent.com/59475849/160775149-0be495f9-68a2-4d89-973c-e6cb1a50e5eb.png" height= "300">
  
  <div align="center">
   <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white"/>
