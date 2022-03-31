@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.repository.Liked;
 
-import com.querydsl.core.types.dsl.NumberPath;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
@@ -8,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface LikedRepository extends JpaRepository<Liked, Long>, LikedRepositoryCustom {

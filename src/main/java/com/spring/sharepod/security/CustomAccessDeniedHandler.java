@@ -3,7 +3,6 @@ package com.spring.sharepod.security;
 
 import com.spring.sharepod.exception.TokenError.TokenErrorCode;
 import lombok.SneakyThrows;
-import org.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

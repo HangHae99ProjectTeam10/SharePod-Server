@@ -2,7 +2,6 @@ package com.spring.sharepod.security;
 
 import com.spring.sharepod.exception.TokenError.TokenErrorCode;
 import lombok.SneakyThrows;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
