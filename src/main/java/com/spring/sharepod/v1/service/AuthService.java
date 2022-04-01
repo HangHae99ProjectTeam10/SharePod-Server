@@ -38,6 +38,9 @@ public class AuthService {
         if(authRepository.authtest(authid)){
             allauthcheck = false;
         }
+//        if (authImgRepository.existsAllByAuthIdAndCheckImgBox(authid,false)) {
+//            allauthcheck = false;
+//        }
         auth.setSellectAllImg(allauthcheck);
 
         //data[] 값 넣어주기
