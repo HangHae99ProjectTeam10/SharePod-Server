@@ -144,7 +144,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         amount.dailyRentalFee,
                         auth.startRental,
                         auth.endRental,
-                        board.auth.authSeller.nickName,
+                        auth.authBuyer.nickName,
+                        auth.authBuyer.userImg.as("othersImg"),
                         board.category,
                         auth.id.as("authId")
                 )).from(board)
@@ -171,7 +172,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         amount.dailyRentalFee,
                         auth.startRental,
                         auth.endRental,
-                        board.user.nickName,
+                        auth.authSeller.nickName,
+                        auth.authSeller.userImg.as("othersImg"),
                         board.category,
                         auth.id.as("authId")
                 )).from(board)
