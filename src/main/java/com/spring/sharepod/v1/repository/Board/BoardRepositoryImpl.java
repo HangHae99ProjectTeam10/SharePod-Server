@@ -77,26 +77,27 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public List<VideoAllResponseDto> videoAll(Long startNum) {
-        return getVideoAll(startNum).fetch();
+    public List<VideoAllResponseDto> videoAll() {
+        return getVideoAll().fetch();
     }
 
-    private JPAQuery<VideoAllResponseDto> getVideoAll(Long startNum){
+    private JPAQuery<VideoAllResponseDto> getVideoAll(){
         return jpaQueryFactory.select(Projections.constructor(VideoAllResponseDto.class,
-                board.id,
-                board.boardRegion,
-                board.title,
-                imgFiles.videoUrl,
-                user.userImg,
-                user.nickName
+                        board.id,
+                        board.boardRegion,
+                        board.title,
+                        imgFiles.videoUrl,
+                        user.userImg,
+                        user.nickName
                 ))
                 .from(board)
-                .innerJoin(imgFiles)
-                .on(board.id.eq(imgFiles.board.id))
-                .innerJoin(user)
-                .on(board.user.id.eq(user.id))
-                .where(startNumLt(startNum))
-                .orderBy(Expressions.numberTemplate(Double.class,"function('rand')").asc())
+//                .innerJoin(imgFiles)
+//                .on(board.id.eq(imgFiles.board.id))
+//                .innerJoin(user)
+//                .on(board.user.id.eq(user.id))
+                .join(board.user, user)
+                .join(board.imgFiles,imgFiles)
+                .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
                 .limit(4);
     }
 

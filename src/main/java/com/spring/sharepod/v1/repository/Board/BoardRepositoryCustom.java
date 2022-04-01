@@ -25,5 +25,7 @@ public interface BoardRepositoryCustom {
 
     List<UserReservation> getReservation(Long userId);
 
-    List<VideoAllResponseDto> videoAll(Long startNum);
+    List<VideoAllResponseDto> videoAll();
+
+//    List<VideoAllResponseDto> videoAll();
 }

@@ -44,8 +44,8 @@ public class BoardService {
 
     //8번 API 릴스 video 전체 GET(Limit)
     @Transactional
-    public List<VideoAllResponseDto> getAllVideo(Long startNum) {
-       List<VideoAllResponseDto> videoAllResponseDtoList = boardRepository.videoAll(startNum);
+    public List<VideoAllResponseDto> getAllVideo() {
+       List<VideoAllResponseDto> videoAllResponseDtoList = boardRepository.videoAll();
         return videoAllResponseDtoList;
     }
 
