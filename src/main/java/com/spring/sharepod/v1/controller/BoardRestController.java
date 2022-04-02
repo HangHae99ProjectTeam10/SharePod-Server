@@ -12,6 +12,7 @@ import com.spring.sharepod.v1.service.AwsS3Service;
 import com.spring.sharepod.v1.service.BoardService;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,10 +36,10 @@ public class BoardRestController {
     //8번 API 릴스 동영상 get 하는 방식
     //stress_test
     @GetMapping("/board/video")
-    public ResponseEntity<AllVideo> getVideo(@RequestParam(value = "startNum", defaultValue = "0") Long startNum) {
+    public ResponseEntity<AllVideo> getVideo() {
         //limit 안 들어오면 5로 고정
 
-        List<VideoAllResponseDto> videoAllResponseDtos = boardService.getAllVideo(startNum);
+        List<VideoAllResponseDto> videoAllResponseDtos = boardService.getAllVideo();
         return new ResponseEntity<>(new AllVideo("success", "영상 전송 성공", videoAllResponseDtos), HttpStatus.OK);
     }
 
@@ -119,7 +121,7 @@ public class BoardRestController {
     //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동
     // stress_test
     @GetMapping("/board/sort")
-    public BoardResponseDto.BoardAllList getCategoryBoardList(@RequestParam(value = "startNum", defaultValue = "0") int startNum, @RequestParam(value = "filterType", defaultValue = "recent") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "boardRegion") String boardRegion, @RequestParam(value = "searchTitle") String searchtitle, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
-        return boardService.getSortedBoard(filtertype, category, boardRegion, startNum, searchtitle, userId);
+    public BoardResponseDto.BoardAllList getCategoryBoardList(@RequestParam(value = "startNum", defaultValue = "0") Long startNum, @RequestParam(value = "filterType", defaultValue = "recent") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "boardRegion") String boardRegion, @RequestParam(value = "searchTitle") String searchtitle, @RequestParam(value = "userId", required = false) Optional<Long> userId, @RequestParam(value="time",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime) {
+        return boardService.getSortedBoard(filtertype, category, boardRegion, startNum, searchtitle, userId,localDateTime);
     }
 }

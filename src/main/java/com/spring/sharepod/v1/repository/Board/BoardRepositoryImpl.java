@@ -17,6 +17,7 @@ import com.spring.sharepod.v1.repository.SearchForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.spring.sharepod.entity.QAmount.amount;
@@ -54,7 +55,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return getAllBoard().fetch();
     }
 
-    //5번 API 내가 등록한 글
+    //5번 API 내가 등록한 글 목록
     @Override
     public List<MyBoardResponseDto> getMyBoard(Long userId) {
         return getMyBoardList(userId).fetch();
@@ -77,31 +78,26 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public List<VideoAllResponseDto> videoAll(Long startNum) {
-        return getVideoAll(startNum).fetch();
+    public List<VideoAllResponseDto> videoAll() {
+        return getVideoAll().fetch();
     }
 
-    private JPAQuery<VideoAllResponseDto> getVideoAll(Long startNum){
+    private JPAQuery<VideoAllResponseDto> getVideoAll() {
         return jpaQueryFactory.select(Projections.constructor(VideoAllResponseDto.class,
-                board.id,
-                board.boardRegion,
-                board.title,
-                imgFiles.videoUrl,
-                user.userImg,
-                user.nickName
+                        board.id,
+                        board.boardRegion,
+                        board.title,
+                        imgFiles.videoUrl,
+                        user.userImg,
+                        user.nickName
                 ))
                 .from(board)
                 .innerJoin(imgFiles)
                 .on(board.id.eq(imgFiles.board.id))
                 .innerJoin(user)
                 .on(board.user.id.eq(user.id))
-                .where(startNumLt(startNum))
-                .orderBy(Expressions.numberTemplate(Double.class,"function('rand')").asc())
+                .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
                 .limit(4);
-    }
-
-    private BooleanExpression startNumLt(Long startNum){
-        return startNum != null ? board.id.lt(startNum): null;
     }
 
     //내가 요청한 게시글
@@ -120,7 +116,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         reservation.id.as("reservationId")
                 ))
                 .from(reservation)
-                .leftJoin(board)
+                .innerJoin(board)
                 .on(reservation.board.id.eq(board.id))
                 .innerJoin(imgFiles)
                 .on(board.id.eq(imgFiles.board.id))
@@ -134,6 +130,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     //내가 빌린 게시글
     private JPAQuery<RentSeller> getRentSellerList(Long userId) {
+
         return jpaQueryFactory.select(Projections.bean(RentSeller.class,
                         board.id,
                         board.title,
@@ -143,7 +140,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         amount.dailyRentalFee,
                         auth.startRental,
                         auth.endRental,
-                        board.auth.authSeller.nickName,
+                        auth.authBuyer.nickName,
+                        auth.authBuyer.userImg.as("othersImg"),
                         board.category,
                         auth.id.as("authId")
                 )).from(board)
@@ -153,6 +151,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(auth.board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
+
+
                 .where(board.auth.authSeller.id.eq(userId))
                 .orderBy(board.modifiedAt.desc());
 
@@ -161,6 +161,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     //내가 빌린 게시글
     private JPAQuery<RentBuyer> getRentBuyerList(Long userId) {
+
         return jpaQueryFactory.select(Projections.bean(RentBuyer.class,
                         board.id,
                         board.title,
@@ -170,7 +171,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         amount.dailyRentalFee,
                         auth.startRental,
                         auth.endRental,
-                        board.user.nickName,
+                        auth.authSeller.nickName,
+                        auth.authSeller.userImg.as("othersImg"),
                         board.category,
                         auth.id.as("authId")
                 )).from(board)
@@ -180,12 +182,13 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(auth.board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
+
                 .where(board.auth.authBuyer.id.eq(userId))
                 .orderBy(board.modifiedAt.desc());
 
     }
 
-    //내가 등록한 게시글
+    //5번 API 내가 등록한 글 목록
     private JPAQuery<MyBoardResponseDto> getMyBoardList(Long userId) {
         return jpaQueryFactory.select(Projections.bean(MyBoardResponseDto.class,
                         board.id,
@@ -199,12 +202,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         board.category
                 ))
                 .from(board)
-                .innerJoin(imgFiles)
-                .on(board.id.eq(imgFiles.board.id))
-                .innerJoin(amount)
-                .on(imgFiles.board.id.eq(amount.board.id))
                 .where(board.user.id.eq(userId),
                         board.mainAppear.eq(true))
+
                 .orderBy(board.modifiedAt.desc());
     }
 
@@ -229,6 +229,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .where(board.mainAppear.eq(true))
                 .orderBy(board.modifiedAt.desc())
                 .limit(8);
+
     }
 
     //searchFormRecent
@@ -240,53 +241,60 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
-                .orderBy(board.modifiedAt.desc())
-                .offset(searchForm.getStartNum())
-                .limit(16)
                 .where(
-                        // 3.
                         searchTitle(searchForm.getSearchTitle()),
                         boardRegion(searchForm.getBoardRegion()),
                         category(searchForm.getCategory()),
+                        startDate(searchForm.getLocalDateTime()),
                         board.mainAppear.eq(true)
-                        // ...
-                );
+                )
+                .orderBy(board.modifiedAt.desc())
+                .limit(16);
     }
+
+    private BooleanExpression startDate(LocalDateTime localDateTime) {
+        return localDateTime != null ? board.modifiedAt.lt(localDateTime) : null;
+    }
+
 
     //searchFormRecent
     private JPAQuery<BoardAllResponseDto> getBoardBySearchFormCost(SearchForm searchForm) {
         return jpaQueryFactory
-                .select(Projections.bean(BoardAllResponseDto.class, board.id, board.imgFiles.firstImgUrl, board.title, board.category, board.amount.dailyRentalFee, board.boardRegion, board.boardTag, board.modifiedAt))
+                .select(Projections.bean(BoardAllResponseDto.class, board.id, imgFiles.firstImgUrl, board.title, board.category, amount.dailyRentalFee, board.boardRegion, board.boardTag, board.modifiedAt))
                 .from(board)
-                .orderBy(board.amount.dailyRentalFee.desc())
-                .offset(searchForm.getStartNum())
-                .limit(16)
+                .innerJoin(imgFiles)
+                .on(board.id.eq(imgFiles.board.id))
+                .innerJoin(amount)
+                .on(imgFiles.board.id.eq(amount.board.id))
                 .where(
-                        // 3.
                         searchTitle(searchForm.getSearchTitle()),
                         boardRegion(searchForm.getBoardRegion()),
                         category(searchForm.getCategory()),
+                        startDate(searchForm.getLocalDateTime()),
                         board.mainAppear.eq(true)
-                        // ...
-                );
+                )
+                .orderBy(amount.count().desc())
+                .limit(16);
     }
 
     //searchFormRecent
     private JPAQuery<BoardAllResponseDto> getBoardBySearchFormQuality(SearchForm searchForm) {
         return jpaQueryFactory
-                .select(Projections.bean(BoardAllResponseDto.class, board.id, board.imgFiles.firstImgUrl, board.title, board.category, board.amount.dailyRentalFee, board.boardRegion, board.boardTag, board.modifiedAt))
+                .select(Projections.bean(BoardAllResponseDto.class, board.id, imgFiles.firstImgUrl, board.title, board.category, amount.dailyRentalFee, board.boardRegion, board.boardTag, board.modifiedAt))
                 .from(board)
-                .orderBy(board.productQuality.desc())
-                .offset(searchForm.getStartNum())
-                .limit(16)
+                .innerJoin(imgFiles)
+                .on(board.id.eq(imgFiles.board.id))
+                .innerJoin(amount)
+                .on(imgFiles.board.id.eq(amount.board.id))
                 .where(
-                        // 3.
                         searchTitle(searchForm.getSearchTitle()),
                         boardRegion(searchForm.getBoardRegion()),
                         category(searchForm.getCategory()),
+                        startDate(searchForm.getLocalDateTime()),
                         board.mainAppear.eq(true)
-                        // ...
-                );
+                )
+                .orderBy(board.productQuality.desc())
+                .limit(16);
     }
 
 
@@ -302,9 +310,5 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     private BooleanExpression searchTitle(String searchTitle) {
         return isEmpty(searchTitle) ? null : board.title.contains(searchTitle);
-    }
-
-    private OrderSpecifier<?> filterType(String filterType) {
-        return filterType.equals("cost") ? null : board.amount.dailyRentalFee.asc();
     }
 }

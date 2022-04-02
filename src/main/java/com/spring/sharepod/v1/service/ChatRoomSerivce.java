@@ -149,7 +149,10 @@ public class ChatRoomSerivce {
             another = chatRoom.getBuyer();
         }
 
+        //List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
+
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
+
         int resultCount = chatMessageList.size();
 
         List<ChatRoomResponseDto.ChatMessageData> chatMessageDataList = new ArrayList<>();
