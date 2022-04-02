@@ -82,7 +82,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return getVideoAll().fetch();
     }
 
+
     private JPAQuery<VideoAllResponseDto> getVideoAll() {
+
         return jpaQueryFactory.select(Projections.constructor(VideoAllResponseDto.class,
                         board.id,
                         board.boardRegion,

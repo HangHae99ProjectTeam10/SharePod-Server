@@ -57,13 +57,13 @@ public class ReservationService {
                 .endRental(LocalDate.parse(requestDTO.getEndRental()))
                 .build());
 
-
+        char quotes = '"';
         //알림 추가(ooo님이 거래 요청을 하였습니다)
         noticeRepository.save(Notice.builder()
                 .receiver(board.getUser())
                 .sender(buyer)
                 .board(board)
-                .noticeInfo(board.getTitle() + "거래 요청을 하였습니다.")
+                .noticeInfo(quotes + board.getTitle() + quotes + "  거래 요청을 하였습니다.")
                 .isChat(false)
                 .build());
 
@@ -117,12 +117,13 @@ public class ReservationService {
             //거래 내역 DB에서 삭제
             reservationRepository.deleteById(reservation.getId());
 
+            char quotes = '"';
             //거래 거절 알림 보내기 => 알림 추가(ooo님이 거래 거절을 하였습니다)
             noticeRepository.save(Notice.builder()
                     .board(board)
                     .receiver(buyer)
                     .sender(seller)
-                    .noticeInfo(board.getTitle() + "거래 거절을 하였습니다.")
+                    .noticeInfo(quotes + board.getTitle() + quotes + "  거래 거절을 하였습니다.")
                     .isChat(false)
                     .build());
 
@@ -171,12 +172,13 @@ public class ReservationService {
 
         //첫번째로 거래를 수락한 사람의 Reservation DB행 지우기
         reservationRepository.deleteById(reservation.getId());
+        char quotes = '"';
         //거래 수락 알림 보내기
         noticeRepository.save(Notice.builder()
                 .board(board)
                 .receiver(buyer)
                 .sender(seller)
-                .noticeInfo(board.getTitle() + "의 거래를 수락을 하였습니다.")
+                .noticeInfo(quotes + board.getTitle() + quotes + "  의 거래를 수락을 하였습니다.")
                 .isChat(false)
                 .build());
 
@@ -188,7 +190,7 @@ public class ReservationService {
                     .board(board)
                     .receiver(reservationNoticeList.getBuyer())
                     .sender(reservationNoticeList.getSeller())
-                    .noticeInfo(board.getTitle() + "의 거래가 이미 대여되어 거절되었습니다.")
+                    .noticeInfo(quotes + board.getTitle() + quotes + "의 거래가 이미 대여되어 거절되었습니다.")
                     .build());
         }
         //거래 내역 DB에서 삭제

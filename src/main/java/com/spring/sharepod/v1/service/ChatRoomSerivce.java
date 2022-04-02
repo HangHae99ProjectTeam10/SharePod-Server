@@ -56,12 +56,12 @@ public class ChatRoomSerivce {
         //chatRoom 정보 저장
         Long chatRoomId = chatRoomRepository.save(chatRoom).getId();
 
-        //거래 거절 알림 보내기 => 알림 추가(ooo님이 거래 거절을 하였습니다)
+        char quotes = '"';
         noticeRepository.save(Notice.builder()
                 .board(board)
                 .receiver(board.getUser())
                 .sender(buyer)
-                .noticeInfo(board.getTitle() + "채팅을 요청했습니다.")
+                .noticeInfo(quotes + board.getTitle() + quotes + "  채팅을 요청했습니다.")
                 .isChat(true)
                 .build());
 
