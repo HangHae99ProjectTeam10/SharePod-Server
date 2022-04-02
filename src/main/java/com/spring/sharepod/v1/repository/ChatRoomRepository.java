@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-    @Query(nativeQuery = true, value = "select * from chat_room cr where cr.buyerid=:userId or cr.sellerid=:userId ORDER BY cr.modified_at asc")
+    @Query(nativeQuery = true, value = "select * from chat_room cr where cr.buyerid=:userId or cr.sellerid=:userId ORDER BY cr.modified_at desc")
     List<ChatRoom> findAllByUserId(Long userId);
 
 

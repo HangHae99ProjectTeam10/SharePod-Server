@@ -37,6 +37,7 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
 
     //거래 요청 목록 리스트
     private JPAQuery<ReservationGetDTO> getReservationList(Long sellerId) {
+
         return jpaQueryFactory.select(Projections.constructor(ReservationGetDTO.class,
                         user.nickName,
                         reservation.startRental,
@@ -52,10 +53,7 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                 .on(board.id.eq(imgFiles.board.id))
                 .innerJoin(user)
                 .on(reservation.buyer.id.eq(user.id))
-//                .where(reservation.seller.id.eq(sellerId));
-                .where(reservation.seller.id.in(JPAExpressions.select(reservation.seller.id)
-                        .from(reservation)
-                        .where(reservation.seller.id.eq(sellerId))))
+                .where(reservation.seller.id.eq(sellerId))
                 .orderBy(board.modifiedAt.desc());
     }
 

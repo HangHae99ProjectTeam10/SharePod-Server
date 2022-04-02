@@ -17,11 +17,14 @@ import com.spring.sharepod.v1.repository.SearchForm;
 import com.spring.sharepod.v1.repository.UserRepository;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.spring.sharepod.exception.CommonError.ErrorCode.BOARD_NOT_EQUAL_WRITER;
@@ -44,8 +47,8 @@ public class BoardService {
 
     //8번 API 릴스 video 전체 GET(Limit)
     @Transactional
-    public List<VideoAllResponseDto> getAllVideo(Long startNum) {
-       List<VideoAllResponseDto> videoAllResponseDtoList = boardRepository.videoAll(startNum);
+    public List<VideoAllResponseDto> getAllVideo() {
+        List<VideoAllResponseDto> videoAllResponseDtoList = boardRepository.videoAll();
         return videoAllResponseDtoList;
     }
 
@@ -108,12 +111,13 @@ public class BoardService {
 
     // 10번 API 상세 페이지 board GET
     @Transactional
+    //@Cacheable(key = "#boardId", value = "getDetailBoard")
     public BoardDetail getDetailBoard(Long boardId, Optional<Long> userId) {
 
         Boolean isLiked = boardValidator.DefaultLiked(userId, boardId);
 
-        TypedQuery<BoardDetails> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Board.BoardDetails(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.user.nickName,b.user.userRegion,b.boardRegion,b.category,b.productQuality,b.likeNumber.size,b.user.userImg,b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardDetails.class);
-        query.setParameter("boardId",boardId);
+        TypedQuery<BoardDetails> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Board.BoardDetails(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.user.nickName,b.user.userRegion,b.boardRegion,b.category,b.productQuality,b.likeNumber.size,b.user.userImg, b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardDetails.class);
+        query.setParameter("boardId", boardId);
         BoardDetails resultList = query.getSingleResult();
 
         List<String> fileNameList = new ArrayList<>();
@@ -124,7 +128,7 @@ public class BoardService {
 
         // 존재한다면 받아온 내용들을 담아서 보내주기
         BoardResponseDto.BoardDetail boardDetailResponseDto = BoardResponseDto.BoardDetail.builder()
-                .Title(resultList.getTitle())
+                .title(resultList.getTitle())
                 .videoUrl(resultList.getVideoUrl())
                 .imgFiles(fileNameList)
                 .contents(resultList.getContents())
@@ -139,7 +143,7 @@ public class BoardService {
                 .isLiked(isLiked)
                 .likeCount(resultList.getLikeNumberSize())
                 .sellerImg(resultList.getUserImg())
-                .modifiedAt(resultList.getModifiedAt())
+                //.modifiedAt(LocalDate.from(resultList.getModifiedAt()))
                 .build();
 
         return BoardDetail.builder()
@@ -194,9 +198,9 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardResponseDto.BoardModifiedData getModifiedBoard(Long boardId){
+    public BoardResponseDto.BoardModifiedData getModifiedBoard(Long boardId) {
         TypedQuery<BoardModifedDetail> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Board.BoardModifedDetail(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.boardRegion,b.category,b.productQuality,b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardModifedDetail.class);
-        query.setParameter("boardId",boardId);
+        query.setParameter("boardId", boardId);
         BoardModifedDetail resultList = query.getSingleResult();
 
         return BoardResponseDto.BoardModifiedData.builder()
@@ -226,24 +230,23 @@ public class BoardService {
         String videoUrl = board.getImgFiles().getVideoUrl();
 
         //DB에 존재하는 풀 길이의 Url을 받아와서 제거하기 위한 키를 만들어준다.
-        if(board.getImgFiles().getSecondImgUrl() == null){
+        if (board.getImgFiles().getSecondImgUrl() == null) {
 
-        }else{
+        } else {
             secondImg = secondImg.substring(secondImg.lastIndexOf("/") + 1);
         }
 
-        if(board.getImgFiles().getLastImgUrl() == null){
+        if (board.getImgFiles().getLastImgUrl() == null) {
 
-        }else{
+        } else {
             lastImg = lastImg.substring(lastImg.lastIndexOf("/") + 1);
         }
 
-        if(board.getImgFiles().getVideoUrl() == null){
+        if (board.getImgFiles().getVideoUrl() == null) {
 
-        }else {
+        } else {
             videoUrl = videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
         }
-
 
 
         firstImg = firstImg.substring(firstImg.lastIndexOf("/") + 1);
@@ -276,7 +279,7 @@ public class BoardService {
 
         int resultCount = querydslBoardList.size();
         for (int i = 0; i < resultCount; i++) {
-            isLiked = boardValidator.DefaultLiked(userId,querydslBoardList.get(i).getId());
+            isLiked = boardValidator.DefaultLiked(userId, querydslBoardList.get(i).getId());
             querydslBoardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
 
@@ -293,41 +296,56 @@ public class BoardService {
 
     //15번 카테고리 정렬별 보여주기
     @Transactional
-    public BoardResponseDto.BoardAllList getSortedBoard(String filterType, String category, String boardRegion, Long startNum, String searchTitle, Optional<Long> userId) {
+    public BoardResponseDto.BoardAllList getSortedBoard(String filterType, String category, String boardRegion, Long startNum, String searchTitle, Optional<Long> userId, LocalDateTime localDateTime) {
         List<BoardAllResponseDto> boardList = new ArrayList<>();
 
         int boardLength = 0;
         Boolean isLiked = false;
+        Long boardLastNum = 0L;
+        LocalDateTime lastDateTime = null;
         switch (filterType) {
             case "quality":
                 boardList = boardRepository.searchFormQuality(SearchForm.builder()
-                        .startNum(startNum)
                         .category(category)
                         .searchTitle(searchTitle)
-                        .boardRegion(boardRegion).build());
+                        .boardRegion(boardRegion)
+                        .localDateTime(localDateTime)
+                        .build());
                 boardLength = boardList.size();
+                if(boardLength>=1) {
+                    lastDateTime = boardList.get(boardLength - 1).getModifiedAt();
+                }
                 break;
 
             case "cost":
                 boardList = boardRepository.searchFormCost(SearchForm.builder()
-                        .startNum(startNum)
                         .category(category)
                         .searchTitle(searchTitle)
-                        .boardRegion(boardRegion).build());
+                        .boardRegion(boardRegion)
+                        .localDateTime(localDateTime)
+                        .build());
                 boardLength = boardList.size();
+                if(boardLength>=1) {
+                    lastDateTime = boardList.get(boardLength - 1).getModifiedAt();
+                }
                 break;
 
             default:
                 boardList = boardRepository.searchFormRecent(SearchForm.builder()
-                        .startNum(startNum)
                         .category(category)
                         .searchTitle(searchTitle)
-                        .boardRegion(boardRegion).build());
+                        .boardRegion(boardRegion)
+                        .localDateTime(localDateTime)
+                        .build());
                 boardLength = boardList.size();
+                //boardLastNum = boardList.get(boardList.size() - 1).getId();
+                if(boardLength >= 1) {
+                    lastDateTime = boardList.get(boardLength - 1).getModifiedAt();
+                }
         }
 
         for (int i = 0; i < boardLength; i++) {
-            isLiked = boardValidator.DefaultLiked(userId,boardList.get(i).getId());
+            isLiked = boardValidator.DefaultLiked(userId, boardList.get(i).getId());
             boardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
 
@@ -335,6 +353,7 @@ public class BoardService {
                 .result("success")
                 .msg("메인 페이지 게시글 반환 성공")
                 .resultCount(boardLength)
+                .boardLastDateTime(lastDateTime)
                 .listData(boardList)
                 .build();
 

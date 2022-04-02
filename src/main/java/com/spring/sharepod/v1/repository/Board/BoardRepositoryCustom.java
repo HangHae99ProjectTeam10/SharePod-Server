@@ -17,6 +17,7 @@ public interface BoardRepositoryCustom {
 
     List<BoardAllResponseDto> searchAllBoard();
 
+    //5번 API 내가 등록한 목록
     List<MyBoardResponseDto> getMyBoard(Long userId);
 
     List<RentBuyer> getRentBuyer(Long userId);
@@ -25,5 +26,5 @@ public interface BoardRepositoryCustom {
 
     List<UserReservation> getReservation(Long userId);
 
-    List<VideoAllResponseDto> videoAll(Long startNum);
+    List<VideoAllResponseDto> videoAll();
 }

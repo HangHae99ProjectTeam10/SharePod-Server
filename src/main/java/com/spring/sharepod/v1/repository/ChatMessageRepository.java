@@ -6,13 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ChatMessageRepository extends JpaRepository<ChatMessage,Long> {
+public interface ChatMessageRepository extends JpaRepository<ChatMessage,Long>{
 
-//    @Query(nativeQuery = true, value = "select * from chat_message ch where ch.chatroomid=:chatroomId ORDER BY ch.modified_at desc LIMIT :startNum,5;")
-//    List<ChatMessage> findAllByChatRoomOrderByModifiedAt(Long chatroomId, int startNum);
-
-
-    @Query(nativeQuery = true, value = "select * from chat_message ch where ch.chatroomid in (select chatroomid from chat_message where chatroomid=:chatroomId) ORDER BY ch.modified_at desc LIMIT :startNum,5;")
+    @Query(nativeQuery = true, value = "select * from chat_message ch where ch.chatroomid=:chatroomId ORDER BY ch.modified_at desc LIMIT :startNum,5;")
     List<ChatMessage> findAllByChatRoomOrderByModifiedAt(Long chatroomId, int startNum);
+
 
 }

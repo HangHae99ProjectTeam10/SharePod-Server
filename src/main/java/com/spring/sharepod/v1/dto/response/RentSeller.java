@@ -24,6 +24,7 @@ public class RentSeller {
     private LocalDate startRental;
     private LocalDate endRental;
     private String nickName;
+    private String othersImg;
     private String category;
     private Long authId;
     private Optional<Boolean> isLiked;
