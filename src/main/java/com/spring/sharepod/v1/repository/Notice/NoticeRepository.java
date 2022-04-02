@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface NoticeRepository extends JpaRepository<Notice, Long>,NoticeRepositoryCustom {
     //알림 갯수
-    @Query(nativeQuery = true, value = "select COUNT(n.id) from notice n where n.buyerId=:userid or n.sellerId=:userid")
+    @Query(nativeQuery = true, value = "select COUNT(n.id) from notice n where n.receiverid=:userid or n.senderid=:userid")
     int findByCOUNTBuyerOrSellerId(Long userid);
 
     //알림 목록
