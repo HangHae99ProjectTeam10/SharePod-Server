@@ -33,7 +33,8 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
                         board.id,
                         notice.isChat
 
-                )).from(notice)
+                ))
+                .from(notice)
                 .innerJoin(user)
                 .on(notice.receiver.id.eq(user.id))
                 .innerJoin(board)

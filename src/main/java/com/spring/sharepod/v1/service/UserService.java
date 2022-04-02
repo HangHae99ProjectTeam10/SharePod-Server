@@ -300,7 +300,7 @@ public class UserService {
     @Transactional
     public List<RentSeller> getSellList(Long userId) {
         Boolean isLiked = false;
-        List<RentSeller> querydslRentSellerList = boardRepository.getRentSeller(userId);
+         List<RentSeller> querydslRentSellerList = boardRepository.getRentSeller(userId);
         int resultCount = querydslRentSellerList.size();
         for (int i=0;i<resultCount;i++){
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentSellerList.get(i).getId());

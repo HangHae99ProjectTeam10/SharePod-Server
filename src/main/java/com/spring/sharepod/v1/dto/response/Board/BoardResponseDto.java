@@ -1,7 +1,9 @@
 package com.spring.sharepod.v1.dto.response.Board;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,8 +52,9 @@ public class BoardResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class BoardDetail {
-        private String Title;
+        private String title;
         private String videoUrl;
         private List<String> imgFiles;
         private String contents;
@@ -65,7 +68,7 @@ public class BoardResponseDto {
         private String category;
         private String boardQuaility;
         private boolean isLiked;
-        private LocalDateTime modifiedAt;
+        private LocalDate modifiedAt;
         private int likeCount;
     }
 
@@ -103,6 +106,7 @@ public class BoardResponseDto {
         private String result;
         private String msg;
         private int resultCount;
+        private LocalDateTime boardLastDateTime;
         private List<BoardAllResponseDto> listData;
     }
 }
