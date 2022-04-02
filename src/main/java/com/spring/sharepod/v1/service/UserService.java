@@ -33,10 +33,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.spring.sharepod.exception.CommonError.ErrorCode.*;
@@ -238,6 +236,18 @@ public class UserService {
     //6.2 마이페이지 내가 등록한 글 불러오기
     @Transactional
     public UserResponseDto.UserMyBoardList getMyBoard(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new ErrorCodeException(USER_NOT_FOUND));
+
+        //쉐어팟과 함께한 날 계산
+        // 현재시간
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        Date nowDate = new Date();
+        Date startDate = java.sql.Timestamp.valueOf(user.getCreatedAt());
+        long calDate = nowDate.getTime() - startDate.getTime();
+        long calDateDays = calDate / (24 * 60 * 60 * 1000);
+        calDateDays = Math.abs(calDateDays);
+
 
         Boolean isLiked = false;
         List<MyBoardResponseDto> querydslMyBoardList = boardRepository.getMyBoard(userId);
@@ -252,6 +262,7 @@ public class UserService {
         return UserResponseDto.UserMyBoardList.builder()
                 .result("success")
                 .msg("등록한 게시글 GET 성공")
+                .withDay(calDateDays)
                 .userMyBoard(querydslMyBoardList)
                 .build();
     }

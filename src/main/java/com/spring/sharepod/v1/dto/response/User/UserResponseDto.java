@@ -66,6 +66,7 @@ public class UserResponseDto {
     public static class UserMyBoardList {
         private String result;
         private String msg;
+        private Long withDay;
         private List<MyBoardResponseDto> userMyBoard;
     }
 
