@@ -29,6 +29,6 @@ public class AuthImgRestController {
         //seller id가 user 테이블에 존재하는지에 대한 판단
         userValidator.ValidByUserId(authBoolRequestDto.getSellerId());
 
-        return  authImgService.BoolAuth(authBoolRequestDto);
+        return authImgService.BoolAuth(authBoolRequestDto);
     }
 }
