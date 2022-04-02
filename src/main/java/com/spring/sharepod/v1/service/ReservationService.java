@@ -35,7 +35,7 @@ public class ReservationService {
     private final AuthImgRepository authImgRepository;
     private final ReservationValidator reservationValidator;
 
-    //17번 거래 요청
+    // 17번 API거래 요청
     @Transactional
     public ReservationResponseDto.ReservationDeal reserRequestService(Long boardId, ReservationRequestDto.Reservation requestDTO) {
         //거래요청 validator
@@ -78,7 +78,7 @@ public class ReservationService {
                 .build();
     }
 
-    //18번 거래요청 목록
+    //18번 API 거래 요청 목록(현재 접속한 사람에게 온 요청 목록)
     @Transactional
     public ReservationResponseDto.ReservationGetFinalDTO reservationGetService(Long sellerId) {
         List<ReservationGetDTO> querydslReservationList = reservationRepository.reservationList(sellerId);
@@ -91,7 +91,7 @@ public class ReservationService {
 
     }
 
-    //API 19번 거래요청 수락/거절
+    //19번 API 거래 요청 수락/거절
     @Transactional
     public ReservationResponseDto.accReservationDTO resResponseService(Long boardId, ReservationRequestDto.AcceptOrNot acceptNotDTO) throws ParseException {
         //buyer

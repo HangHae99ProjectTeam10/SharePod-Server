@@ -27,7 +27,8 @@ public class ChatController {
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
 
-    @MessageMapping("/templates/chat/message")  // 웹소켓으로 들어오는 메시지 발행 처리 -> 클라이언트에서는 /pub/chat/message로 발행 요청
+    // 웹소켓으로 들어오는 메시지 발행 처리 -> 클라이언트에서는 /pub/chat/message로 발행 요청
+    @MessageMapping("/templates/chat/message")
     @Transactional
     public void message(ChatMessageRequestDto.Wirte message) {
 

@@ -20,6 +20,7 @@ public class ReservationValidator {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
+    // 17번 API거래 요청
     public void validateReservationRequest(Long boardid, ReservationRequestDto.Reservation requestDTO){
         //게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardid).orElseThrow(

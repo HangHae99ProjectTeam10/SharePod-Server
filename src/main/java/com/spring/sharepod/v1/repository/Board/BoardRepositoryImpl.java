@@ -77,6 +77,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return getReservationList(userId).fetch();
     }
 
+    //8번 API 릴스 동영상
     @Override
     public List<VideoAllResponseDto> videoAll() {
         return getVideoAll().fetch();

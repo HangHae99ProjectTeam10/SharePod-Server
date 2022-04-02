@@ -14,6 +14,7 @@ import static com.spring.sharepod.exception.CommonError.ErrorCode.NOTICE_NOT_EXI
 public class NoticeValidator {
     private final NoticeRepository noticeRepository;
 
+    //25번 API 알림 목록 띄우기
     //알림 목록 valid
     public int ValidnoticeList(Long userid) {
         //userid로 notice를 찾는다

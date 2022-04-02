@@ -203,7 +203,7 @@ public class UserService {
                 .build();
     }
 
-    //5번 API userinfo 불러오기
+    //5번 API 마이페이지 불러오기
     @Transactional
     public UserMyInfoResponseDto getUserInfo(Long userid) {
         TypedQuery<UserInfoResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.User.UserInfoResponseDto(u.id,u.username,u.nickName,u.userRegion,u.userImg,u.createdAt)  FROM User u where u.id=:userId", UserInfoResponseDto.class);
@@ -221,7 +221,7 @@ public class UserService {
                 .build();
     }
 
-    //5번 API 찜목록 불러오기
+    //6번 마이페이지 찜 목록 불러오기
     @Transactional
     public UserResponseDto.UserLikedList getUserLikeBoard(Long userid) {
         TypedQuery<LikedListResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Liked.LikedListResponseDto(b.id,b.title,b.boardRegion,b.boardTag,b.imgFiles.firstImgUrl,true,b.modifiedAt,b.amount.dailyRentalFee,b.user.nickName,b.category)  FROM Liked l inner JOIN Board b on l.board.id = b.id where l.user.id=:userId", LikedListResponseDto.class);
@@ -235,7 +235,7 @@ public class UserService {
                 .build();
     }
 
-    //5번 API 등록한 목록
+    //6.2 마이페이지 내가 등록한 글 불러오기
     @Transactional
     public UserResponseDto.UserMyBoardList getMyBoard(Long userId) {
 
@@ -256,7 +256,7 @@ public class UserService {
                 .build();
     }
 
-    //5번 API 내가 대여한 목록 불러오기
+    //6.3 마이페이지 대여한 목록 불러오기
     @Transactional
     public List<RentBuyer> getBuyList(Long userId) {
         Boolean isLiked = false;
@@ -265,38 +265,10 @@ public class UserService {
         for (int i=0;i<resultCount;i++){
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentBuyerList.get(i).getId());
             querydslRentBuyerList.get(i).setIsLiked(Optional.ofNullable(isLiked));
-
-
-
         }
-
-//        List<UserResponseDto.RentBuyer> rentBuyerResponseDtoList = new ArrayList<>();
-//        // 없으면 for문 안돌고 빈 list가 들어간다.
-//        List<Auth> authList = authRepository.findByBuyerId(userId);
-//
-//        for (Auth auth : authList) {
-//            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),auth.getBoard().getId());
-//
-//            UserResponseDto.RentBuyer rentBuyerResponseDto = UserResponseDto.RentBuyer.builder()
-//                    .boardId(auth.getBoard().getId())
-//                    .boardTitle(auth.getBoard().getTitle())
-//                    .boardTag(auth.getBoard().getBoardTag())
-//                    .boardRegion(auth.getBoard().getBoardRegion())
-//                    .isLiked(isLiked)
-//                    .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
-//                    .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
-//                    .startRental(auth.getStartRental())
-//                    .nickName(auth.getAuthSeller().getNickName())
-//                    .authId(auth.getId())
-//                    .category(auth.getBoard().getCategory())
-//                    .build();
-//            rentBuyerResponseDtoList.add(rentBuyerResponseDto);
-//        }
         return querydslRentBuyerList;
     }
-
-
-    //5번 API 내가 빌려준 목록 불러오기
+    //6.3 마이페이지 빌려준 목록 불러오기
     @Transactional
     public List<RentSeller> getSellList(Long userId) {
         Boolean isLiked = false;
@@ -308,10 +280,10 @@ public class UserService {
         }
         return querydslRentSellerList;
     }
+    //6.3거래요청 목록 불러오기
     @Transactional
     public List<UserReservation> getReservationList(Long userId) {
         Boolean isLiked = false;
-
 
         List<UserReservation> querydslResrvationList = boardRepository.getReservation(userId);
         int resultCount = querydslResrvationList.size();
@@ -324,7 +296,7 @@ public class UserService {
     }
 
 
-    //6번 API 회원 정보 수정
+    //6.4번 회원 정보 수정하기
     @Transactional
     public UserResponseDto.UserModifiedInfo usermodifyService(Long userid, UserRequestDto.Modify modifyRequestDTO) {
         User user = userValidator.ValidByUserId(userid);
@@ -352,7 +324,6 @@ public class UserService {
     //7번 API 회원 탈퇴
     @Transactional
     public BasicResponseDTO UserDelete(Long userid, UserRequestDto.Login userLoginRequest) {
-        //userid에 의한 user가 있는지 판단
         User user = userValidator.ValidByUserDelete(userid, userLoginRequest);
 
         //파일 이미지 key를 반환하기 위한 로직

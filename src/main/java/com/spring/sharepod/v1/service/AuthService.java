@@ -26,7 +26,7 @@ public class AuthService {
     private final BoardValidator boardValidator;
     private final AuthValidator authValidator;
 
-    //20번 API 이미지 인증 창 데이터
+    //20번 이미지 인증 창 데이터(인증 사진 확인하기)
     @Transactional
     public AuthResponseDto.AuthDataAll dataAllResponseDTO(@PathVariable Long authid) {
 
@@ -38,9 +38,8 @@ public class AuthService {
         if(authRepository.authtest(authid)){
             allauthcheck = false;
         }
-//        if (authImgRepository.existsAllByAuthIdAndCheckImgBox(authid,false)) {
-//            allauthcheck = false;
-//        }
+
+        //위에서 나온 allauthcheck 값 으로 변경해주기
         auth.setSellectAllImg(allauthcheck);
 
         //data[] 값 넣어주기
@@ -58,7 +57,7 @@ public class AuthService {
                 .build();
     }
 
-    //빌려준 사람만의 기능, 재업로드
+    //23번 재업로드 or 삭제 api
     @Transactional
     public AuthResponseDto.AuthReUploadDTO CheckReuploadBoard(AuthRequestDto.AuthCheckReUpload authCheckReUploadRequestDto) {
 

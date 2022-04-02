@@ -26,8 +26,7 @@ public class AuthRestController {
     private final AuthImgService authImgService;
     private final AwsS3Service awsS3Service;
 
-    //20번 이미지 인증 창 데이터
-    //stress_test
+    //20번 이미지 인증 창 데이터(인증 사진 확인하기)
     @GetMapping("/auth/img/{authId}")
     public AuthResponseDto.AuthDataAll authDataAllResponseDTO(@PathVariable Long authId, @AuthenticationPrincipal User user){
         //토큰이 존재하는지에 대한 것만 확인해야함
@@ -38,7 +37,7 @@ public class AuthRestController {
         return authService.dataAllResponseDTO(authId);
     }
 
-    //21번 buyer가 인증 이미지 저장
+    //21번 buyer가 인증 사진 업로드
     @PostMapping("/auth/img/{userId}/{authImgId}")
     public AuthResponseDto.AuthUploadDTO AuthImgUpload(@PathVariable Long userId, @PathVariable Long authImgId, @RequestPart MultipartFile authFile, @AuthenticationPrincipal User user) throws IOException {
         // 토큰과 userid 일치하는지 확인

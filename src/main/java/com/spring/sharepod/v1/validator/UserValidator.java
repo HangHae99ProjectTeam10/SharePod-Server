@@ -79,6 +79,7 @@ public class UserValidator {
         }
     }
 
+    //6.4번 회원 정보 수정하기
     //유저 id에 대한 user가 존재하는지에 대한 판단
     public User ValidByUserId(Long userId) {
         return userRepository.findById(userId).orElseThrow(
