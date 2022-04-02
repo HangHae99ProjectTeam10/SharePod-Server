@@ -18,6 +18,7 @@ public class AuthValidator {
 
     private final AuthRepository authRepository;
 
+    //20번 이미지 인증 창 데이터(인증 사진 확인하기)
     //authid로 auth가 없다면 error 메시지 호출
     public Auth ValidAuthByAuthId(Long authid) {
         Auth auth = authRepository.findById(authid).orElseThrow(

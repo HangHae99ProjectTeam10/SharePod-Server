@@ -57,6 +57,7 @@ public class AwsS3Service {
         return amazonS3.getUrl(bucket, modifiedFileName).toString();
     }
 
+    //7번 API 회원 탈퇴하기
     // 회원 탈퇴 시, 진행되는 로직
     public void deleteProfileImg(String fileName) {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
@@ -180,7 +181,7 @@ public class AwsS3Service {
         }
     }
 
-    //21번 API 인증 이미지
+    //21번 buyer가 인증 사진 업로드
     public String authImgCheck(Long userId, Long authImgId, MultipartFile authfile) throws IOException {
 
         //이미지박스 id가 존재하는지 확인
