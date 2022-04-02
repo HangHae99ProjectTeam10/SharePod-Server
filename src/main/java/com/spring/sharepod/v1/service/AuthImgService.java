@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthImgService {
     private final AuthImgValidator authImgValidator;
 
-    //21번 API 인증 사진 업로드
+    //21번 buyer가 인증 사진 업로드
     @javax.transaction.Transactional
     public AuthResponseDto.AuthUploadDTO authimguploadService(Long userId, Long authImgId, String imgUrl) {
 
