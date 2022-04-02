@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -20,7 +22,7 @@ public class SearchForm {
     @Length(max = 100)
     private String boardRegion;
 
-    private int startNum;
-
     private String searchTitle;
+
+    private LocalDateTime localDateTime;
 }

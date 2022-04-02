@@ -24,11 +24,11 @@ public class AuthImgValidator {
     }
 
     //구매자가 아닐 경우
-    public AuthImg ValidAuthImgByBuyerId(Long buyerId, Long authImgId) {
-        AuthImg authImg = authImgRepository.findByBuyerAndAuthImgId(buyerId, authImgId).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_BUYER));
-        return authImg;
-    }
+//    public AuthImg ValidAuthImgByBuyerId(Long buyerId, Long authImgId) {
+//        AuthImg authImg = authImgRepository.findByAuthAuthBuyerIdAndId(buyerId, authImgId);
+//                //.orElseThrow(() -> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_BUYER));
+//        return authImg;
+//    }
 
     //구매자가 일치하지 않을 경우
     public void ValidAuthImgBoxIdEqualBuyerId(Long authimgboxbuyerid,Long requestuserid){
