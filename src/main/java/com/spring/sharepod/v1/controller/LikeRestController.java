@@ -19,7 +19,7 @@ public class LikeRestController {
     private final LikedService likedService;
     private final TokenValidator tokenValidator;
 
-    //찜하기, 찜하기 취소
+    //16번 찜하기, 찜하기 취소
     @PostMapping("/like/{boardId}")
     public LikedResponseDto.LikedPost likecontroll(@PathVariable Long boardId, @RequestBody LikeRequestDTO.Liked requestDTO, @AuthenticationPrincipal User user){
         tokenValidator.userIdCompareToken(requestDTO.getUserId(),user.getId());

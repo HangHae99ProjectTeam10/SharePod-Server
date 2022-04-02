@@ -29,7 +29,7 @@ public class ChatRoomSerivce {
     private final UserRepository userRepository;
     private final NoticeRepository noticeRepository;
 
-    // 채팅방 생성
+    // 27번 채팅방 생성
     @Transactional
     public ChatRoomResponseDto.ChatRoomData createChatRoom(@RequestBody ChatRoomRequestDto.Create create) {
 
@@ -80,7 +80,7 @@ public class ChatRoomSerivce {
         return chatRoomData;
     }
 
-    //게시글 좌측 리스트 조회
+    // 28번 채팅 리스트 받아오기
     @Transactional
     public ChatRoomResponseDto.ChatRoomListData findChatList(Long userId) {
         //내 정보 가져오기
@@ -136,7 +136,7 @@ public class ChatRoomSerivce {
                 .build();
     }
 
-    //해당 채팅방 채팅 내용 반환
+    // 29번 해당 채팅방 채팅내용 반환
     public ChatRoomResponseDto.ChatMessageListData roomChatListService(Long userId, Long chatroomId, int startNum) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatroomId).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.CHATROOM_NOT_EXIST));

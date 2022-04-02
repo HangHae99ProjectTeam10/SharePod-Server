@@ -23,14 +23,14 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final NoticeValidator noticeValidator;
 
-    //24번 알림 갯수
+    //24번 API 알림 갯수
     @Transactional
     public int getNoticeCount(Long userid) {
         // user의 정보가 없을 경우에는 count를 0으로 보내준다.
         return noticeRepository.findByCOUNTBuyerOrSellerId(userid);
     }
 
-    //25번 알림 목록 띄우기
+    //25번 API 알림 목록 띄우기
     @Transactional
     public NoticeInfoResponseDto getNoticeList(Long userId) {
 
@@ -50,7 +50,7 @@ public class NoticeService {
                 .build();
     }
 
-    //알림 확인 삭제
+    //26번 API 알림 확인 or 삭제
     @Transactional
     public void DeleteNotice(Long noticeId, Long userId) {
         //알림이 존재하지 않을 시 에러 메시지 호출

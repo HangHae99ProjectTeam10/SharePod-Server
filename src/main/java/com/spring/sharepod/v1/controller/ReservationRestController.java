@@ -20,13 +20,11 @@ public class ReservationRestController {
     // 17번 API거래 요청
     @PostMapping("/reservation/request/{boardId}")
     public ReservationResponseDto.ReservationDeal reservationRequest(@PathVariable Long boardId, @RequestBody ReservationRequestDto.Reservation requestDTO, @AuthenticationPrincipal User user){
-
         tokenValidator.userIdCompareToken(requestDTO.getUserId(), user.getId());
         return reservationService.reserRequestService(boardId,requestDTO);
     }
 
     //18번 API 거래 요청 목록(현재 접속한 사람에게 온 요청 목록)
-    //stress_test
     @GetMapping("/reservation/{userId}")
     public ReservationResponseDto.ReservationGetFinalDTO reservationGetControll(@PathVariable Long userId, @AuthenticationPrincipal User user){
         tokenValidator.userIdCompareToken(userId,user.getId());
@@ -38,6 +36,5 @@ public class ReservationRestController {
     public ReservationResponseDto.accReservationDTO resResponse(@PathVariable Long boardId, @RequestBody ReservationRequestDto.AcceptOrNot reservationAcceptNotDTO, @AuthenticationPrincipal User user) throws ParseException {
         tokenValidator.userIdCompareToken(reservationAcceptNotDTO.getSellerId(), user.getId());
         return reservationService.resResponseService(boardId,reservationAcceptNotDTO);
-
     }
 }

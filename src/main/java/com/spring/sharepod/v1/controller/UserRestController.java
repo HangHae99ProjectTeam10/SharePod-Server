@@ -29,11 +29,9 @@ public class UserRestController {
     private final AwsS3Service awsS3Service;
 
     //1번 API 로그인
-
     //유저에게 받아온 정보를 (UserRequestDto.Login)를 통하여 컨트롤러에서의 예외처리 후
     //(userService.login)으로 보낸 후  Refresh토큰과 Access토큰을 헤더에 담고, db에서 가져온 정보를 body에 담아
     //(UserResponseDto.Login)를 통해 컨트롤러로 보낸후 유저한테 보냄
-
     @PostMapping("/user/login")
     public UserResponseDto.Login Login(@RequestBody UserRequestDto.Login userLoginRequest, HttpServletResponse res) {
         //이메일이나 패스워드가 null 값일 경우의 처리
@@ -54,7 +52,6 @@ public class UserRestController {
         return userService.logout(reIssueRequestDto, req);
     }
 
-
     //4번 API 회원가입
     @PostMapping("/user/register")
     public BasicResponseDTO UserRegister(@RequestPart UserRequestDto.Register userRegisterRequestDto,
@@ -70,23 +67,23 @@ public class UserRestController {
     //5번 API 마이페이지 불러오기
     @GetMapping("/user/{userId}")
     public UserMyInfoResponseDto getBoardList(@PathVariable Long userId, @AuthenticationPrincipal User user) {
-
-        //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userId, user.getId());
-
         return userService.getUserInfo(userId);
     }
 
+    //6.1번 마이페이지 찜 목록 불러오기
     @GetMapping("/user/like/{userId}")
     public UserResponseDto.UserLikedList userLikedList(@PathVariable Long userId,@AuthenticationPrincipal User user){
         tokenValidator.userIdCompareToken(userId,user.getId());
         return userService.getUserLikeBoard(userId);
     }
+    //6.2 마이페이지 내가 등록한 글 불러오기
     @GetMapping("/user/board/{userId}")
     public UserResponseDto.UserMyBoardList userMyBoardList(@PathVariable Long userId,@AuthenticationPrincipal User user){
         tokenValidator.userIdCompareToken(userId,user.getId());
         return userService.getMyBoard(userId);
     }
+    //6.3 마이페이지 내가 대여한, 블려준, 거래요청 목록 불러오기
     @GetMapping("/user/order/{userId}")
     public UserOrderResponseDto userBuyerList(@PathVariable Long userId, @AuthenticationPrincipal User user){
         tokenValidator.userIdCompareToken(userId,user.getId());
@@ -102,17 +99,14 @@ public class UserRestController {
                 .build();
     }
 
-    //6번 회원 정보 수정하기
+    //6.4번 회원 정보 수정하기
     @PatchMapping("/user/{userId}")
-    public UserResponseDto.UserModifiedInfo UserModify(@PathVariable Long userId,
-                                       @RequestPart UserRequestDto.Modify userModifyRequestDTO,
+    public UserResponseDto.UserModifiedInfo UserModify(@PathVariable Long userId, @RequestPart UserRequestDto.Modify userModifyRequestDTO,
                                        @RequestPart(required=false) MultipartFile userImgFile, @AuthenticationPrincipal User user) throws IOException {
         //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userId, user.getId());
-
         //해당 request vaildator 작동
         userValidator.ValidModifiedUser(userModifyRequestDTO);
-
 
         //이미지가 새롭게 들어왔으면
         if (!Objects.equals(null, StringUtils.getFilenameExtension(userImgFile.getOriginalFilename()))){
@@ -128,7 +122,6 @@ public class UserRestController {
     //7번 API 회원 탈퇴하기
     @DeleteMapping("/user/{userId}")
     public BasicResponseDTO DeleteUser(@PathVariable Long userId, @RequestBody UserRequestDto.Login userDelete, @AuthenticationPrincipal User user) {
-        //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userId, user.getId());
         return userService.UserDelete(userId, userDelete);
     }

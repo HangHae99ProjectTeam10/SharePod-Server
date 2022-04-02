@@ -21,6 +21,7 @@ public class LikedService {
     private final BoardValidator boardValidator;
     private final UserValidator userValidator;
 
+    //16번 찜하기, 찜하기 취소
     @Transactional
     public LikedResponseDto.LikedPost islikeservice(Long boardid, LikeRequestDTO.Liked requestDTO) {
         //찜할 게시판 boardid로 검색해 가져오기
