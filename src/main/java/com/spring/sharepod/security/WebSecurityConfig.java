@@ -72,6 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/board/sort/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/reissue").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/logout").permitAll()
+                .antMatchers("/ws-stomp/**").permitAll()
                 .anyRequest().authenticated()
                 //.anyRequest().permitAll()
 
