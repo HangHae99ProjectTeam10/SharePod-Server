@@ -143,7 +143,7 @@ public class BoardService {
                 .isLiked(isLiked)
                 .likeCount(resultList.getLikeNumberSize())
                 .sellerImg(resultList.getUserImg())
-                //.modifiedAt(LocalDate.from(resultList.getModifiedAt()))
+                .modifiedAt(resultList.getModifiedAt())
                 .build();
 
         return BoardDetail.builder()
