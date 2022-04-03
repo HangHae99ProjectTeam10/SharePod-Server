@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -63,17 +64,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
-//                .antMatchers("/user/login").permitAll()
-//                .antMatchers("/user/register").permitAll()
-//                .antMatchers("/board/video").permitAll()
-//                .antMatchers(HttpMethod.GET, "/board/{boardid}").permitAll()
-//                .antMatchers(HttpMethod.GET, "/board").permitAll()
-//                .antMatchers(HttpMethod.GET, "/board/sort").permitAll()
-//                .antMatchers(HttpMethod.GET, "/search").permitAll()
-//                .antMatchers(HttpMethod.POST, "/reissue").permitAll()
-//                .antMatchers(HttpMethod.POST, "/user/logout").permitAll()
-//                .anyRequest().authenticated()
-                .anyRequest().permitAll()
+                .antMatchers("/user/login").permitAll()
+                .antMatchers("/user/register").permitAll()
+                .antMatchers("/board/video/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/board/{boardid}/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/board/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/board/sort/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/user/reissue").permitAll()
+                .antMatchers(HttpMethod.POST, "/user/logout").permitAll()
+                .anyRequest().authenticated()
+                //.anyRequest().permitAll()
 
 
 

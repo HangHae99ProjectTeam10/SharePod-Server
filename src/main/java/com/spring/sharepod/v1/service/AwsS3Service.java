@@ -74,8 +74,10 @@ public class AwsS3Service {
         String[] giveUrl = new String[3];
         for (int i = 0; i < giveUrl.length; i++) {
             if (Objects.equals(null, StringUtils.getFilenameExtension(imgFiles[i].getOriginalFilename()))){
+                System.out.println("giveURL == null");
                 giveUrl[i] = null;
             } else {
+                System.out.println("giveURL != null");
                 String fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(imgFiles[i].getOriginalFilename());
                 amazonS3.putObject(new PutObjectRequest(bucket, fileName, imgFiles[i].getInputStream(), null)
                         .withCannedAcl(CannedAccessControlList.PublicRead));

@@ -26,9 +26,9 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
     private JPAQuery<Notice> getNoticeInfoList(Long userId) {
         return jpaQueryFactory.select(Projections.constructor(Notice.class,
                         notice.id,
-                        user.nickName,
-                        user.userRegion,
-                        user.userImg,
+                        notice.sender.nickName,
+                        notice.sender.userRegion,
+                        notice.sender.userImg,
                         notice.noticeInfo,
                         board.id,
                         notice.isChat
