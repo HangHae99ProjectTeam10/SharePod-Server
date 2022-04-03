@@ -68,7 +68,7 @@ public class BoardResponseDto {
         private String category;
         private String boardQuaility;
         private boolean isLiked;
-        private LocalDate modifiedAt;
+        private LocalDateTime modifiedAt;
         private int likeCount;
     }
 
