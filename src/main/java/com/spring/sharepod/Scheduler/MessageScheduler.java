@@ -1,6 +1,6 @@
 package com.spring.sharepod.Scheduler;
 
-import com.spring.sharepod.v1.repository.ChatMessageRepository;
+import com.spring.sharepod.v1.repository.ChatMessage.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

@@ -154,8 +154,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(auth.board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
-
-
                 .where(board.auth.authSeller.id.eq(userId))
                 .orderBy(board.modifiedAt.desc());
 
@@ -251,6 +249,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         startDate(searchForm.getLocalDateTime()),
                         board.mainAppear.eq(true)
                 )
+                //.offset(searchForm.getStartNum())
                 .orderBy(board.modifiedAt.desc())
                 .limit(16);
     }
@@ -276,7 +275,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         startDate(searchForm.getLocalDateTime()),
                         board.mainAppear.eq(true)
                 )
-                .orderBy(amount.count().desc())
+                //.offset(searchForm.getStartNum())
+                .orderBy(amount.dailyRentalFee.desc())
                 .limit(16);
     }
 
@@ -296,6 +296,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         startDate(searchForm.getLocalDateTime()),
                         board.mainAppear.eq(true)
                 )
+                //.offset(searchForm.getStartNum())
                 .orderBy(board.productQuality.desc())
                 .limit(16);
     }

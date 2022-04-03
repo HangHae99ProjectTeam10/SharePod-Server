@@ -132,9 +132,12 @@ public class UserService {
 
 
 
-        HttpHeaders header = new HttpHeaders();
-        header.set("accessToken", tokenInfo.getAccessToken());
-        header.set("refreshToken", tokenInfo.getRefreshToken());
+//        HttpHeaders header = new HttpHeaders();
+//        header.set("accessToken", tokenInfo.getAccessToken());
+//        header.set("refreshToken", tokenInfo.getRefreshToken());
+
+        res.addHeader("accessToken", tokenInfo.getAccessToken());
+        res.addHeader("refreshToken", tokenInfo.getRefreshToken());
 
         // 5. RefreshToken Redis 업데이트
         redisTemplate.opsForValue()

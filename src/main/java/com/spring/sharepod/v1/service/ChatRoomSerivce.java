@@ -7,7 +7,7 @@ import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.ChatRoomRequestDto;
 import com.spring.sharepod.v1.dto.response.ChatRoomResponseDto;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
-import com.spring.sharepod.v1.repository.ChatMessageRepository;
+import com.spring.sharepod.v1.repository.ChatMessage.ChatMessageRepository;
 import com.spring.sharepod.v1.repository.ChatRoomRepository;
 import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -137,7 +138,7 @@ public class ChatRoomSerivce {
     }
 
     // 29번 해당 채팅방 채팅내용 반환
-    public ChatRoomResponseDto.ChatMessageListData roomChatListService(Long userId, Long chatroomId, int startNum) {
+    public ChatRoomResponseDto.ChatMessageListData roomChatListService(Long userId, Long chatroomId, LocalDateTime localDateTime) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatroomId).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.CHATROOM_NOT_EXIST));
 
@@ -151,7 +152,10 @@ public class ChatRoomSerivce {
 
         //List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
 
-        List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
+        //List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
+
+        List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomOrderByModifiedAt(chatroomId,localDateTime);
+
 
         int resultCount = chatMessageList.size();
 

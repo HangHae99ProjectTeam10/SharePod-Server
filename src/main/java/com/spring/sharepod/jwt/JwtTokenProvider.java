@@ -30,7 +30,8 @@ public class JwtTokenProvider {
 
     private String secretKey = "webfirewood";
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;              // //1분
+    //private static final long ACCESS_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;              // //1분
+    private static final long ACCESS_TOKEN_EXPIRE_TIME =  30 * 1000L;
     //private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 2 * 7 * 24 * 60 * 60 * 1000L;     // 10초
 

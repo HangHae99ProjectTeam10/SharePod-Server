@@ -17,13 +17,11 @@ import com.spring.sharepod.v1.repository.SearchForm;
 import com.spring.sharepod.v1.repository.UserRepository;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -309,6 +307,7 @@ public class BoardService {
                         .category(category)
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion)
+                                .startNum(startNum)
                         .localDateTime(localDateTime)
                         .build());
                 boardLength = boardList.size();
@@ -322,6 +321,7 @@ public class BoardService {
                         .category(category)
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion)
+                        .startNum(startNum)
                         .localDateTime(localDateTime)
                         .build());
                 boardLength = boardList.size();
@@ -335,6 +335,7 @@ public class BoardService {
                         .category(category)
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion)
+                        .startNum(startNum)
                         .localDateTime(localDateTime)
                         .build());
                 boardLength = boardList.size();
@@ -351,7 +352,7 @@ public class BoardService {
 
         BoardResponseDto.BoardAllList boardAllList = BoardResponseDto.BoardAllList.builder()
                 .result("success")
-                .msg("메인 페이지 게시글 반환 성공")
+                .msg("검색 결과 게시글 반환 성공")
                 .resultCount(boardLength)
                 .boardLastDateTime(lastDateTime)
                 .listData(boardList)

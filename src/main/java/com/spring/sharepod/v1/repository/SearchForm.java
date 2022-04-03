@@ -25,4 +25,6 @@ public class SearchForm {
     private String searchTitle;
 
     private LocalDateTime localDateTime;
+
+    private Long startNum;
 }
