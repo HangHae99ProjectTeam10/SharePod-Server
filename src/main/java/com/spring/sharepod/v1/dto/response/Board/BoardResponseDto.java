@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class BoardResponseDto {
-
     @Getter
     @AllArgsConstructor
     @Builder
@@ -43,7 +42,6 @@ public class BoardResponseDto {
         private String category;
         private LocalDateTime modifiedAt;
     }
-
 
     @Getter
     @NoArgsConstructor
