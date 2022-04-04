@@ -294,13 +294,12 @@ public class BoardService {
 
     //15번 카테고리 정렬별 보여주기
     @Transactional
-    public BoardResponseDto.BoardAllList getSortedBoard(String filterType, String category, String boardRegion, Long startNum, String searchTitle, Optional<Long> userId, LocalDateTime localDateTime) {
+    public BoardResponseDto.BoardAllList getSortedBoard(String filterType, String category, String boardRegion, Long startNum, String searchTitle, Optional<Long> userId) {
         List<BoardAllResponseDto> boardList = new ArrayList<>();
 
         int boardLength = 0;
         Boolean isLiked = false;
-        Long boardLastNum = 0L;
-        LocalDateTime lastDateTime = null;
+
         switch (filterType) {
             case "quality":
                 boardList = boardRepository.searchFormQuality(SearchForm.builder()
@@ -308,12 +307,8 @@ public class BoardService {
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion)
                                 .startNum(startNum)
-                        .localDateTime(localDateTime)
                         .build());
                 boardLength = boardList.size();
-                if(boardLength>=1) {
-                    lastDateTime = boardList.get(boardLength - 1).getModifiedAt();
-                }
                 break;
 
             case "cost":
@@ -321,13 +316,9 @@ public class BoardService {
                         .category(category)
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion)
-                        .startNum(startNum)
-                        .localDateTime(localDateTime)
+                                .startNum(startNum)
                         .build());
                 boardLength = boardList.size();
-                if(boardLength>=1) {
-                    lastDateTime = boardList.get(boardLength - 1).getModifiedAt();
-                }
                 break;
 
             default:
@@ -336,13 +327,8 @@ public class BoardService {
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion)
                         .startNum(startNum)
-                        .localDateTime(localDateTime)
                         .build());
                 boardLength = boardList.size();
-                //boardLastNum = boardList.get(boardList.size() - 1).getId();
-                if(boardLength >= 1) {
-                    lastDateTime = boardList.get(boardLength - 1).getModifiedAt();
-                }
         }
 
         for (int i = 0; i < boardLength; i++) {
@@ -354,7 +340,6 @@ public class BoardService {
                 .result("success")
                 .msg("검색 결과 게시글 반환 성공")
                 .resultCount(boardLength)
-                .boardLastDateTime(lastDateTime)
                 .listData(boardList)
                 .build();
 
