@@ -9,12 +9,22 @@
  
  <br>
  
+  <div align="center">
+ 
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FHangHae99ProjectTeam10%2FSharePod-Server&count_bg=%23FFC34A&title_bg=%23622EFA&icon=&icon_color=%23E7E7E7&title=%EB%B0%A9%EB%AC%B8%EC%9E%90+%EC%88%98&edge_flat=false)](https://github.com/HangHae99ProjectTeam10/SharePod-Server)
+
+ </div>
+ 
+ 
+<br>
+<br>
+ 
  <div align="center">
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"/>&nbsp;
-    <img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=Notion&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Github-181717?style=flat&logo=Github&logoColor=white"/>&nbsp;
-  <img src="https://img.shields.io/badge/Slack-4A154B?style=flat&logo=slack&logoColor=white"/>
+ <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white"/>
+ <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"/>
+ <img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=Notion&logoColor=white"/>
+ <img src="https://img.shields.io/badge/Github-181717?style=flat&logo=Github&logoColor=white"/>
+ <img src="https://img.shields.io/badge/Slack-4A154B?style=flat&logo=slack&logoColor=white"/>
  <img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=flat&logo=Amazon AWS&logoColor=#232F3E"/>
  <img src="https://img.shields.io/badge/Amazon S3-white?style=flat&logo=Amazon S3&logoColor=#white"/>
  <img src="https://img.shields.io/badge/Redis-white?style=flat&logo=Redis&logoColor=#DC382D"/>
@@ -22,6 +32,7 @@
 </div>
 
 <br>
+
 
 ## 팀 소개
  <div align="center">
