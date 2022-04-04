@@ -23,6 +23,7 @@ public class LikedService {
     //16번 찜하기, 찜하기 취소
     @Transactional
     public LikedResponseDto.LikedPost islikeservice(Long boardid, LikeRequestDTO.Liked requestDTO) {
+
         //찜할 게시판 boardid로 검색해 가져오기
         Board board = boardValidator.ValidByBoardId(boardid);
 
@@ -46,10 +47,10 @@ public class LikedService {
                     .build();
 
         }
+
         //like에 값이 존재하면 삭제
         else {
             likedRepository.deleteById(like.getId());
-
             return LikedResponseDto.LikedPost.builder()
                     .result("success")
                     .msg(board.getTitle()+ "찜하기 취소 완료")
