@@ -31,7 +31,6 @@ public class AwsS3Service {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
     private final AmazonS3 amazonS3;
     private final UserValidator userValidator;
     private final BoardValidator boardValidator;
@@ -152,13 +151,13 @@ public class AwsS3Service {
         } else {
             //기존 이미지 삭제
             amazonS3.deleteObject(bucket, board.getImgFiles().getVideoUrl().substring(board.getImgFiles().getVideoUrl().lastIndexOf("/") + 1));
+
             //비디오 처리
             String videoname = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(videoFile.getOriginalFilename());
             amazonS3.putObject(new PutObjectRequest(bucket, videoname, videoFile.getInputStream(), null)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             patchRequestDTO.setVideoUrl(amazonS3.getUrl(bucket, videoname).toString());
         }
-
         return patchRequestDTO;
     }
 
