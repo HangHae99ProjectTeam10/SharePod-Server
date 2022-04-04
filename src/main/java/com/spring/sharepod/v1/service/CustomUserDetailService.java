@@ -1,7 +1,5 @@
 package com.spring.sharepod.v1.service;
 
-
-
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.repository.UserRepository;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class CustomUserDetailService implements UserDetailsService {
-
     private final UserRepository userRepository;
 
     @Override

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import static com.spring.sharepod.entity.QLiked.liked;
 
-
 @Repository
 @RequiredArgsConstructor
 public class LikedRepositoryImpl implements LikedRepositoryCustom {

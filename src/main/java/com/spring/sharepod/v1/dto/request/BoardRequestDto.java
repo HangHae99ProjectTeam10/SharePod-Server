@@ -24,7 +24,6 @@ public class BoardRequestDto {
         private String boardTag;
     }
 
-
     @Getter
     @Setter
     @NoArgsConstructor
@@ -44,7 +43,6 @@ public class BoardRequestDto {
         private String firstImgUrl;
         private String secondImgUrl;
         private String lastImgUrl;
-
     }
 
     @Getter
@@ -66,6 +64,5 @@ public class BoardRequestDto {
         private String firstImgUrl;
         private String secondImgUrl;
         private String lastImgUrl;
-
     }
 }

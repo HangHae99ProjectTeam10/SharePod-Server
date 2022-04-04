@@ -13,7 +13,6 @@ import java.util.Optional;
 @NoArgsConstructor
 @Setter
 public class BoardAllResponseDto {
-
     private Long id;
     private String firstImgUrl;
     private String title;

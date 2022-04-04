@@ -41,16 +41,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return getBoardBySearchFormCost(searchForm).fetch();
     }
 
-
     @Override
     public List<BoardAllResponseDto> searchFormRecent(SearchForm searchForm) {
         return getBoardBySearchFormRecent(searchForm).fetch();
-    }
-
-    //13번 API 메인 게시판
-    @Override
-    public List<BoardAllResponseDto> searchAllBoard() {
-        return getAllBoard().fetch();
     }
 
     //5번 API 내가 등록한 글 목록
@@ -69,7 +62,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return getRentSellerList(userId).fetch();
     }
 
-
     @Override
     public List<UserReservation> getReservation(Long userId) {
         return getReservationList(userId).fetch();
@@ -81,9 +73,13 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return getVideoAll().fetch();
     }
 
+    //13번 API 메인 게시판
+    @Override
+    public List<BoardAllResponseDto> searchAllBoard() {
+        return getAllBoard().fetch();
+    }
 
     private JPAQuery<VideoAllResponseDto> getVideoAll() {
-
         return jpaQueryFactory.select(Projections.constructor(VideoAllResponseDto.class,
                         board.id,
                         board.boardRegion,
@@ -125,13 +121,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(imgFiles.board.id.eq(amount.board.id))
                 .where(reservation.buyer.id.eq(userId))
                 .orderBy(board.modifiedAt.desc());
-
-
     }
 
     //내가 빌린 게시글
     private JPAQuery<RentSeller> getRentSellerList(Long userId) {
-
         return jpaQueryFactory.select(Projections.bean(RentSeller.class,
                         board.id,
                         board.title,
@@ -154,13 +147,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(imgFiles.board.id.eq(amount.board.id))
                 .where(board.auth.authSeller.id.eq(userId))
                 .orderBy(board.modifiedAt.desc());
-
     }
-
 
     //내가 빌린 게시글
     private JPAQuery<RentBuyer> getRentBuyerList(Long userId) {
-
         return jpaQueryFactory.select(Projections.bean(RentBuyer.class,
                         board.id,
                         board.title,
@@ -183,7 +173,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(imgFiles.board.id.eq(amount.board.id))
                 .where(board.auth.authBuyer.id.eq(userId))
                 .orderBy(board.modifiedAt.desc());
-
     }
 
     //5번 API 내가 등록한 글 목록
@@ -226,7 +215,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .where(board.mainAppear.eq(true))
                 .orderBy(board.modifiedAt.desc())
                 .limit(8);
-
     }
 
     //searchFormRecent
@@ -248,7 +236,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .orderBy(board.modifiedAt.desc())
                 .limit(16);
     }
-
 
     //searchFormRecent
     private JPAQuery<BoardAllResponseDto> getBoardBySearchFormCost(SearchForm searchForm) {
@@ -290,12 +277,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .limit(16);
     }
 
-
     //동적 쿼리를 위한 문들
     private BooleanExpression boardRegion(String boardRegion) {
         return isEmpty(boardRegion) ? null : board.boardRegion.eq(boardRegion);
     }
-
 
     private BooleanExpression category(String category) {
         return isEmpty(category) ? null : board.category.eq(category);

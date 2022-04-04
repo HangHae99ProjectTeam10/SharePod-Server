@@ -4,9 +4,7 @@ import com.spring.sharepod.v1.dto.response.Auth.AuthDataResponseDto;
 
 import java.util.List;
 
-
 public interface AuthRepositoryCustom {
-
     Boolean authtest(Long authId);
 
     //20번 이미지 인증 창 데이터(인증 사진 확인하기)

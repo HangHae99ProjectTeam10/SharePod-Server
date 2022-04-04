@@ -3,12 +3,10 @@ package com.spring.sharepod.v1.dto.response.Board;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class BoardResponseDto {
-
     @Getter
     @AllArgsConstructor
     @Builder
@@ -28,12 +26,10 @@ public class BoardResponseDto {
         private BoardModifedDetail boardData;
     }
 
-
     @Getter
     @AllArgsConstructor
     @Builder
     public static class BoardData {
-
         private Long boardId;
         private String contents;
         private String productQuality;
@@ -46,7 +42,6 @@ public class BoardResponseDto {
         private String category;
         private LocalDateTime modifiedAt;
     }
-
 
     @Getter
     @NoArgsConstructor

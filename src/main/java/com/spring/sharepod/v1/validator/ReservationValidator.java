@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.validator;
 
-
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Reservation;
 import com.spring.sharepod.entity.User;
@@ -22,12 +21,15 @@ public class ReservationValidator {
 
     // 17번 API거래 요청
     public void validateReservationRequest(Long boardid, ReservationRequestDto.Reservation requestDTO){
+
         //게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardid).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND));
+
         //유저 userid로 검색해 가져오기
         User buyer = userRepository.findById(requestDTO.getUserId()).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
+
         //해당 reservation 가져오기
         Reservation reservation = reservationRepository.findByBuyerAndBoard(buyer, board);
 

@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Builder
 public class ReservationGetDTO {
     private String nickName;
-
     private LocalDate startRental;
     private LocalDate endRental;
 

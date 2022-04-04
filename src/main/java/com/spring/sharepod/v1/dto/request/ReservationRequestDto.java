@@ -3,7 +3,6 @@ package com.spring.sharepod.v1.dto.request;
 import lombok.*;
 
 public class ReservationRequestDto {
-
     @Getter
     @NoArgsConstructor
     @Setter
@@ -13,7 +12,6 @@ public class ReservationRequestDto {
         private String startRental;
         private String endRental;
         private boolean check;
-
     }
 
     @Getter

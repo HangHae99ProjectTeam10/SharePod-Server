@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 public class LikedResponseDto {
-
     @Getter
     @AllArgsConstructor
     @Builder

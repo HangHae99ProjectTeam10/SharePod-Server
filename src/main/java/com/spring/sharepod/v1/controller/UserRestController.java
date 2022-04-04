@@ -34,9 +34,9 @@ public class UserRestController {
     //(UserResponseDto.Login)를 통해 컨트롤러로 보낸후 유저한테 보냄
     @PostMapping("/user/login")
     public UserResponseDto.Login Login(@RequestBody UserRequestDto.Login userLoginRequest, HttpServletResponse res) {
+
         //이메일이나 패스워드가 null 값일 경우의 처리
         userValidator.ValidLoginRequest(userLoginRequest);
-
         return userService.login(userLoginRequest, res);
     }
 
@@ -77,12 +77,14 @@ public class UserRestController {
         tokenValidator.userIdCompareToken(userId,user.getId());
         return userService.getUserLikeBoard(userId);
     }
+
     //6.2 마이페이지 내가 등록한 글 불러오기
     @GetMapping("/user/board/{userId}")
     public UserResponseDto.UserMyBoardList userMyBoardList(@PathVariable Long userId,@AuthenticationPrincipal User user){
         tokenValidator.userIdCompareToken(userId,user.getId());
         return userService.getMyBoard(userId);
     }
+
     //6.3 마이페이지 내가 대여한, 블려준, 거래요청 목록 불러오기
     @GetMapping("/user/order/{userId}")
     public UserOrderResponseDto userBuyerList(@PathVariable Long userId, @AuthenticationPrincipal User user){
@@ -103,19 +105,21 @@ public class UserRestController {
     @PatchMapping("/user/{userId}")
     public UserResponseDto.UserModifiedInfo UserModify(@PathVariable Long userId, @RequestPart UserRequestDto.Modify userModifyRequestDTO,
                                        @RequestPart(required=false) MultipartFile userImgFile, @AuthenticationPrincipal User user) throws IOException {
+
         //토큰과 userid 일치 확인
         tokenValidator.userIdCompareToken(userId, user.getId());
+
         //해당 request vaildator 작동
         userValidator.ValidModifiedUser(userModifyRequestDTO);
 
         //이미지가 새롭게 들어왔으면
         if (!Objects.equals(null, StringUtils.getFilenameExtension(userImgFile.getOriginalFilename()))){
+
             //변경된 사진 저장 후 기존 삭제 삭제 후 requestDto에 setUserimg 하기
             userModifyRequestDTO.setUserImg(awsS3Service.ModifiedProfileImg(user.getUserImg().substring(user.getUserImg().lastIndexOf("/") + 1), user.getNickName(), userImgFile));
         } else {
             userModifyRequestDTO.setUserImg(user.getUserImg());
         }
-
         return userService.usermodifyService(userId, userModifyRequestDTO);
     }
 
@@ -125,6 +129,4 @@ public class UserRestController {
         tokenValidator.userIdCompareToken(userId, user.getId());
         return userService.UserDelete(userId, userDelete);
     }
-
-
 }

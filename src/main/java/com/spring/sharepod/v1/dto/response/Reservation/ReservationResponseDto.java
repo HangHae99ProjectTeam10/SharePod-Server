@@ -5,7 +5,6 @@ import lombok.*;
 import java.util.List;
 
 public class ReservationResponseDto {
-
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor

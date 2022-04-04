@@ -8,7 +8,6 @@ import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -17,10 +16,8 @@ import java.time.LocalDateTime;
 @Controller
 @RequestMapping("/chat")
 public class ChatRoomController {
-
     private final ChatRoomSerivce chatRoomSerivce;
     private final TokenValidator tokenValidator;
-
 
     // 27번 채팅방 생성
     @PostMapping("/room")

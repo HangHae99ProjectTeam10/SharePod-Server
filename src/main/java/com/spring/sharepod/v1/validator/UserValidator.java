@@ -18,7 +18,6 @@ import static com.spring.sharepod.exception.CommonError.ErrorCode.*;
 @Component // 선언하지 않으면 사용할 수 없다!!!!!
 @RequiredArgsConstructor
 public class UserValidator {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -44,7 +43,6 @@ public class UserValidator {
         if(userRegisterRequestDto.getUserImg() == null){
             throw new ErrorCodeException(REGISTER_NULL_USERIMG);
         }
-
 
         // 유저네임(이메일) 중복 확인
         Optional<User> findEmail = userRepository.findByUsername(userRegisterRequestDto.getUsername());
@@ -98,7 +96,6 @@ public class UserValidator {
         //userid가 있는지 확인
         User user = userRepository.findById(userid).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
-
         //이메일이 맞는지 확인
         if(!Objects.equals(user.getUsername(), userLoginRequest.getUsername())){
             throw new ErrorCodeException(USER_NOT_FOUND);

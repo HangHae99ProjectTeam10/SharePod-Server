@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.controller;
 
-
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
 import com.spring.sharepod.v1.dto.response.notice.NoticeCount;
@@ -26,7 +25,6 @@ public class NoticeRestController {
     @GetMapping("/notice/count/{userId}")
     public ResponseEntity<NoticeCount> NoticeCount(@PathVariable Long userId, @AuthenticationPrincipal User user){
         tokenValidator.userIdCompareToken(userId,user.getId());
-
         int NoticeCount = noticeService.getNoticeCount(userId);
         return new ResponseEntity<>(new NoticeCount("success", "알림 개수 전송 성공", NoticeCount), HttpStatus.OK);
     }
@@ -41,7 +39,6 @@ public class NoticeRestController {
     //26번 API 알림 확인 or 삭제
     @DeleteMapping("/notice/{noticeId}")
     public BasicResponseDTO NoticeDelete(@PathVariable Long noticeId, @AuthenticationPrincipal User user){
-
         noticeService.DeleteNotice(noticeId,user.getId());
         return BasicResponseDTO.builder()
                 .result("success")

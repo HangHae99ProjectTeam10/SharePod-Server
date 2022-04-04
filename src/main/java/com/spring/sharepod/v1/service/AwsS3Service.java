@@ -31,7 +31,6 @@ public class AwsS3Service {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
     private final AmazonS3 amazonS3;
     private final UserValidator userValidator;
     private final BoardValidator boardValidator;
@@ -48,12 +47,9 @@ public class AwsS3Service {
     //회원정보 수정 시, 파일이 바뀌었다면 진행되는 로직
     public String ModifiedProfileImg(String fileName, String userNickName, MultipartFile userimgfile) throws IOException {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
-
         String modifiedFileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(userimgfile.getOriginalFilename());
-
         amazonS3.putObject(new PutObjectRequest(bucket, modifiedFileName, userimgfile.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-
         return amazonS3.getUrl(bucket, modifiedFileName).toString();
     }
 
@@ -101,7 +97,6 @@ public class AwsS3Service {
         return boardWriteRequestDTO;
     }
 
-
     //게시글 수정
     public BoardRequestDto.PatchBoard boardUpdate(Long boardId,
                                                   BoardRequestDto.PatchBoard patchRequestDTO,
@@ -139,10 +134,7 @@ public class AwsS3Service {
 
                 // 게시글 삭제
                 amazonS3.deleteObject(new DeleteObjectRequest(bucket, modifiedBoardImg));
-
-
                 String filename = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(imgFiles[i].getOriginalFilename());
-
                 amazonS3.putObject(new PutObjectRequest(bucket, filename, imgFiles[i].getInputStream(), null)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
                 givenUrl[i] = amazonS3.getUrl(bucket, filename).toString();
@@ -159,14 +151,13 @@ public class AwsS3Service {
         } else {
             //기존 이미지 삭제
             amazonS3.deleteObject(bucket, board.getImgFiles().getVideoUrl().substring(board.getImgFiles().getVideoUrl().lastIndexOf("/") + 1));
+
             //비디오 처리
             String videoname = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(videoFile.getOriginalFilename());
-
             amazonS3.putObject(new PutObjectRequest(bucket, videoname, videoFile.getInputStream(), null)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             patchRequestDTO.setVideoUrl(amazonS3.getUrl(bucket, videoname).toString());
         }
-
         return patchRequestDTO;
     }
 
@@ -194,10 +185,8 @@ public class AwsS3Service {
 
         //이미지 s3 저장
         String imgName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(authfile.getOriginalFilename());
-
         amazonS3.putObject(new PutObjectRequest(bucket, imgName, authfile.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-
         return amazonS3.getUrl(bucket, imgName).toString();
     }
 }
