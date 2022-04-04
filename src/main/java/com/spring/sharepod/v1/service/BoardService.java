@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.spring.sharepod.exception.CommonError.ErrorCode.BOARD_NOT_EQUAL_WRITER;
@@ -68,7 +67,6 @@ public class BoardService {
 
         //보드를 저장한 Id를 통해 imgfiles와 amount를 저장한다.
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new ErrorCodeException(BOARD_NOT_FOUND));
-
         imgFilesRepository.save(ImgFiles.builder()
                 .firstImgUrl(writeBoard.getFirstImgUrl())
                 .secondImgUrl(writeBoard.getSecondImgUrl())
@@ -105,15 +103,11 @@ public class BoardService {
 
     // 10번 API 상세 페이지 board GET
     @Transactional
-    //@Cacheable(key = "#boardId", value = "getDetailBoard")
     public BoardDetail getDetailBoard(Long boardId, Optional<Long> userId) {
-
         Boolean isLiked = boardValidator.DefaultLiked(userId, boardId);
-
         TypedQuery<BoardDetails> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Board.BoardDetails(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.user.nickName,b.user.userRegion,b.boardRegion,b.category,b.productQuality,b.likeNumber.size,b.user.userImg, b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardDetails.class);
         query.setParameter("boardId", boardId);
         BoardDetails resultList = query.getSingleResult();
-
         List<String> fileNameList = new ArrayList<>();
         fileNameList.add(resultList.getFirstImgUrl());
         fileNameList.add(resultList.getSecondImgUrl());
@@ -139,7 +133,6 @@ public class BoardService {
                 .sellerImg(resultList.getUserImg())
                 .modifiedAt(resultList.getModifiedAt())
                 .build();
-
         return BoardDetail.builder()
                 .result("success")
                 .msg("상세 페이지 조회 성공")
@@ -153,8 +146,7 @@ public class BoardService {
 
         //수정할 게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
-        );
+                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND));
 
         //받아온 userid와 boardid의 작성자가 다를때
         if (!Objects.equals(patchRequestDTO.getUserId(), board.getUser().getId())) {
@@ -168,9 +160,7 @@ public class BoardService {
 
         //수정된 게시판 boardid로 검색해 가져오기
         Board boardupdate = boardRepository.findById(boardId).orElseThrow(
-                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
-        );
-
+                () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND));
         return BoardResponseDto.BoardWrite.builder()
                 .result("success")
                 .msg(board.getUser().getNickName() + "님의 게시글 수정 완료되었습니다.")
@@ -196,7 +186,6 @@ public class BoardService {
         TypedQuery<BoardModifedDetail> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Board.BoardModifedDetail(i.firstImgUrl,i.secondImgUrl,i.lastImgUrl,i.videoUrl,b.title,b.contents,ba.originPrice,ba.dailyRentalFee,b.boardTag,b.boardRegion,b.category,b.productQuality,b.modifiedAt) FROM Board b INNER JOIN b.imgFiles as i on b.id=i.board.id INNER JOIN b.amount ba on i.board.id=ba.board.id where b.id=:boardId", BoardModifedDetail.class);
         query.setParameter("boardId", boardId);
         BoardModifedDetail resultList = query.getSingleResult();
-
         return BoardResponseDto.BoardModifiedData.builder()
                 .result("success")
                 .msg(boardId + " 번 게시글 수정 전의 GET 데이터")
@@ -210,8 +199,7 @@ public class BoardService {
 
         //삭제할 게시판 boardid로 검색해 가져오기
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new ErrorCodeException(BOARD_NOT_FOUND)
-        );
+                () -> new ErrorCodeException(BOARD_NOT_FOUND));
 
         //받아온 userid와 boardid의 작성자가 다를때
         if (!Objects.equals(userId, board.getUser().getId())) {
@@ -225,24 +213,19 @@ public class BoardService {
 
         //DB에 존재하는 풀 길이의 Url을 받아와서 제거하기 위한 키를 만들어준다.
         if (board.getImgFiles().getSecondImgUrl() == null) {
-
         } else {
             secondImg = secondImg.substring(secondImg.lastIndexOf("/") + 1);
         }
 
         if (board.getImgFiles().getLastImgUrl() == null) {
-
         } else {
             lastImg = lastImg.substring(lastImg.lastIndexOf("/") + 1);
         }
 
         if (board.getImgFiles().getVideoUrl() == null) {
-
         } else {
             videoUrl = videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
         }
-
-
         firstImg = firstImg.substring(firstImg.lastIndexOf("/") + 1);
 
         //리스트에 담에서 넣어주기
@@ -252,12 +235,10 @@ public class BoardService {
         fileNameList.add(lastImg);
         fileNameList.add(videoUrl);
         fileNameList.removeAll(Arrays.asList("", null));
-
         awsS3Service.deleteBoardFiles(fileNameList);
 
         //게시글 삭제
         boardRepository.deleteById(boardId);
-
         return BasicResponseDTO.builder()
                 .result("success")
                 .msg(board.getUser().getNickName() + "번 게시글 삭제 완료되었습니다.")
@@ -267,10 +248,8 @@ public class BoardService {
     //API 13번 메인 페이지 전체 게시글 불러오기
     @Transactional
     public BoardResponseDto.BoardAllList getAllBoard(Optional<Long> userId) {
-
         Boolean isLiked = false;
         List<BoardAllResponseDto> querydslBoardList = boardRepository.searchAllBoard();
-
         int resultCount = querydslBoardList.size();
         for (int i = 0; i < resultCount; i++) {
             isLiked = boardValidator.DefaultLiked(userId, querydslBoardList.get(i).getId());
@@ -284,7 +263,6 @@ public class BoardService {
                 .resultCount(resultCount)
                 .listData(querydslBoardList)
                 .build();
-
         return boardAllList;
     }
 
@@ -292,10 +270,8 @@ public class BoardService {
     @Transactional
     public BoardResponseDto.BoardAllList getSortedBoard(String filterType, String category, String boardRegion, Long startNum, String searchTitle, Optional<Long> userId) {
         List<BoardAllResponseDto> boardList = new ArrayList<>();
-
         int boardLength = 0;
         Boolean isLiked = false;
-
         switch (filterType) {
             case "quality":
                 boardList = boardRepository.searchFormQuality(SearchForm.builder()
@@ -338,7 +314,6 @@ public class BoardService {
                 .resultCount(boardLength)
                 .listData(boardList)
                 .build();
-
         return boardAllList;
     }
 }
