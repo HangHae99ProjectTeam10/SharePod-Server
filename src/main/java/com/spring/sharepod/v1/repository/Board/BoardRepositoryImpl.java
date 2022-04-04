@@ -1,7 +1,5 @@
 package com.spring.sharepod.v1.repository.Board;
 
-
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -183,7 +181,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(auth.board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
-
                 .where(board.auth.authBuyer.id.eq(userId))
                 .orderBy(board.modifiedAt.desc());
 
@@ -205,7 +202,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .from(board)
                 .where(board.user.id.eq(userId),
                         board.mainAppear.eq(true))
-
                 .orderBy(board.modifiedAt.desc());
     }
 
@@ -246,16 +242,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         searchTitle(searchForm.getSearchTitle()),
                         boardRegion(searchForm.getBoardRegion()),
                         category(searchForm.getCategory()),
-                        startDate(searchForm.getLocalDateTime()),
                         board.mainAppear.eq(true)
                 )
-                //.offset(searchForm.getStartNum())
+                .offset(searchForm.getStartNum())
                 .orderBy(board.modifiedAt.desc())
                 .limit(16);
-    }
-
-    private BooleanExpression startDate(LocalDateTime localDateTime) {
-        return localDateTime != null ? board.modifiedAt.lt(localDateTime) : null;
     }
 
 
@@ -272,10 +263,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         searchTitle(searchForm.getSearchTitle()),
                         boardRegion(searchForm.getBoardRegion()),
                         category(searchForm.getCategory()),
-                        startDate(searchForm.getLocalDateTime()),
                         board.mainAppear.eq(true)
                 )
-                //.offset(searchForm.getStartNum())
+                .offset(searchForm.getStartNum())
                 .orderBy(amount.dailyRentalFee.desc())
                 .limit(16);
     }
@@ -293,11 +283,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         searchTitle(searchForm.getSearchTitle()),
                         boardRegion(searchForm.getBoardRegion()),
                         category(searchForm.getCategory()),
-                        startDate(searchForm.getLocalDateTime()),
                         board.mainAppear.eq(true)
                 )
-                //.offset(searchForm.getStartNum())
-                .orderBy(board.productQuality.desc())
+                .offset(searchForm.getStartNum())
+                .orderBy(board.productQuality.asc())
                 .limit(16);
     }
 
@@ -314,5 +303,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     private BooleanExpression searchTitle(String searchTitle) {
         return isEmpty(searchTitle) ? null : board.title.contains(searchTitle);
+    }
+
+    private BooleanExpression startDate(LocalDateTime localDateTime) {
+        return localDateTime != null ? board.modifiedAt.lt(localDateTime) : null;
     }
 }
