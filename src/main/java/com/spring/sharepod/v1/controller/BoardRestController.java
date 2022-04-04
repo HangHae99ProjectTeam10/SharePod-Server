@@ -29,12 +29,11 @@ public class BoardRestController {
     private final AwsS3Service awsS3Service;
     private final TokenValidator tokenValidator;
 
-
     //8번 API 릴스 동영상
     @GetMapping("/board/video")
     public ResponseEntity<AllVideo> getVideo() {
-        //limit 안 들어오면 5로 고정
 
+        //limit 안 들어오면 5로 고정
         List<VideoAllResponseDto> videoAllResponseDtos = boardService.getAllVideo();
         return new ResponseEntity<>(new AllVideo("success", "영상 전송 성공", videoAllResponseDtos), HttpStatus.OK);
     }
@@ -52,7 +51,6 @@ public class BoardRestController {
         //token과 boardWriteRequestDto의 userid와 비교
         tokenValidator.userIdCompareToken(boardWriteRequestDTO.getUserId(), user.getId());
 
-
         //게시판 업로드
         BoardRequestDto.WriteBoard writeBoard = awsS3Service.boardUpload(boardWriteRequestDTO, imgFiles, videoFile);
 
@@ -63,10 +61,9 @@ public class BoardRestController {
     // 10번 게시글 상세 페이지 불러오기
     @GetMapping("/board/{boardId}")
     public BoardDetail getDetailBoard(@PathVariable Long boardId, @RequestParam(value = "userId", required = false) Optional<Long> userId) {
+
         // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.(로그인 안했을 때는 찜 그냥 false)
-
         return boardService.getDetailBoard(boardId,userId);
-
     }
 
     // 11.1번 게시판 수정
@@ -74,9 +71,9 @@ public class BoardRestController {
     public BoardResponseDto.BoardWrite updateDetailBoard(@PathVariable Long boardId, @RequestPart BoardRequestDto.PatchBoard patchRequestDTO,
                                                          @AuthenticationPrincipal User user, @RequestPart(required = false) MultipartFile[] imgFiles,
                                                          @RequestPart MultipartFile videoFile) throws IOException {
+
         //token과 patchRequestDTO의 userid와 비교
         tokenValidator.userIdCompareToken(patchRequestDTO.getUserId(), user.getId());
-
         BoardRequestDto.PatchBoard boardPatchRequestDTOadd = awsS3Service.boardUpdate(boardId, patchRequestDTO, imgFiles, videoFile);
 
         //게시판 수정 업로드
@@ -86,15 +83,16 @@ public class BoardRestController {
     // 11.2번 게시판 수정 정보 받아오기
     @GetMapping("/board/modified/{userId}/{boardId}")
     public BoardResponseDto.BoardModifiedData updateDetailBoard(@PathVariable Long boardId, @PathVariable Long userId, @AuthenticationPrincipal User user){
+
         //token과 patchRequestDTO의 userid와 비교
         tokenValidator.userIdCompareToken(userId, user.getId());
-
         return boardService.getModifiedBoard(boardId);
     }
 
     //12번 게시판 삭제
     @DeleteMapping("/board/{boardId}")
     public BasicResponseDTO deleteBoard(@PathVariable Long boardId, @RequestBody Map<String, Long> user, @AuthenticationPrincipal User tokenUser) {
+
         //token과 user.get("userid")와 비교
         tokenValidator.userIdCompareToken(user.get("userId"), tokenUser.getId());
         return boardService.deleteboard(boardId, user.get("userId"));
