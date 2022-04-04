@@ -10,6 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/chat")
@@ -39,8 +41,8 @@ public class ChatRoomController {
     @GetMapping("/roomslist/{userId}/{chatroomId}")
     @ResponseBody
     public ChatRoomResponseDto.ChatMessageListData roomChatList(@PathVariable Long userId, @PathVariable Long chatroomId,
-                                                                @RequestParam(value = "startNum", defaultValue = "0") int startNum, @AuthenticationPrincipal User user) {
+                                                                @RequestParam(value = "time", required = false) LocalDateTime localDateTime, @AuthenticationPrincipal User user) {
         tokenValidator.userIdCompareToken(userId,user.getId());
-        return chatRoomSerivce.roomChatListService(userId, chatroomId, startNum);
+        return chatRoomSerivce.roomChatListService(userId, chatroomId, localDateTime);
     }
 }

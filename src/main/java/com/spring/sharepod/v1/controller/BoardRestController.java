@@ -11,7 +11,6 @@ import com.spring.sharepod.v1.service.AwsS3Service;
 import com.spring.sharepod.v1.service.BoardService;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -111,7 +109,7 @@ public class BoardRestController {
 
     //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동
     @GetMapping("/board/sort")
-    public BoardResponseDto.BoardAllList getCategoryBoardList(@RequestParam(value = "startNum", defaultValue = "0") Long startNum, @RequestParam(value = "filterType", defaultValue = "recent") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "boardRegion") String boardRegion, @RequestParam(value = "searchTitle") String searchtitle, @RequestParam(value = "userId", required = false) Optional<Long> userId, @RequestParam(value="time",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime) {
-        return boardService.getSortedBoard(filtertype, category, boardRegion, startNum, searchtitle, userId,localDateTime);
+    public BoardResponseDto.BoardAllList getCategoryBoardList(@RequestParam(value = "startNum", defaultValue = "0") Long startNum, @RequestParam(value = "filterType", defaultValue = "recent") String filtertype, @RequestParam(value = "category") String category, @RequestParam(value = "boardRegion") String boardRegion, @RequestParam(value = "searchTitle") String searchtitle, @RequestParam(value = "userId", required = false) Optional<Long> userId){
+        return boardService.getSortedBoard(filtertype, category, boardRegion, startNum, searchtitle, userId);
     }
 }

@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.repository.Board;
 
-
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -42,9 +41,16 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return getBoardBySearchFormCost(searchForm).fetch();
     }
 
+
     @Override
     public List<BoardAllResponseDto> searchFormRecent(SearchForm searchForm) {
         return getBoardBySearchFormRecent(searchForm).fetch();
+    }
+
+    //13번 API 메인 게시판
+    @Override
+    public List<BoardAllResponseDto> searchAllBoard() {
+        return getAllBoard().fetch();
     }
 
     //5번 API 내가 등록한 글 목록
@@ -63,129 +69,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return getRentSellerList(userId).fetch();
     }
 
+
     @Override
     public List<UserReservation> getReservation(Long userId) {
         return getReservationList(userId).fetch();
-    }
-
-    //5번 API 내가 등록한 글 목록
-    private JPAQuery<MyBoardResponseDto> getMyBoardList(Long userId) {
-        return jpaQueryFactory.select(Projections.bean(MyBoardResponseDto.class,
-                        board.id,
-                        board.title,
-                        board.boardTag,
-                        board.boardRegion,
-                        imgFiles.firstImgUrl,
-                        board.modifiedAt,
-                        amount.dailyRentalFee,
-                        board.user.nickName,
-                        board.category
-                ))
-                .from(board)
-                .where(board.user.id.eq(userId),
-                        board.mainAppear.eq(true))
-
-                .orderBy(board.modifiedAt.desc());
-    }
-
-    //메인 페이지 8개
-    private JPAQuery<BoardAllResponseDto> getAllBoard() {
-        return jpaQueryFactory
-                .select(Projections.bean(BoardAllResponseDto.class,
-                        board.id,
-                        imgFiles.firstImgUrl,
-                        board.title,
-                        board.category,
-                        amount.dailyRentalFee,
-                        board.boardRegion,
-                        board.boardTag,
-                        board.modifiedAt
-                ))
-                .from(board)
-                .innerJoin(imgFiles)
-                .on(board.id.eq(imgFiles.board.id))
-                .innerJoin(amount)
-                .on(imgFiles.board.id.eq(amount.board.id))
-                .where(board.mainAppear.eq(true))
-                .orderBy(board.modifiedAt.desc())
-                .limit(8);
-    }
-
-    //searchFormRecent
-    private JPAQuery<BoardAllResponseDto> getBoardBySearchFormRecent(SearchForm searchForm) {
-        return jpaQueryFactory
-                .select(Projections.bean(BoardAllResponseDto.class, board.id, imgFiles.firstImgUrl, board.title, board.category, amount.dailyRentalFee, board.boardRegion, board.boardTag, board.modifiedAt))
-                .from(board)
-                .innerJoin(imgFiles)
-                .on(board.id.eq(imgFiles.board.id))
-                .innerJoin(amount)
-                .on(imgFiles.board.id.eq(amount.board.id))
-                .where(
-                        searchTitle(searchForm.getSearchTitle()),
-                        boardRegion(searchForm.getBoardRegion()),
-                        category(searchForm.getCategory()),
-                        startDate(searchForm.getLocalDateTime()),
-                        board.mainAppear.eq(true)
-                )
-                .orderBy(board.modifiedAt.desc())
-                .limit(16);
-    }
-
-    private BooleanExpression startDate(LocalDateTime localDateTime) {
-        return localDateTime != null ? board.modifiedAt.lt(localDateTime) : null;
-    }
-
-    //searchFormRecent
-    private JPAQuery<BoardAllResponseDto> getBoardBySearchFormCost(SearchForm searchForm) {
-        return jpaQueryFactory
-                .select(Projections.bean(BoardAllResponseDto.class, board.id, imgFiles.firstImgUrl, board.title, board.category, amount.dailyRentalFee, board.boardRegion, board.boardTag, board.modifiedAt))
-                .from(board)
-                .innerJoin(imgFiles)
-                .on(board.id.eq(imgFiles.board.id))
-                .innerJoin(amount)
-                .on(imgFiles.board.id.eq(amount.board.id))
-                .where(
-                        searchTitle(searchForm.getSearchTitle()),
-                        boardRegion(searchForm.getBoardRegion()),
-                        category(searchForm.getCategory()),
-                        startDate(searchForm.getLocalDateTime()),
-                        board.mainAppear.eq(true)
-                )
-                .orderBy(amount.count().desc())
-                .limit(16);
-    }
-
-    //searchFormRecent
-    private JPAQuery<BoardAllResponseDto> getBoardBySearchFormQuality(SearchForm searchForm) {
-        return jpaQueryFactory
-                .select(Projections.bean(BoardAllResponseDto.class, board.id, imgFiles.firstImgUrl, board.title, board.category, amount.dailyRentalFee, board.boardRegion, board.boardTag, board.modifiedAt))
-                .from(board)
-                .innerJoin(imgFiles)
-                .on(board.id.eq(imgFiles.board.id))
-                .innerJoin(amount)
-                .on(imgFiles.board.id.eq(amount.board.id))
-                .where(
-                        searchTitle(searchForm.getSearchTitle()),
-                        boardRegion(searchForm.getBoardRegion()),
-                        category(searchForm.getCategory()),
-                        startDate(searchForm.getLocalDateTime()),
-                        board.mainAppear.eq(true)
-                )
-                .orderBy(board.productQuality.desc())
-                .limit(16);
-    }
-
-    //동적 쿼리를 위한 문들
-    private BooleanExpression boardRegion(String boardRegion) {
-        return isEmpty(boardRegion) ? null : board.boardRegion.eq(boardRegion);
-    }
-
-    private BooleanExpression category(String category) {
-        return isEmpty(category) ? null : board.category.eq(category);
-    }
-
-    private BooleanExpression searchTitle(String searchTitle) {
-        return isEmpty(searchTitle) ? null : board.title.contains(searchTitle);
     }
 
     //8번 API 릴스 동영상
@@ -239,7 +126,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .where(reservation.buyer.id.eq(userId))
                 .orderBy(board.modifiedAt.desc());
 
+
     }
+
     //내가 빌린 게시글
     private JPAQuery<RentSeller> getRentSellerList(Long userId) {
 
@@ -263,8 +152,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(auth.board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
-
-
                 .where(board.auth.authSeller.id.eq(userId))
                 .orderBy(board.modifiedAt.desc());
 
@@ -294,14 +181,131 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .on(auth.board.id.eq(imgFiles.board.id))
                 .innerJoin(amount)
                 .on(imgFiles.board.id.eq(amount.board.id))
-
                 .where(board.auth.authBuyer.id.eq(userId))
+                .orderBy(board.modifiedAt.desc());
+
+    }
+
+    //5번 API 내가 등록한 글 목록
+    private JPAQuery<MyBoardResponseDto> getMyBoardList(Long userId) {
+        return jpaQueryFactory.select(Projections.bean(MyBoardResponseDto.class,
+                        board.id,
+                        board.title,
+                        board.boardTag,
+                        board.boardRegion,
+                        imgFiles.firstImgUrl,
+                        board.modifiedAt,
+                        amount.dailyRentalFee,
+                        board.user.nickName,
+                        board.category
+                ))
+                .from(board)
+                .where(board.user.id.eq(userId),
+                        board.mainAppear.eq(true))
                 .orderBy(board.modifiedAt.desc());
     }
 
-    //13번 API 메인 게시판
-    @Override
-    public List<BoardAllResponseDto> searchAllBoard() {
-        return getAllBoard().fetch();
+    //메인 페이지 8개
+    private JPAQuery<BoardAllResponseDto> getAllBoard() {
+        return jpaQueryFactory
+                .select(Projections.bean(BoardAllResponseDto.class,
+                        board.id,
+                        imgFiles.firstImgUrl,
+                        board.title,
+                        board.category,
+                        amount.dailyRentalFee,
+                        board.boardRegion,
+                        board.boardTag,
+                        board.modifiedAt
+                ))
+                .from(board)
+                .innerJoin(imgFiles)
+                .on(board.id.eq(imgFiles.board.id))
+                .innerJoin(amount)
+                .on(imgFiles.board.id.eq(amount.board.id))
+                .where(board.mainAppear.eq(true))
+                .orderBy(board.modifiedAt.desc())
+                .limit(8);
+
+    }
+
+    //searchFormRecent
+    private JPAQuery<BoardAllResponseDto> getBoardBySearchFormRecent(SearchForm searchForm) {
+        return jpaQueryFactory
+                .select(Projections.bean(BoardAllResponseDto.class, board.id, imgFiles.firstImgUrl, board.title, board.category, amount.dailyRentalFee, board.boardRegion, board.boardTag, board.modifiedAt))
+                .from(board)
+                .innerJoin(imgFiles)
+                .on(board.id.eq(imgFiles.board.id))
+                .innerJoin(amount)
+                .on(imgFiles.board.id.eq(amount.board.id))
+                .where(
+                        searchTitle(searchForm.getSearchTitle()),
+                        boardRegion(searchForm.getBoardRegion()),
+                        category(searchForm.getCategory()),
+                        board.mainAppear.eq(true)
+                )
+                .offset(searchForm.getStartNum())
+                .orderBy(board.modifiedAt.desc())
+                .limit(16);
+    }
+
+
+    //searchFormRecent
+    private JPAQuery<BoardAllResponseDto> getBoardBySearchFormCost(SearchForm searchForm) {
+        return jpaQueryFactory
+                .select(Projections.bean(BoardAllResponseDto.class, board.id, imgFiles.firstImgUrl, board.title, board.category, amount.dailyRentalFee, board.boardRegion, board.boardTag, board.modifiedAt))
+                .from(board)
+                .innerJoin(imgFiles)
+                .on(board.id.eq(imgFiles.board.id))
+                .innerJoin(amount)
+                .on(imgFiles.board.id.eq(amount.board.id))
+                .where(
+                        searchTitle(searchForm.getSearchTitle()),
+                        boardRegion(searchForm.getBoardRegion()),
+                        category(searchForm.getCategory()),
+                        board.mainAppear.eq(true)
+                )
+                .offset(searchForm.getStartNum())
+                .orderBy(amount.dailyRentalFee.desc())
+                .limit(16);
+    }
+
+    //searchFormRecent
+    private JPAQuery<BoardAllResponseDto> getBoardBySearchFormQuality(SearchForm searchForm) {
+        return jpaQueryFactory
+                .select(Projections.bean(BoardAllResponseDto.class, board.id, imgFiles.firstImgUrl, board.title, board.category, amount.dailyRentalFee, board.boardRegion, board.boardTag, board.modifiedAt))
+                .from(board)
+                .innerJoin(imgFiles)
+                .on(board.id.eq(imgFiles.board.id))
+                .innerJoin(amount)
+                .on(imgFiles.board.id.eq(amount.board.id))
+                .where(
+                        searchTitle(searchForm.getSearchTitle()),
+                        boardRegion(searchForm.getBoardRegion()),
+                        category(searchForm.getCategory()),
+                        board.mainAppear.eq(true)
+                )
+                .offset(searchForm.getStartNum())
+                .orderBy(board.productQuality.asc())
+                .limit(16);
+    }
+
+
+    //동적 쿼리를 위한 문들
+    private BooleanExpression boardRegion(String boardRegion) {
+        return isEmpty(boardRegion) ? null : board.boardRegion.eq(boardRegion);
+    }
+
+
+    private BooleanExpression category(String category) {
+        return isEmpty(category) ? null : board.category.eq(category);
+    }
+
+    private BooleanExpression searchTitle(String searchTitle) {
+        return isEmpty(searchTitle) ? null : board.title.contains(searchTitle);
+    }
+
+    private BooleanExpression startDate(LocalDateTime localDateTime) {
+        return localDateTime != null ? board.modifiedAt.lt(localDateTime) : null;
     }
 }

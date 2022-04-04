@@ -103,7 +103,6 @@ public class BoardResponseDto {
         private String result;
         private String msg;
         private int resultCount;
-        private LocalDateTime boardLastDateTime;
         private List<BoardAllResponseDto> listData;
     }
 }

@@ -37,11 +37,11 @@ public class NoticeService {
         int noticeExist = noticeValidator.ValidnoticeList(userId);
         List<com.spring.sharepod.v1.dto.response.notice.Notice> noticeList = new ArrayList<>();
 
-        if (noticeExist == 0) {
-            throw new ErrorCodeException(NOTICELIST_NOT_EXIST);
-        } else {
-            noticeList = noticeRepository.noticeInfoList(userId);
-        }
+//        if (noticeExist == 0) {
+//            throw new ErrorCodeException(NOTICELIST_NOT_EXIST);
+//        } else {
+        noticeList = noticeRepository.noticeInfoList(userId);
+//        }
         return NoticeInfoResponseDto.builder()
                 .result("success")
                 .msg("알림 목록 성공")

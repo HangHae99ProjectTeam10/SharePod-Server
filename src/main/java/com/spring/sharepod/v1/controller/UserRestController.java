@@ -41,7 +41,7 @@ public class UserRestController {
     }
 
     //2번 API 토큰 재발급을 위한 api
-    @PostMapping("/reissue")
+    @PostMapping("/user/reissue")
     public BasicResponseDTO reissue(@RequestBody UserRequestDto.Reissue reissue, HttpServletResponse res, HttpServletRequest req) {
         return userService.reissue(reissue, res, req);
     }

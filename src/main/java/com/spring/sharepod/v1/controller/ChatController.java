@@ -6,7 +6,7 @@ import com.spring.sharepod.entity.User;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.ChatMessageRequestDto;
-import com.spring.sharepod.v1.repository.ChatMessageRepository;
+import com.spring.sharepod.v1.repository.ChatMessage.ChatMessageRepository;
 import com.spring.sharepod.v1.repository.ChatRoomRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
