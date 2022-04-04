@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class UserRequestDto {
-
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter

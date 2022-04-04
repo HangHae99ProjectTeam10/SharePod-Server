@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 public class UserResponseDto {
-
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
