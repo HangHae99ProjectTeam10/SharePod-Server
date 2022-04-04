@@ -16,10 +16,8 @@ import java.time.LocalDateTime;
 @Controller
 @RequestMapping("/chat")
 public class ChatRoomController {
-
     private final ChatRoomSerivce chatRoomSerivce;
     private final TokenValidator tokenValidator;
-
 
     // 27번 채팅방 생성
     @PostMapping("/room")

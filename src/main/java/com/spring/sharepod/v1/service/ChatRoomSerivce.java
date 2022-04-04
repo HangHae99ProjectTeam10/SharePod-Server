@@ -33,7 +33,6 @@ public class ChatRoomSerivce {
     // 27번 채팅방 생성
     @Transactional
     public ChatRoomResponseDto.ChatRoomData createChatRoom(@RequestBody ChatRoomRequestDto.Create create) {
-
         Board board = boardRepository.findById(create.getBoardId()).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND));
         User buyer = userRepository.findById(create.getBuyerId()).orElseThrow(
@@ -47,7 +46,6 @@ public class ChatRoomSerivce {
                     .build();
             return chatRoomData;
         }
-
         ChatRoom chatRoom = ChatRoom.create(ChatRoom.builder()
                 .buyer(buyer)
                 .seller(board.getUser())
@@ -56,7 +54,6 @@ public class ChatRoomSerivce {
 
         //chatRoom 정보 저장
         Long chatRoomId = chatRoomRepository.save(chatRoom).getId();
-
         char quotes = '"';
         noticeRepository.save(Notice.builder()
                 .board(board)
@@ -65,7 +62,6 @@ public class ChatRoomSerivce {
                 .noticeInfo(quotes + board.getTitle() + quotes + "  채팅을 요청했습니다.")
                 .isChat(true)
                 .build());
-
         ChatRoomResponseDto.ChatRoomData chatRoomData = ChatRoomResponseDto.ChatRoomData.builder()
                 .sellerNickName(chatRoom.getSeller().getNickName())
                 .buyerNickName(chatRoom.getBuyer().getNickName())
@@ -77,7 +73,6 @@ public class ChatRoomSerivce {
                 .boardId(create.getBoardId())
                 .buyerId(create.getBuyerId())
                 .build();
-
         return chatRoomData;
     }
 
@@ -89,7 +84,6 @@ public class ChatRoomSerivce {
                 () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByUserId(userId);
         List<ChatRoomResponseDto.ChatRoomList> chatRoomListList = new ArrayList<>();
-
         for (ChatRoom chatRoom : chatRoomList) {
             if (Objects.equals(userId, chatRoom.getBuyer().getId())) {
                 String lastChat = "";
@@ -127,7 +121,6 @@ public class ChatRoomSerivce {
                 chatRoomListList.add(chatRoomListBuilder);
             }
         }
-
         return ChatRoomResponseDto.ChatRoomListData.builder()
                 .result("success")
                 .msg("전체 채팅 리스트 조회 성공")
@@ -141,8 +134,8 @@ public class ChatRoomSerivce {
     public ChatRoomResponseDto.ChatMessageListData roomChatListService(Long userId, Long chatroomId, LocalDateTime localDateTime) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatroomId).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.CHATROOM_NOT_EXIST));
-
         User another = new User();
+
         //내가 buyer인지 seller인지 구별하기 위한 코드
         if (Objects.equals(chatRoom.getBuyer().getId(), userId)) {
             another = chatRoom.getSeller();
@@ -150,17 +143,10 @@ public class ChatRoomSerivce {
             another = chatRoom.getBuyer();
         }
 
-        //List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
-
-        //List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
-
         List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomOrderByModifiedAt(chatroomId,localDateTime);
-
-
         int resultCount = chatMessageList.size();
 
         List<ChatRoomResponseDto.ChatMessageData> chatMessageDataList = new ArrayList<>();
-
         for (ChatMessage chatMessage : chatMessageList) {
             chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
                     .message(chatMessage.getMessage())
@@ -168,7 +154,6 @@ public class ChatRoomSerivce {
                     .modifiedAt(chatMessage.getModifiedAt())
                     .build());
         }
-
         return ChatRoomResponseDto.ChatMessageListData.builder()
                 .result("success")
                 .msg("해당 채팅방 채팅내용 반환성공")

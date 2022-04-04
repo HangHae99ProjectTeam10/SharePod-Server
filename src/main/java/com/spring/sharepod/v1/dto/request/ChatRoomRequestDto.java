@@ -3,7 +3,6 @@ package com.spring.sharepod.v1.dto.request;
 import lombok.*;
 
 public class ChatRoomRequestDto {
-
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
