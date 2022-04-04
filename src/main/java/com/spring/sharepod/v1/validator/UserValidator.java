@@ -49,23 +49,28 @@ public class UserValidator {
         if (findEmail.isPresent()) {
             throw new ErrorCodeException(EMAIL_DUPLICATE);
         }
+
         // 닉네임 중복 확인
         Optional<User> findUsername = userRepository.findByNickName(userRegisterRequestDto.getNickName());
         if (findUsername.isPresent()) {
             throw new ErrorCodeException(USERNAME_DUPLICATE);
         }
+
         // 이메일(유저네임) 유효성 확인
         if(!Pattern.matches("^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\\.[A-Za-z0-9\\-]+$" , userRegisterRequestDto.getUsername())){
             throw new ErrorCodeException(EMAIL_VALIDATE);
         }
+
         // 비밀번호 닉네임 포함 확인
         if (userRegisterRequestDto.getPassword().contains(userRegisterRequestDto.getUsername())) {
             throw new ErrorCodeException(PASSWORD_INCLUDE_USERNAME);
         }
+
         // 비밀번호 길이 확인
         if (userRegisterRequestDto.getPassword().length() < 4) {
             throw new ErrorCodeException(PASSWORD_LENGTH);
         }
+
         // 비밀번호 비밀번호 확인과 일치 확인
         if (!Objects.equals(userRegisterRequestDto.getPassword(), userRegisterRequestDto.getPasswordCheck())) {
             throw new ErrorCodeException(PASSWORD_COINCIDE);
