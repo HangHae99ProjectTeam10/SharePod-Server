@@ -22,7 +22,6 @@ public class AuthImgService {
 
         //이미지 DB 넣어주기
         authImg.updateImgUrl(imgUrl);
-
         return AuthResponseDto.AuthUploadDTO.builder()
                 .result("success")
                 .msg("사진 등록성공")
@@ -45,7 +44,6 @@ public class AuthImgService {
 
         //둘 다 통과가 되면 true, false를 업데이트 해줌
         authimg.AuthBoolupdate(authBoolRequestDto.getCheck());
-
         return AuthResponseDto.AuthImgBoolDTO.builder()
                 .result("success")
                 .msg("사진 인증 등록성공")
