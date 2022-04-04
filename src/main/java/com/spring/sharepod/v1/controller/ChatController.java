@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Controller
 public class ChatController {
-
     private final RedisTemplate<String, Object> redisTemplate;
     private final ChannelTopic channelTopic;
     private final ChatMessageRepository chatMessageRepository;
@@ -30,10 +29,8 @@ public class ChatController {
     @MessageMapping("/templates/chat/message")
     @Transactional
     public void message(ChatMessageRequestDto.Wirte message) {
-
         ChatRoom chatRoom = chatRoomRepository.findById(message.getChatRoomId()).orElseThrow(()-> new ErrorCodeException(ErrorCode.BOARD_BOARDQUILITY_NOT_EXIST));
         User user = userRepository.findById(message.getUserId()).orElseThrow(()-> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
-
         ChatMessage chatMessage = ChatMessage.builder()
                 .message(message.getMessage())
                 .chatRoom(chatRoom)
@@ -52,7 +49,6 @@ public class ChatController {
 
         //룸 modfiatedat 시간 변경하기
         Long chatMessageid = chatMessageRepository.save(chatMessage).getId();
-
         ChatMessage getmessage = chatMessageRepository.findById(chatMessageid).orElseThrow(()-> new ErrorCodeException(ErrorCode.CHATMESSAGE_NOT_EXIST));
 
         //chatRoom 수정시간 변경
