@@ -44,7 +44,6 @@ public class AuthService {
 
         //data[] 값 넣어주기
         List<AuthDataResponseDto> authDataResponseDtoResponseDTOList = authRepository.getauthresponse(authid);
-
         return AuthResponseDto.AuthDataAll.builder()
                 .result("success")
                 .msg("사진 데이터 전송 성공")
@@ -69,7 +68,6 @@ public class AuthService {
 
         //auth의 sellerid와 request의 id가 일치하는지 확인
         authValidator.ValidAuthBySellerIdEqualRequestId(authCheckReUploadRequestDto, auth.getAuthSeller().getId());
-
         if (authCheckReUploadRequestDto.isAuthReUpload()) {
             board.setAppear(true);
         } else {
@@ -81,7 +79,6 @@ public class AuthService {
 
         //reupload에 따라서 메시지 다르게 호출
         String result = authValidator.ValidAuthByReupload(authCheckReUploadRequestDto.isAuthReUpload());
-
         return AuthResponseDto.AuthReUploadDTO.builder()
                 .result("success")
                 .msg(board.getId() +"번 "+ result)
