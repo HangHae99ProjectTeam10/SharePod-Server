@@ -11,7 +11,7 @@ public enum ErrorCode {
 
     // 400 Bad Request - 잘못된 요청 (REQUEST 가 정확한 정보가 아님).
     // 403 Forbidden - 해당 요청에 대한 권한이 없음.
-    // 404 Not Found - 해당 RESOURECE 를 찾을 수 없음 (경로가 없거나 그런거임).
+    // 404 Not Found - 해당 RESOURCE 를 찾을 수 없음 (경로가 없거나 그런거임).
 
     // 회원가입 관련 에러 모음
     //request 에러

@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.dto.response.Board;
 
-
 import lombok.*;
 
 import java.time.LocalDateTime;

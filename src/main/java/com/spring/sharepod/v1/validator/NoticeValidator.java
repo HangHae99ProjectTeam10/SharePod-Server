@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.validator;
 
-
 import com.spring.sharepod.entity.Notice;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.repository.Notice.NoticeRepository;

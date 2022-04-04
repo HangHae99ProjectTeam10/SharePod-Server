@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-
 public interface AuthImgRepository extends JpaRepository<AuthImg, Long> {
 
     @Modifying

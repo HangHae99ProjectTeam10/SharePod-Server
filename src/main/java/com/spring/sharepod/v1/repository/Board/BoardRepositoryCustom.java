@@ -9,12 +9,6 @@ import com.spring.sharepod.v1.repository.SearchForm;
 import java.util.List;
 
 public interface BoardRepositoryCustom {
-    //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동 - 품질순
-    List<BoardAllResponseDto> searchFormQuality(SearchForm seachForm);
-    //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동 - 비용순
-    List<BoardAllResponseDto> searchFormCost(SearchForm searchForm);
-    //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동 - 최신순
-    List<BoardAllResponseDto> searchFormRecent(SearchForm searchForm);
 
     List<BoardAllResponseDto> searchAllBoard();
 
@@ -32,4 +26,11 @@ public interface BoardRepositoryCustom {
 
     //8번 API 릴스 동영상 - 비디오 영상 랜덤 보내주기
     List<VideoAllResponseDto> videoAll();
+
+    //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동 - 품질순
+    List<BoardAllResponseDto> searchFormQuality(SearchForm seachForm);
+    //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동 - 비용순
+    List<BoardAllResponseDto> searchFormCost(SearchForm searchForm);
+    //14번 상품 카테고리 클릭 시, 상세 리스트 페이지로 이동 - 최신순
+    List<BoardAllResponseDto> searchFormRecent(SearchForm searchForm);
 }

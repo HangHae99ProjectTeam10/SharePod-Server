@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.validator;
 
-
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Reservation;
 import com.spring.sharepod.entity.User;
@@ -30,7 +29,6 @@ public class ReservationValidator {
                 () -> new ErrorCodeException(ErrorCode.LOGIN_USER_NOT_FOUND));
         //해당 reservation 가져오기
         Reservation reservation = reservationRepository.findByBuyerAndBoard(buyer, board);
-
         //이미 거래 요청 DB에 존재하면 생성 거절
         if (reservation != null) {
             throw new ErrorCodeException(ErrorCode.RESERVATION_ALREADY_EXIST);

@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.service;
 
-
 import com.spring.sharepod.entity.Notice;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;

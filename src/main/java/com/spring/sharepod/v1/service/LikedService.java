@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.service;
 
-
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;

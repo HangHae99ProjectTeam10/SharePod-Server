@@ -39,7 +39,6 @@ import java.util.concurrent.TimeUnit;
 
 import static com.spring.sharepod.exception.CommonError.ErrorCode.*;
 
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -82,7 +81,6 @@ public class UserService {
         redisTemplate.opsForValue()
                 .set("RT:" + authentication.getName(), loginReFreshTokenResponseDto.getRefreshToken(), loginReFreshTokenResponseDto.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
-
         res.addHeader("accessToken", loginReFreshTokenResponseDto.getAccessToken());
         res.addHeader("refreshToken", loginReFreshTokenResponseDto.getRefreshToken());
 
@@ -114,7 +112,6 @@ public class UserService {
         // 3. Redis 에서 User email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
         String refreshToken = redisTemplate.opsForValue().get("RT:" + authentication.getName());
 
-
         // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
         if (ObjectUtils.isEmpty(refreshToken)) {
             return BasicResponseDTO.builder()
@@ -122,16 +119,12 @@ public class UserService {
                     .msg("잘못된 요청입니다.")
                     .build();
         }
-
         if (!refreshToken.equals(reissue.getRefreshToken())) {
             throw new ErrorCodeException(RETOKEN_REISSUE);
         }
 
         // 4. 새로운 토큰 생성
         UserResponseDto.LoginReFreshToken tokenInfo = jwtTokenProvider.generateToken(authentication, user.getId());
-
-
-
         HttpHeaders header = new HttpHeaders();
         header.set("accessToken", tokenInfo.getAccessToken());
         header.set("refreshToken", tokenInfo.getRefreshToken());
@@ -176,7 +169,6 @@ public class UserService {
                 .build();
     }
 
-
     //4번 API 회원가입
     @Transactional
     public BasicResponseDTO registerUser(UserRequestDto.Register userRegisterRequestDto) {
@@ -211,7 +203,6 @@ public class UserService {
         if(resultList==null){
             throw new ErrorCodeException(USER_NOT_FOUND);
         }
-
         return UserMyInfoResponseDto.builder()
                 .result("success")
                 .msg("마이 페이지 불러오기 성공")
@@ -248,7 +239,6 @@ public class UserService {
         long calDateDays = calDate / (24 * 60 * 60 * 1000);
         calDateDays = Math.abs(calDateDays);
 
-
         Boolean isLiked = false;
         List<MyBoardResponseDto> querydslMyBoardList = boardRepository.getMyBoard(userId);
 
@@ -258,7 +248,6 @@ public class UserService {
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslMyBoardList.get(i).getId());
             querydslMyBoardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
-
         return UserResponseDto.UserMyBoardList.builder()
                 .result("success")
                 .msg("등록한 게시글 GET 성공")
@@ -272,31 +261,37 @@ public class UserService {
     public List<RentBuyer> getBuyList(Long userId) {
         Boolean isLiked = false;
         List<RentBuyer> querydslRentBuyerList = boardRepository.getRentBuyer(userId);
+
         int resultCount = querydslRentBuyerList.size();
+
         for (int i=0;i<resultCount;i++){
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentBuyerList.get(i).getId());
             querydslRentBuyerList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
         return querydslRentBuyerList;
     }
+
     //6.3 마이페이지 빌려준 목록 불러오기
     @Transactional
     public List<RentSeller> getSellList(Long userId) {
         Boolean isLiked = false;
-         List<RentSeller> querydslRentSellerList = boardRepository.getRentSeller(userId);
+        List<RentSeller> querydslRentSellerList = boardRepository.getRentSeller(userId);
+
         int resultCount = querydslRentSellerList.size();
+
         for (int i=0;i<resultCount;i++){
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentSellerList.get(i).getId());
             querydslRentSellerList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
         return querydslRentSellerList;
     }
+
     //6.3거래요청 목록 불러오기
     @Transactional
     public List<UserReservation> getReservationList(Long userId) {
         Boolean isLiked = false;
-
         List<UserReservation> querydslResrvationList = boardRepository.getReservation(userId);
+
         int resultCount = querydslResrvationList.size();
 
         for (int i=0;i<resultCount;i++){
@@ -305,7 +300,6 @@ public class UserService {
         }
         return querydslResrvationList;
     }
-
 
     //6.4번 회원 정보 수정하기
     @Transactional
@@ -320,7 +314,6 @@ public class UserService {
         else {
             user.updateEtc(modifyRequestDTO);
         }
-
         return UserResponseDto.UserModifiedInfo.builder()
                 .result("success")
                 .msg(user.getNickName() + "님 회원정보 수정 성공하였습니다.")

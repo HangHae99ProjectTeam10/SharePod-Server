@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ChatRoomResponseDto {
-
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
@@ -24,7 +23,6 @@ public class ChatRoomResponseDto {
         private int dailyRentalFee;
         private Long boardId;
         private Long buyerId;
-
         private Long chatRoomId;
     }
 

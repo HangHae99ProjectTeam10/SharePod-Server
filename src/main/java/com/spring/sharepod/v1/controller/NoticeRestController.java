@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.controller;
 
-
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
 import com.spring.sharepod.v1.dto.response.notice.NoticeCount;

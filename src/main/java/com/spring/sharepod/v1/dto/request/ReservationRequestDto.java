@@ -13,7 +13,6 @@ public class ReservationRequestDto {
         private String startRental;
         private String endRental;
         private boolean check;
-
     }
 
     @Getter

@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.service;
 
-
 import com.spring.sharepod.entity.*;
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
@@ -148,8 +147,6 @@ public class ChatRoomSerivce {
         } else {
             another = chatRoom.getBuyer();
         }
-
-        //List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
 
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
 

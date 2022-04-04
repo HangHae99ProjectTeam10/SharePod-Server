@@ -67,7 +67,6 @@ public class ReservationService {
                 .isChat(false)
                 .build());
 
-
         return ReservationResponseDto.ReservationDeal.builder()
                 .result("success")
                 .msg("거래 요청완료")
@@ -88,7 +87,6 @@ public class ReservationService {
                 .msg("거래 목록 리스트 반환")
                 .reservationList(querydslReservationList)
                 .build();
-
     }
 
     //19번 API 거래 요청 수락/거절
@@ -104,7 +102,6 @@ public class ReservationService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND)
         );
-
 
         Reservation reservation = reservationRepository.findByBuyerAndBoard(buyer, board);
         Long reservationId = reservation.getId();
@@ -140,7 +137,6 @@ public class ReservationService {
         //거래 수락시
         //보드 테이블 appear - false변경
         board.setAppear(false);
-
 
         //Auth 테이블 만들기
         Long authid = authRepository.save(Auth.builder()
@@ -181,7 +177,6 @@ public class ReservationService {
                 .noticeInfo(quotes + board.getTitle() + quotes + "  의 거래를 수락을 하였습니다.")
                 .isChat(false)
                 .build());
-
 
         List<ReservationNoticeList> reservationList = reservationRepository.reservationNoticeList(reservationId);
         for (ReservationNoticeList reservationNoticeList : reservationList) {

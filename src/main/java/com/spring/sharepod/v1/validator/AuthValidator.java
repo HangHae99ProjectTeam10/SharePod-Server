@@ -15,7 +15,6 @@ import static com.spring.sharepod.exception.CommonError.ErrorCode.AUTH_NOT_SELLE
 @Component // 선언하지 않으면 사용할 수 없다!!!!!
 @RequiredArgsConstructor
 public class AuthValidator {
-
     private final AuthRepository authRepository;
 
     //20번 이미지 인증 창 데이터(인증 사진 확인하기)

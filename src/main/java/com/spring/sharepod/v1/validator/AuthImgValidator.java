@@ -1,7 +1,6 @@
 package com.spring.sharepod.v1.validator;
 
 import com.spring.sharepod.entity.AuthImg;
-import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.repository.AuthImgRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +22,6 @@ public class AuthImgValidator {
         return authImg;
     }
 
-    //구매자가 아닐 경우
-//    public AuthImg ValidAuthImgByBuyerId(Long buyerId, Long authImgId) {
-//        AuthImg authImg = authImgRepository.findByAuthAuthBuyerIdAndId(buyerId, authImgId);
-//                //.orElseThrow(() -> new ErrorCodeException(ErrorCode.AUTHIMGBOX_NOT_BUYER));
-//        return authImg;
-//    }
 
     //구매자가 일치하지 않을 경우
     public void ValidAuthImgBoxIdEqualBuyerId(Long authimgboxbuyerid,Long requestuserid){

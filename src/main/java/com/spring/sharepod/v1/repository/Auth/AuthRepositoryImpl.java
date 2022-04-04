@@ -44,6 +44,4 @@ public class AuthRepositoryImpl implements AuthRepositoryCustom {
                 .from(authImg)
                 .where(authImg.auth.id.eq(authId));
     }
-
-
 }

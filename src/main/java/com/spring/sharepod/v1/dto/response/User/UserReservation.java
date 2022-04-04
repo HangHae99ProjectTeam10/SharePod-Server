@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.dto.response.User;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 

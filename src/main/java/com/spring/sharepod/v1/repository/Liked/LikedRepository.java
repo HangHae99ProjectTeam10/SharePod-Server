@@ -6,7 +6,6 @@ import com.spring.sharepod.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-
 public interface LikedRepository extends JpaRepository<Liked, Long>, LikedRepositoryCustom {
 
     //16번 찜하기, 찜하기 취소

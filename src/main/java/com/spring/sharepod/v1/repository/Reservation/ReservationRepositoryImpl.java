@@ -1,7 +1,6 @@
 package com.spring.sharepod.v1.repository.Reservation;
 
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.sharepod.v1.dto.response.Reservation.ReservationGetDTO;
@@ -21,7 +20,6 @@ import static com.spring.sharepod.entity.QUser.user;
 public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
-
     //18번
     @Override
     public List<ReservationGetDTO> reservationList(Long sellerId) {
@@ -34,10 +32,8 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
         return getNoticeReservationList(reservationId).fetch();
     }
 
-
     //거래 요청 목록 리스트
     private JPAQuery<ReservationGetDTO> getReservationList(Long sellerId) {
-
         return jpaQueryFactory.select(Projections.constructor(ReservationGetDTO.class,
                         user.nickName,
                         reservation.startRental,

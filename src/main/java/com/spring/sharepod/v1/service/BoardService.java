@@ -17,13 +17,11 @@ import com.spring.sharepod.v1.repository.SearchForm;
 import com.spring.sharepod.v1.repository.UserRepository;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -35,15 +33,11 @@ import static com.spring.sharepod.exception.CommonError.ErrorCode.BOARD_NOT_FOUN
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
-
     private final AwsS3Service awsS3Service;
-
     private final BoardValidator boardValidator;
     private final ImgFilesRepository imgFilesRepository;
-
     private final AmountRepository amountRepository;
     private final EntityManager entityManager;
-
 
     //8번 API 릴스 video 전체 GET(Limit)
     @Transactional
