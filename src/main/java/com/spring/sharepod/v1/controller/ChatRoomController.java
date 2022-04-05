@@ -6,6 +6,7 @@ import com.spring.sharepod.v1.dto.response.ChatRoomResponseDto;
 import com.spring.sharepod.v1.service.ChatRoomSerivce;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class ChatRoomController {
     @GetMapping("/roomslist/{userId}/{chatroomId}")
     @ResponseBody
     public ChatRoomResponseDto.ChatMessageListData roomChatList(@PathVariable Long userId, @PathVariable Long chatroomId,
-                                                                @RequestParam(value = "time", required = false) LocalDateTime localDateTime, @AuthenticationPrincipal User user) {
+                                                                @RequestParam(value = "time", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime, @AuthenticationPrincipal User user) {
         tokenValidator.userIdCompareToken(userId,user.getId());
         return chatRoomSerivce.roomChatListService(userId, chatroomId, localDateTime);
     }
