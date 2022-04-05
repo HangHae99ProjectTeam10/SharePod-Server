@@ -6,35 +6,21 @@ import com.spring.sharepod.v1.dto.response.ChatRoomResponseDto;
 import com.spring.sharepod.v1.service.ChatRoomSerivce;
 import com.spring.sharepod.v1.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/chat")
 public class ChatRoomController {
-
     private final ChatRoomSerivce chatRoomSerivce;
     private final TokenValidator tokenValidator;
 
-    // 채팅 클릭 화면
-    @GetMapping("/clickbtn")
-    public String clickbtn(Model model) {
-        return "/chat/clickbtn";
-    }
-
-    // 채팅방 입장 화면
-    @GetMapping("/room/enter/{roomid}")
-    public String roomDetail(Model model, @PathVariable String roomid) {
-        model.addAttribute("roomid", roomid);
-        return "/chat/roomdetail";
-    }
-
-    /////////////////////////// api 시작
-
-    // 채팅방 생성
+    // 27번 채팅방 생성
     @PostMapping("/room")
     @ResponseBody
     public ChatRoomResponseDto.ChatRoomData createRoom(@RequestBody ChatRoomRequestDto.Create create, @AuthenticationPrincipal User user) {
@@ -42,7 +28,7 @@ public class ChatRoomController {
         return chatRoomSerivce.createChatRoom(create);
     }
 
-    // 채팅 리스트 받아오기
+    // 28번 채팅 리스트 받아오기
     @GetMapping("/room/{userId}")
     @ResponseBody
     public ChatRoomResponseDto.ChatRoomListData chatList(@PathVariable Long userId, @AuthenticationPrincipal User user) {
@@ -50,11 +36,12 @@ public class ChatRoomController {
         return chatRoomSerivce.findChatList(userId);
     }
 
-    //해당 채팅방 채팅내용 반환
+    // 29번 해당 채팅방 채팅내용 반환
     @GetMapping("/roomslist/{userId}/{chatroomId}")
     @ResponseBody
-    public ChatRoomResponseDto.ChatMessageListData roomChatList(@PathVariable Long userId, @PathVariable Long chatroomId, @RequestParam(value = "startNum", defaultValue = "0") int startNum, @AuthenticationPrincipal User user) {
+    public ChatRoomResponseDto.ChatMessageListData roomChatList(@PathVariable Long userId, @PathVariable Long chatroomId,
+                                                                @RequestParam(value = "time", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime, @AuthenticationPrincipal User user) {
         tokenValidator.userIdCompareToken(userId,user.getId());
-        return chatRoomSerivce.roomChatListService(userId, chatroomId, startNum);
+        return chatRoomSerivce.roomChatListService(userId, chatroomId, localDateTime);
     }
 }

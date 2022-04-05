@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.dto.response.Board;
 
-import com.querydsl.core.types.dsl.NumberPath;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,6 @@ import java.util.Optional;
 @NoArgsConstructor
 @Setter
 public class BoardAllResponseDto {
-
     private Long id;
     private String firstImgUrl;
     private String title;
@@ -24,6 +22,4 @@ public class BoardAllResponseDto {
     private String boardTag;
     private LocalDateTime modifiedAt;
     private Optional<Boolean> isLiked;
-
-
 }

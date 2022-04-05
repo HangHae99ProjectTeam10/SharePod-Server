@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.controller;
 
-
 import com.spring.sharepod.entity.User;
 import com.spring.sharepod.v1.dto.request.LikeRequestDTO;
 import com.spring.sharepod.v1.dto.response.Liked.LikedResponseDto;
@@ -19,10 +18,9 @@ public class LikeRestController {
     private final LikedService likedService;
     private final TokenValidator tokenValidator;
 
-    //찜하기, 찜하기 취소
+    //16번 찜하기, 찜하기 취소
     @PostMapping("/like/{boardId}")
     public LikedResponseDto.LikedPost likecontroll(@PathVariable Long boardId, @RequestBody LikeRequestDTO.Liked requestDTO, @AuthenticationPrincipal User user){
-        System.out.println("user.getId()"+user.getId());
         tokenValidator.userIdCompareToken(requestDTO.getUserId(),user.getId());
         return likedService.islikeservice(boardId,requestDTO);
     }

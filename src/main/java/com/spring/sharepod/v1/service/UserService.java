@@ -5,22 +5,21 @@ import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.jwt.JwtTokenProvider;
 import com.spring.sharepod.v1.dto.request.UserRequestDto;
-import com.spring.sharepod.v1.dto.response.*;
+import com.spring.sharepod.v1.dto.response.BasicResponseDTO;
 import com.spring.sharepod.v1.dto.response.Board.MyBoardResponseDto;
 import com.spring.sharepod.v1.dto.response.Liked.LikedListResponseDto;
+import com.spring.sharepod.v1.dto.response.RentBuyer;
+import com.spring.sharepod.v1.dto.response.RentSeller;
 import com.spring.sharepod.v1.dto.response.User.UserInfoResponseDto;
 import com.spring.sharepod.v1.dto.response.User.UserMyInfoResponseDto;
 import com.spring.sharepod.v1.dto.response.User.UserReservation;
 import com.spring.sharepod.v1.dto.response.User.UserResponseDto;
-import com.spring.sharepod.v1.repository.Auth.AuthRepository;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
-import com.spring.sharepod.v1.repository.Liked.LikedRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import com.spring.sharepod.v1.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -33,10 +32,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.spring.sharepod.exception.CommonError.ErrorCode.*;
@@ -45,13 +42,10 @@ import static com.spring.sharepod.exception.CommonError.ErrorCode.*;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     private final UserValidator userValidator;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final LikedRepository likedRepository;
     private final BoardRepository boardRepository;
-    private final AuthRepository authRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate<String, String> redisTemplate;
@@ -59,7 +53,7 @@ public class UserService {
     private final BoardValidator boardValidator;
     private final EntityManager entityManager;
 
-    //1번 API 로그인 구현 완료
+    //1번 API 로그인
     @Transactional
     public UserResponseDto.Login login(UserRequestDto.Login userLoginRequest, HttpServletResponse res) {
         //user를 username으로 찾고 없다면 메시지를 호출
@@ -85,11 +79,8 @@ public class UserService {
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         redisTemplate.opsForValue()
                 .set("RT:" + authentication.getName(), loginReFreshTokenResponseDto.getRefreshToken(), loginReFreshTokenResponseDto.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
-
         res.addHeader("accessToken", loginReFreshTokenResponseDto.getAccessToken());
         res.addHeader("refreshToken", loginReFreshTokenResponseDto.getRefreshToken());
-
         return UserResponseDto.Login.builder()
                 .result("success")
                 .msg("로그인 성공")
@@ -102,26 +93,21 @@ public class UserService {
 
     //2번 API 리프레쉬 토큰 재발급
     public BasicResponseDTO reissue(UserRequestDto.Reissue reissue, HttpServletResponse res, HttpServletRequest req) {
-        System.out.println("reissue controller 1");
 
-        System.out.println(reissue.getRefreshToken() + "refreshtoken 출력(request에서 받아온 내용)");
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken(), req)) {
+
             //fail로 리턴이 나올 경우 refresttoken 정보가 유효하지 않다고 보내면서 프론트가 다시 로그인 시킨다.
             throw new ErrorCodeException(RETOKEN_REISSUE);
         }
 
-        System.out.println("reissue controller 2");
-
         // 2. Access Token 에서 User email 을 가져옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
-
         User user = userRepository.findByUsername(authentication.getName()).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
 
         // 3. Redis 에서 User email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
         String refreshToken = redisTemplate.opsForValue().get("RT:" + authentication.getName());
-
 
         // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
         if (ObjectUtils.isEmpty(refreshToken)) {
@@ -137,29 +123,20 @@ public class UserService {
 
         // 4. 새로운 토큰 생성
         UserResponseDto.LoginReFreshToken tokenInfo = jwtTokenProvider.generateToken(authentication, user.getId());
-
-
-
-        HttpHeaders header = new HttpHeaders();
-        header.set("accessToken", tokenInfo.getAccessToken());
-        header.set("refreshToken", tokenInfo.getRefreshToken());
-
-
-//
-//        res.addHeader("accessToken", tokenInfo.getAccessToken());
-//        res.addHeader("refreshToken", tokenInfo.getRefreshToken());
+        res.addHeader("accessToken", tokenInfo.getAccessToken());
+        res.addHeader("refreshToken", tokenInfo.getRefreshToken());
 
         // 5. RefreshToken Redis 업데이트
         redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
+                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(),
+                        TimeUnit.MILLISECONDS);
         return BasicResponseDTO.builder()
                 .result("success")
                 .msg("accessToken 정보가 갱신되었습니다.")
                 .build();
     }
 
-    //3번 API 로그아웃(구현 완료)
+    //3번 API 로그아웃
     public BasicResponseDTO logout(UserRequestDto.Reissue reIssueRequestDto, HttpServletRequest req) {
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(reIssueRequestDto.getAccessToken(), req)) {
@@ -181,17 +158,16 @@ public class UserService {
         Long expiration = jwtTokenProvider.getExpiration(reIssueRequestDto.getAccessToken());
         redisTemplate.opsForValue()
                 .set(reIssueRequestDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
-
         return BasicResponseDTO.builder()
                 .result("success")
                 .msg("로그아웃 성공")
                 .build();
     }
 
-
-    //4번 API 회원가입 (구현 완료)
+    //4번 API 회원가입
     @Transactional
     public BasicResponseDTO registerUser(UserRequestDto.Register userRegisterRequestDto) {
+
         //회원가입 유효성 검사 validator 통해서 검증한다. 중간에 이상하거 있으면 바로 거기서 메시지 반환하도록
         userValidator.validateUserRegisterData(userRegisterRequestDto);
 
@@ -213,27 +189,15 @@ public class UserService {
                 .build();
     }
 
-    //5번 API userinfo 불러오기 (구현 완료)
+    //5번 API 마이페이지 불러오기
     @Transactional
     public UserMyInfoResponseDto getUserInfo(Long userid) {
         TypedQuery<UserInfoResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.User.UserInfoResponseDto(u.id,u.username,u.nickName,u.userRegion,u.userImg,u.createdAt)  FROM User u where u.id=:userId", UserInfoResponseDto.class);
         query.setParameter("userId",userid);
         UserInfoResponseDto resultList = query.getSingleResult();
-
         if(resultList==null){
             throw new ErrorCodeException(USER_NOT_FOUND);
         }
-
-        //User user = userValidator.ValidByUserId(userid);
-        //build해서 찾은 user의 내용 중 일부를 responseDto를 통해서 전달한다.
-//        UserResponseDto.UserInfo userInfoResponseDto = UserResponseDto.UserInfo.builder()
-//                .userId(user.getId())
-//                .username(user.getUsername())
-//                .nickName(user.getNickName())
-//                .userRegion(user.getUserRegion())
-//                .userImg(user.getUserImg())
-//                .build();
-
         return UserMyInfoResponseDto.builder()
                 .result("success")
                 .msg("마이 페이지 불러오기 성공")
@@ -241,38 +205,12 @@ public class UserService {
                 .build();
     }
 
-    //5번 API 찜목록 불러오기 (구현 완료)
+    //6번 마이페이지 찜 목록 불러오기
     @Transactional
     public UserResponseDto.UserLikedList getUserLikeBoard(Long userid) {
         TypedQuery<LikedListResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Liked.LikedListResponseDto(b.id,b.title,b.boardRegion,b.boardTag,b.imgFiles.firstImgUrl,true,b.modifiedAt,b.amount.dailyRentalFee,b.user.nickName,b.category)  FROM Liked l inner JOIN Board b on l.board.id = b.id where l.user.id=:userId", LikedListResponseDto.class);
         query.setParameter("userId",userid);
         List<LikedListResponseDto> resultList = query.getResultList();
-
-
-//        //해당하는 유저가 존재하는 like 테이블에서 boardid를 받아오고 그 boardid를 통해
-//        // boardtitle과 userid category를 찾아낸다.
-//        List<LikedResponseDto.Liked> likedResponseDtoList = new ArrayList<>();
-//
-//        // 없으면 for문 안돌고 빈 list가 들어간다.
-//        List<Liked> userlikeList = likedRepository.findByUserId(userid);
-//
-//        for (Liked liked : userlikeList) {
-//            System.out.println("getTitle" + liked.getBoard().getTitle());
-//            LikedResponseDto.Liked likedResponseDto = LikedResponseDto.Liked.builder()
-//                    .boardId(liked.getBoard().getId())
-//                    .boardTitle(liked.getBoard().getTitle())
-//                    .boardRegion(liked.getBoard().getBoardRegion())
-//                    .boardTag(liked.getBoard().getBoardTag())
-//                    .FirstImg(liked.getBoard().getImgFiles().getFirstImgUrl())
-//                    .isliked(true)
-//                    .dailyRentalFee(liked.getBoard().getAmount().getDailyRentalFee())
-//                    .modifiedAt(liked.getBoard().getModifiedAt())
-//                    .userNickName(liked.getBoard().getUser().getNickName())
-//                    .category(liked.getBoard().getCategory())
-//                    .build();
-//
-//            likedResponseDtoList.add(likedResponseDto);
-//        }
         return UserResponseDto.UserLikedList.builder()
                 .result("success")
                 .msg("찜 목록 GET 성공")
@@ -280,76 +218,36 @@ public class UserService {
                 .build();
     }
 
-    //5번 API 등록한 목록 (구현 완료)
+    //6.2 마이페이지 내가 등록한 글 불러오기
     @Transactional
     public UserResponseDto.UserMyBoardList getMyBoard(Long userId) {
-//        TypedQuery<MyBoardResponseDto> query = entityManager.createQuery("SELECT NEW com.spring.sharepod.v1.dto.response.Board.MyBoardResponseDto(b.id,b.title,b.boardTag,b.boardRegion,i.firstImgUrl,b.modifiedAt,a.dailyRentalFee,b.user.nickName)  FROM Board b inner JOIN Amount a inner JOIN ImgFiles i on i.board.id = a.board.id where b.user.id=:userId", MyBoardResponseDto.class);
-//        query.setParameter("userId",userId);
-//        List<MyBoardResponseDto> resultList = query.getResultList();
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new ErrorCodeException(USER_NOT_FOUND));
 
+        //쉐어팟과 함께한 날 계산
+        //현재시간
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        Date nowDate = new Date();
+        Date startDate = java.sql.Timestamp.valueOf(user.getCreatedAt());
+        long calDate = nowDate.getTime() - startDate.getTime();
+        long calDateDays = calDate / (24 * 60 * 60 * 1000);
+        calDateDays = Math.abs(calDateDays);
         Boolean isLiked = false;
         List<MyBoardResponseDto> querydslMyBoardList = boardRepository.getMyBoard(userId);
-        //System.out.println("querydslMyBoardList" + querydslMyBoardList);
         int resultCount = querydslMyBoardList.size();
-        //System.out.println("resultCount"+ resultCount);
         for (int i=0;i<resultCount;i++){
-            //System.out.println("querydslMyBoardList.get(i).getBoardId()"+querydslMyBoardList.get(i).getBoardId());
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslMyBoardList.get(i).getId());
             querydslMyBoardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
-
-
-//        Boolean isLiked = false;
-//        List<BoardAllResponseDto> querydslBoardList = boardRepository.searchAllBoard();
-//
-//        int resultCount = querydslBoardList.size();
-//
-//
-//        for (int i = 0; i < resultCount; i++) {
-//            //System.out.println(querydslBoardList.get(i).getId() + "boardID");
-//            isLiked = boardValidator.DefaultLiked(userId,querydslBoardList.get(i).getId());
-//            querydslBoardList.get(i).setIsLiked(Optional.ofNullable(isLiked));
-//        }
-
-
-
-
-//        // userid를 사용하여 board에서 있는 것들 다 찾아오고 그에 따른 내용들을 전달
-//        List<BoardResponseDto.MyBoard> myBoardResponseDtoList = new ArrayList<>();
-//
-//        // 없으면 for문 안돌고 빈 list가 들어간다.
-//        List<Board> boardList = boardRepository.findListBoardByUserId(userId);
-//
-//
-//
-//        for (Board board : boardList) {
-//            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),board.getId());
-//
-//            BoardResponseDto.MyBoard myBoardResponseDto = BoardResponseDto.MyBoard.builder()
-//                    .boardId(board.getId())
-//                    .boardTitle(board.getTitle())
-//                    .boardTag(board.getBoardTag())
-//                    .boardRegion(board.getBoardRegion())
-//                    .isLiked(isLiked)
-//                    .FirstImg(board.getImgFiles().getFirstImgUrl())
-//                    .modifiedAt(board.getModifiedAt())
-//                    .dailyRentalFee(board.getAmount().getDailyRentalFee())
-//                    .nickName(board.getUser().getNickName())
-//                    .category(board.getCategory())
-//                    .build();
-//
-//            myBoardResponseDtoList.add(myBoardResponseDto);
-//
-//
-//        }
         return UserResponseDto.UserMyBoardList.builder()
                 .result("success")
                 .msg("등록한 게시글 GET 성공")
+                .withDay(calDateDays)
                 .userMyBoard(querydslMyBoardList)
                 .build();
     }
 
-    //5번 API 내가 대여한 목록 불러오기 (구현 완료)
+    //6.3 마이페이지 대여한 목록 불러오기
     @Transactional
     public List<RentBuyer> getBuyList(Long userId) {
         Boolean isLiked = false;
@@ -358,104 +256,29 @@ public class UserService {
         for (int i=0;i<resultCount;i++){
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentBuyerList.get(i).getId());
             querydslRentBuyerList.get(i).setIsLiked(Optional.ofNullable(isLiked));
-
-//     public List<UserResponseDto.RentBuyer> getBuyList(Long userId) {
-
-//         List<UserResponseDto.RentBuyer> rentBuyerResponseDtoList = new ArrayList<>();
-//         // 없으면 for문 안돌고 빈 list가 들어간다.
-//         List<Auth> authList = authRepository.findByBuyerId(userId);
-
-//         for (Auth auth : authList) {
-//             //Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),auth.getBoard().getId());
-
-//             UserResponseDto.RentBuyer rentBuyerResponseDto = UserResponseDto.RentBuyer.builder()
-//                     .boardId(auth.getBoard().getId())
-//                     .boardTitle(auth.getBoard().getTitle())
-//                     .boardTag(auth.getBoard().getBoardTag())
-//                     .boardRegion(auth.getBoard().getBoardRegion())
-//             //        .isLiked(isLiked)
-//                     .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
-//                     .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
-//                     .startRental(auth.getStartRental())
-//                     .nickName(auth.getAuthSeller().getNickName())
-//                     .authId(auth.getId())
-//                     .category(auth.getBoard().getCategory())
-//                     .build();
-//             rentBuyerResponseDtoList.add(rentBuyerResponseDto);
-
         }
-
-//        List<UserResponseDto.RentBuyer> rentBuyerResponseDtoList = new ArrayList<>();
-//        // 없으면 for문 안돌고 빈 list가 들어간다.
-//        List<Auth> authList = authRepository.findByBuyerId(userId);
-//
-//        for (Auth auth : authList) {
-//            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),auth.getBoard().getId());
-//
-//            UserResponseDto.RentBuyer rentBuyerResponseDto = UserResponseDto.RentBuyer.builder()
-//                    .boardId(auth.getBoard().getId())
-//                    .boardTitle(auth.getBoard().getTitle())
-//                    .boardTag(auth.getBoard().getBoardTag())
-//                    .boardRegion(auth.getBoard().getBoardRegion())
-//                    .isLiked(isLiked)
-//                    .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
-//                    .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
-//                    .startRental(auth.getStartRental())
-//                    .nickName(auth.getAuthSeller().getNickName())
-//                    .authId(auth.getId())
-//                    .category(auth.getBoard().getCategory())
-//                    .build();
-//            rentBuyerResponseDtoList.add(rentBuyerResponseDto);
-//        }
         return querydslRentBuyerList;
     }
 
-
-    //5번 API 내가 빌려준 목록 불러오기 (구현 완료)
+    //6.3 마이페이지 빌려준 목록 불러오기
     @Transactional
     public List<RentSeller> getSellList(Long userId) {
         Boolean isLiked = false;
-        List<RentSeller> querydslRentSellerList = boardRepository.getRentSeller(userId);
+         List<RentSeller> querydslRentSellerList = boardRepository.getRentSeller(userId);
         int resultCount = querydslRentSellerList.size();
         for (int i=0;i<resultCount;i++){
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslRentSellerList.get(i).getId());
             querydslRentSellerList.get(i).setIsLiked(Optional.ofNullable(isLiked));
         }
-
-
-//        List<UserResponseDto.RentSeller> rentSellerResponseDtoList = new ArrayList<>();
-//
-//        // 없으면 for문 안돌고 빈 list가 들어간다.
-//        List<Auth> authList = authRepository.findBySellerId(userId);
-//
-//        for (Auth auth : authList) {
-//            Boolean isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId), auth.getBoard().getId());
-//            UserResponseDto.RentSeller rentSellerResponseDto = UserResponseDto.RentSeller.builder()
-//                    .boardId(auth.getBoard().getId())
-//                    .boardTitle(auth.getBoard().getTitle())
-//                    .boardRegion(auth.getBoard().getBoardRegion())
-//                    .boardTag(auth.getBoard().getBoardTag())
-//                    .isLiked(isLiked)
-//                    .FirstImgUrl(auth.getBoard().getImgFiles().getFirstImgUrl())
-//                    .dailyRentalFee(auth.getBoard().getAmount().getDailyRentalFee())
-//                    .startRental(auth.getStartRental())
-//                    .endRental(auth.getEndRental())
-//                    .nickName(auth.getAuthBuyer().getNickName())
-//                    .authId(auth.getId())
-//                    .category(auth.getBoard().getCategory())
-//                    .build();
-//            rentSellerResponseDtoList.add(rentSellerResponseDto);
-//        }
         return querydslRentSellerList;
     }
+
+    //6.3거래요청 목록 불러오기
     @Transactional
     public List<UserReservation> getReservationList(Long userId) {
         Boolean isLiked = false;
-
-
         List<UserReservation> querydslResrvationList = boardRepository.getReservation(userId);
         int resultCount = querydslResrvationList.size();
-        System.out.println(querydslResrvationList+"querydslResrvationList");
         for (int i=0;i<resultCount;i++){
             isLiked = boardValidator.DefaultLiked(Optional.ofNullable(userId),querydslResrvationList.get(i).getId());
             querydslResrvationList.get(i).setIsLiked(Optional.ofNullable(isLiked));
@@ -463,23 +286,20 @@ public class UserService {
         return querydslResrvationList;
     }
 
-
-    //6번 API 회원 정보 수정 (구현 완료)
+    //6.4번 회원 정보 수정하기
     @Transactional
     public UserResponseDto.UserModifiedInfo usermodifyService(Long userid, UserRequestDto.Modify modifyRequestDTO) {
         User user = userValidator.ValidByUserId(userid);
 
         //유저 이미지가 변경 되었을 때
         if (!Objects.equals(modifyRequestDTO.getUserImg(), user.getUserImg())) {
-            System.out.println("이미지 변경 적용 완료!");
             user.updateUserImg(modifyRequestDTO);
         }
+
         // 아닐때
         else {
-            System.out.println("이미지 변경 안한거 확인!");
             user.updateEtc(modifyRequestDTO);
         }
-
         return UserResponseDto.UserModifiedInfo.builder()
                 .result("success")
                 .msg(user.getNickName() + "님 회원정보 수정 성공하였습니다.")
@@ -489,29 +309,22 @@ public class UserService {
                 .userRegion(user.getUserRegion())
                 .userModifiedImg(user.getUserImg())
                 .build();
-
     }
 
-
-    //7번 API 회원 탈퇴 (구현 완료)
+    //7번 API 회원 탈퇴
     @Transactional
     public BasicResponseDTO UserDelete(Long userid, UserRequestDto.Login userLoginRequest) {
-        //userid에 의한 user가 있는지 판단
         User user = userValidator.ValidByUserDelete(userid, userLoginRequest);
 
         //파일 이미지 key를 반환하기 위한 로직
         String fileName = user.getUserImg().substring(user.getUserImg().lastIndexOf("/")+1);
 
-
         // 프로필 이미지 삭제 후, 회원탈퇴
         awsS3Service.deleteProfileImg(fileName);
-
         userRepository.deleteById(userid);
         return BasicResponseDTO.builder()
                 .result("success")
                 .msg("회원탈퇴 성공")
                 .build();
     }
-
-
 }

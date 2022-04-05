@@ -15,5 +15,4 @@ public class NoticeInfoResponseDto {
     private String result;
     private String msg;
     private List<Notice> noticeList;
-
 }

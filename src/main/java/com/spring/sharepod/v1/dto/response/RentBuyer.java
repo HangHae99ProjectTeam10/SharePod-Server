@@ -19,14 +19,13 @@ public class RentBuyer {
     private String title;
     private String boardRegion;
     private String boardTag;
-
     private String firstImgUrl;
     private int dailyRentalFee;
     private LocalDate startRental;
     private LocalDate endRental;
     private String nickName;
+    private String othersImg;
     private String category;
-
     private Long authId;
     private Optional<Boolean> isLiked;
 }

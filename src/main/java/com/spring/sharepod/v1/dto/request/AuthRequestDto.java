@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public class AuthRequestDto {
-
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
@@ -23,5 +22,4 @@ public class AuthRequestDto {
         private Long sellerId;
         private Boolean check;
     }
-
 }

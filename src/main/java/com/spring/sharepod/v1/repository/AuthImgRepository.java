@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-
 public interface AuthImgRepository extends JpaRepository<AuthImg, Long> {
 
     @Modifying
@@ -16,8 +15,7 @@ public interface AuthImgRepository extends JpaRepository<AuthImg, Long> {
     @Query("delete from AuthImg a where a.auth.id=:authid")
     void deleteByAuthId(Long authid);
 
-
     @Query("select a from AuthImg a where a.auth.authBuyer.id=:buyerId and a.id=:authImgId")
     Optional<AuthImg> findByBuyerAndAuthImgId(Long buyerId, Long authImgId);
-
+    Boolean existsAllByAuthIdAndCheckImgBox(Long authId,Boolean checkImgBox);
 }

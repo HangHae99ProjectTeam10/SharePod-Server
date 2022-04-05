@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.dto.response.notice;
 
-
 import lombok.*;
 
 @Getter

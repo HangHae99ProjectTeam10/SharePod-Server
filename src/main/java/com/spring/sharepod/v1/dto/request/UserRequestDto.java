@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-
 public class UserRequestDto {
-
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
@@ -42,14 +40,12 @@ public class UserRequestDto {
         public UsernamePasswordAuthenticationToken toAuthentication() {
             return new UsernamePasswordAuthenticationToken(username, password);
         }
-
     }
 
     @Getter
     @Setter
     public static class Reissue {
         private String accessToken;
-
         private String refreshToken;
     }
 
@@ -57,10 +53,8 @@ public class UserRequestDto {
     @Setter
     public static class Logout {
         private String accessToken;
-
         private String refreshToken;
     }
-
 
     @Getter
     @Setter
@@ -68,5 +62,4 @@ public class UserRequestDto {
         private String username;
         private String password;
     }
-
 }

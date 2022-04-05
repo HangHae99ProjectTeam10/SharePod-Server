@@ -5,7 +5,6 @@ import lombok.*;
 import java.util.List;
 
 public class ReservationResponseDto {
-
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
@@ -41,7 +40,4 @@ public class ReservationResponseDto {
         private String startRental;
         private String endRental;
     }
-
-
-
 }

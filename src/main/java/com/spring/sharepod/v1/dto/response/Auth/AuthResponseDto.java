@@ -23,8 +23,6 @@ public class AuthResponseDto {
         private LocalDate endRental;
         private boolean authAllCheck;
         private List<AuthDataResponseDto> data;
-
-
     }
 
     @Getter
@@ -62,5 +60,4 @@ public class AuthResponseDto {
         private Long sellerId;
         private Long authId;
     }
-
 }

@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ChatRoomResponseDto {
-
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
@@ -24,7 +23,7 @@ public class ChatRoomResponseDto {
         private int dailyRentalFee;
         private Long boardId;
         private Long buyerId;
-        private Long ChatRoomId;
+        private Long chatRoomId;
     }
 
     @Getter
@@ -35,12 +34,13 @@ public class ChatRoomResponseDto {
         private Long chatRoomId;
         private String otherImg;
         private String boardImg;
+        private String boardTitle;
         private String otherNickName;
         private String lastChat;
         private String otherRegion;
+        private int dailyRentalFee;
         private LocalDateTime modifiedAt;
     }
-
 
     @Getter
     @NoArgsConstructor
@@ -53,7 +53,6 @@ public class ChatRoomResponseDto {
         private String myNickname;
         private List<ChatRoomList> chatRoomList;
     }
-
 
     @Getter
     @NoArgsConstructor
@@ -72,6 +71,7 @@ public class ChatRoomResponseDto {
     public static class ChatMessageListData{
         private String result;
         private String msg;
+        private LocalDateTime lastDatetime;
         private String otherImg;
         private String otherNickName;
         private int resultCount;

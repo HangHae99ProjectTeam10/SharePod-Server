@@ -7,7 +7,7 @@ import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.dto.request.ChatRoomRequestDto;
 import com.spring.sharepod.v1.dto.response.ChatRoomResponseDto;
 import com.spring.sharepod.v1.repository.Board.BoardRepository;
-import com.spring.sharepod.v1.repository.ChatMessageRepository;
+import com.spring.sharepod.v1.repository.ChatMessage.ChatMessageRepository;
 import com.spring.sharepod.v1.repository.ChatRoomRepository;
 import com.spring.sharepod.v1.repository.Notice.NoticeRepository;
 import com.spring.sharepod.v1.repository.UserRepository;
@@ -16,11 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.spring.sharepod.exception.CommonError.ErrorCode.CHATROOM_EXIST;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +30,9 @@ public class ChatRoomSerivce {
     private final UserRepository userRepository;
     private final NoticeRepository noticeRepository;
 
-    // 채팅방 생성
+    // 27번 채팅방 생성
     @Transactional
     public ChatRoomResponseDto.ChatRoomData createChatRoom(@RequestBody ChatRoomRequestDto.Create create) {
-
         Board board = boardRepository.findById(create.getBoardId()).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.BOARD_NOT_FOUND));
         User buyer = userRepository.findById(create.getBuyerId()).orElseThrow(
@@ -43,14 +41,11 @@ public class ChatRoomSerivce {
         //이미 있는지 확인
         ChatRoom chatRoomexistcehck = chatRoomRepository.findByBuyerAndAndBoard(buyer, board);
         if (chatRoomexistcehck != null) {
-//            throw new ErrorCodeException(CHATROOM_EXIST);
             ChatRoomResponseDto.ChatRoomData chatRoomData = ChatRoomResponseDto.ChatRoomData.builder()
-                    .ChatRoomId(chatRoomexistcehck.getId())
+                    .chatRoomId(chatRoomexistcehck.getId())
                     .build();
             return chatRoomData;
         }
-
-
         ChatRoom chatRoom = ChatRoom.create(ChatRoom.builder()
                 .buyer(buyer)
                 .seller(board.getUser())
@@ -59,16 +54,14 @@ public class ChatRoomSerivce {
 
         //chatRoom 정보 저장
         Long chatRoomId = chatRoomRepository.save(chatRoom).getId();
-
-        //거래 거절 알림 보내기 => 알림 추가(ooo님이 거래 거절을 하였습니다)
+        char quotes = '"';
         noticeRepository.save(Notice.builder()
                 .board(board)
                 .receiver(board.getUser())
                 .sender(buyer)
-                .noticeInfo(board.getTitle() + "채팅을 요청했습니다.")
+                .noticeInfo(quotes + board.getTitle() + quotes + "  채팅을 요청했습니다.")
                 .isChat(true)
                 .build());
-
         ChatRoomResponseDto.ChatRoomData chatRoomData = ChatRoomResponseDto.ChatRoomData.builder()
                 .sellerNickName(chatRoom.getSeller().getNickName())
                 .buyerNickName(chatRoom.getBuyer().getNickName())
@@ -80,21 +73,17 @@ public class ChatRoomSerivce {
                 .boardId(create.getBoardId())
                 .buyerId(create.getBuyerId())
                 .build();
-
         return chatRoomData;
     }
 
-    //게시글 좌측 리스트 조회
+    // 28번 채팅 리스트 받아오기
     @Transactional
     public ChatRoomResponseDto.ChatRoomListData findChatList(Long userId) {
         //내 정보 가져오기
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
-
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByUserId(userId);
-
         List<ChatRoomResponseDto.ChatRoomList> chatRoomListList = new ArrayList<>();
-
         for (ChatRoom chatRoom : chatRoomList) {
             if (Objects.equals(userId, chatRoom.getBuyer().getId())) {
                 String lastChat = "";
@@ -107,8 +96,10 @@ public class ChatRoomSerivce {
                         .chatRoomId(chatRoom.getId())
                         .otherImg(chatRoom.getSeller().getUserImg())
                         .boardImg(chatRoom.getBoard().getImgFiles().getFirstImgUrl())
+                        .boardTitle(chatRoom.getBoard().getTitle())
                         .otherNickName(chatRoom.getSeller().getNickName())
                         .otherRegion(chatRoom.getSeller().getUserRegion())
+                        .dailyRentalFee(chatRoom.getBoard().getAmount().getDailyRentalFee())
                         .modifiedAt(chatRoom.getModifiedAt())
                         .lastChat(lastChat)
                         .build();
@@ -124,15 +115,16 @@ public class ChatRoomSerivce {
                         .chatRoomId(chatRoom.getId())
                         .otherImg(chatRoom.getBuyer().getUserImg())
                         .boardImg(chatRoom.getBoard().getImgFiles().getFirstImgUrl())
+                        .boardTitle(chatRoom.getBoard().getTitle())
                         .otherNickName(chatRoom.getBuyer().getNickName())
                         .otherRegion(chatRoom.getBuyer().getUserRegion())
+                        .dailyRentalFee(chatRoom.getBoard().getAmount().getDailyRentalFee())
                         .modifiedAt(chatRoom.getModifiedAt())
                         .lastChat(lastChat)
                         .build();
                 chatRoomListList.add(chatRoomListBuilder);
             }
         }
-
         return ChatRoomResponseDto.ChatRoomListData.builder()
                 .result("success")
                 .msg("전체 채팅 리스트 조회 성공")
@@ -142,12 +134,12 @@ public class ChatRoomSerivce {
                 .build();
     }
 
-    //해당 채팅방 채팅 내용 반환
-    public ChatRoomResponseDto.ChatMessageListData roomChatListService(Long userId, Long chatroomId, int startNum) {
+    // 29번 해당 채팅방 채팅내용 반환
+    public ChatRoomResponseDto.ChatMessageListData roomChatListService(Long userId, Long chatroomId, LocalDateTime localDateTime) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatroomId).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.CHATROOM_NOT_EXIST));
-
         User another = new User();
+
         //내가 buyer인지 seller인지 구별하기 위한 코드
         if (Objects.equals(chatRoom.getBuyer().getId(), userId)) {
             another = chatRoom.getSeller();
@@ -155,28 +147,15 @@ public class ChatRoomSerivce {
             another = chatRoom.getBuyer();
         }
 
-
-        List<ChatMessage> chatMessageList = chatMessageRepository.findAllByChatRoomOrderByModifiedAt(chatroomId, startNum);
+        LocalDateTime lastDateTime = null;
+        List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomOrderByModifiedAt(chatroomId,localDateTime);
         int resultCount = chatMessageList.size();
 
-        List<ChatRoomResponseDto.ChatMessageData> chatMessageDataList = new ArrayList<>();
+        if(resultCount>=1){
+            lastDateTime = chatMessageList.get(resultCount-1).getModifiedAt();
+        }
 
-//        //me you 구별
-//        for (ChatMessage chatMessage : chatMessageList) {
-//            if (Objects.equals(chatMessage.getWriter().getId(), userId)) {
-//                chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
-//                        .message(chatMessage.getMessage())
-//                        .who("me")
-//                        .modifiedAt(chatMessage.getModifiedAt())
-//                        .build());
-//            } else {
-//                chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
-//                        .message(chatMessage.getMessage())
-//                        .who("you")
-//                        .modifiedAt(chatMessage.getModifiedAt())
-//                        .build());
-//            }
-//        }
+        List<ChatRoomResponseDto.ChatMessageData> chatMessageDataList = new ArrayList<>();
         for (ChatMessage chatMessage : chatMessageList) {
             chatMessageDataList.add(ChatRoomResponseDto.ChatMessageData.builder()
                     .message(chatMessage.getMessage())
@@ -184,16 +163,14 @@ public class ChatRoomSerivce {
                     .modifiedAt(chatMessage.getModifiedAt())
                     .build());
         }
-
         return ChatRoomResponseDto.ChatMessageListData.builder()
                 .result("success")
                 .msg("해당 채팅방 채팅내용 반환성공")
                 .resultCount(resultCount)
+                .lastDatetime(lastDateTime)
                 .otherImg(another.getUserImg())
                 .otherNickName(another.getNickName())
                 .chatMessageDataList(chatMessageDataList)
                 .build();
-
     }
-
 }

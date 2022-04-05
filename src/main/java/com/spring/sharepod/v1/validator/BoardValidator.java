@@ -33,28 +33,16 @@ public class BoardValidator {
         }
     }
 
-
     //상세 페이지 보여줄 시 로그인이 되어 있을 경우, 찜하기가 되어있는지에 대한 판단
     public Boolean DefaultLiked(Optional<Long> userId, Long boardId) {
+
         // isliked가 null일때는 로그인을 하지 않은 유저이므로 찜하기 부분을 False로 처리한다.
         if (!userId.isPresent()) {
             return false;
         } else {
-            //userid.get().longValue()이 존재하므로
-            //tokenValidator.userIdCompareToken(userid,user.getId());
-            //System.out.println(likedRepository.existLikedBoolean(userId.get(),boardId));
-            return likedRepository.existLikedBoolean(userId.get(),boardId);
-//            int result = likedRepository.existLiked(userId.get(), boardId);
-//            if(result == 1){
-//                return true;
-//            }else {
-//                return false;
-//            }
+            return likedRepository.existsByUserIdAndBoardId(userId.get(),boardId);
         }
     }
-
-
-
 
     //상세 페이지를 보여줄 떄, board가 존재하는지 아닌지에 대한 판단
     public Board ValidByBoardId(Long boardId) {
@@ -66,6 +54,7 @@ public class BoardValidator {
     public void validateBoardWrite(BoardRequestDto.WriteBoard boardWriteRequestDTO,
                                    MultipartFile[] imgfiles,
                                    MultipartFile videofile){
+
         // 유저네임(이메일) 유무 확인
         userRepository.findById(boardWriteRequestDTO.getUserId()).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
@@ -74,26 +63,32 @@ public class BoardValidator {
         if(Objects.equals(boardWriteRequestDTO.getTitle(), "")){
             throw new ErrorCodeException(BOARD_TITLE_NOT_EXIST);
         }
+
         //내용 적었는지 확인
         if(Objects.equals(boardWriteRequestDTO.getContents(), "")){
             throw new ErrorCodeException(BOARD_CONTENTS_NOT_EXIST);
         }
+
         //원가 적었는지 확인
         if(boardWriteRequestDTO.getOriginPrice() < 0){
             throw new ErrorCodeException(BOARD_ORIGINPRICE_NOT_EXIST);
         }
+
         //일일대여료 적었는지 확인
         if(boardWriteRequestDTO.getDailyRentalFee() < 0){
             throw new ErrorCodeException(BOARD_DAILYRENTALFEE_NOT_EXIST);
         }
+
         //지역 적었는지 확인
         if(Objects.equals(boardWriteRequestDTO.getBoardRegion(), "")){
             throw new ErrorCodeException(BOARD_MAPDATA_NOT_EXIST);
         }
+
         //상품태그를 적었는지 확인
         if(Objects.equals(boardWriteRequestDTO.getCategory(), "")){
             throw new ErrorCodeException(BOARD_CATEGORY_NOT_EXIST);
         }
+
         //상품태그를 적었는지 확인
         if(Objects.equals(boardWriteRequestDTO.getProductQuality(), "")){
             throw new ErrorCodeException(BOARD_BOARDQUILITY_NOT_EXIST);
@@ -104,45 +99,15 @@ public class BoardValidator {
             throw new ErrorCodeException(BOARD_MAIN_IMGFILE_NOT_EXIST);
         }
 
-//        //이미지 파일이 있는지 확인
-//        for (int i = 0; i < imgfiles.length; i++){
-//            if(Objects.equals(imgfiles[i].getOriginalFilename(), "")){
-//                throw new ErrorCodeException(BOARD_IMG_NOT_EXIST);
-//            }
-//        }
-
         //비디오파일 있는지 확인
         if(Objects.equals(videofile.getOriginalFilename(), "")){
             throw new ErrorCodeException(VIDEOFILE_NOT_EXIST);
         }
-//
-//
-//        for (int i=0; i<imgfiles.length; i++){
-//
-//        }
-//        // 파일의 확장자 추출
-//        String originalFileExtension;
-//        String contentType = imgfiles.getContentType();
-//
-//        // 확장자명이 존재하지 않을 경우 처리 x
-//        if(ObjectUtils.isEmpty(contentType)) {
-//            break;
-//        }
-//        else {  // 확장자가 jpeg, png인 파일들만 받아서 처리
-//            if(contentType.contains("image/jpeg"))
-//                originalFileExtension = ".jpg";
-//            else if(contentType.contains("image/png"))
-//                originalFileExtension = ".png";
-//            else  // 다른 확장자일 경우 처리 x
-//                break;
-//        }
-
-
     }
 
     public void validateBoardUpdate(BoardRequestDto.PatchBoard patchRequestDTO){
 
-        // 유저네임(이메일) 유무 확인
+        //유저네임(이메일) 유무 확인
         userRepository.findById(patchRequestDTO.getUserId()).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
 
@@ -150,34 +115,35 @@ public class BoardValidator {
         if(Objects.equals(patchRequestDTO.getTitle(), "")){
             throw new ErrorCodeException(BOARD_TITLE_NOT_EXIST);
         }
+
         //내용 적었는지 확인
         if(Objects.equals(patchRequestDTO.getContents(), "")){
             throw new ErrorCodeException(BOARD_CONTENTS_NOT_EXIST);
         }
+
         //원가 적었는지 확인
         if(patchRequestDTO.getOriginPrice() < 0){
             throw new ErrorCodeException(BOARD_ORIGINPRICE_NOT_EXIST);
         }
+
         //일일대여료 적었는지 확인
         if(patchRequestDTO.getDailyRentalFee() < 0){
             throw new ErrorCodeException(BOARD_DAILYRENTALFEE_NOT_EXIST);
         }
+
         //지역 적었는지 확인
         if(Objects.equals(patchRequestDTO.getBoardRegion(), "")){
             throw new ErrorCodeException(BOARD_MAPDATA_NOT_EXIST);
         }
+
         //상품태그를 적었는지 확인
         if(Objects.equals(patchRequestDTO.getCategory(), "")){
             throw new ErrorCodeException(BOARD_CATEGORY_NOT_EXIST);
         }
+
         //상품태그를 적었는지 확인
         if(Objects.equals(patchRequestDTO.getProductQuality(), "")){
             throw new ErrorCodeException(BOARD_BOARDQUILITY_NOT_EXIST);
         }
-
     }
-
-
-
-
 }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import static com.spring.sharepod.entity.QLiked.liked;
 
-
 @Repository
 @RequiredArgsConstructor
 public class LikedRepositoryImpl implements LikedRepositoryCustom {
@@ -24,5 +23,4 @@ public class LikedRepositoryImpl implements LikedRepositoryCustom {
                 .where(liked.user.id.eq(userId),liked.board.id.eq(boardId))
                 .fetchFirst() != null;
     }
-
 }

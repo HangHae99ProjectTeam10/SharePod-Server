@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.dto.response.Reservation;
 
-
 import com.spring.sharepod.entity.User;
 import lombok.*;
 

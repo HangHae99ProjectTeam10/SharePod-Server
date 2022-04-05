@@ -2,7 +2,6 @@ package com.spring.sharepod.v1.dto.response.User;
 
 import com.spring.sharepod.v1.dto.response.RentBuyer;
 import com.spring.sharepod.v1.dto.response.RentSeller;
-import com.spring.sharepod.v1.dto.response.User.UserReservation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +19,4 @@ public class UserOrderResponseDto {
     private List<RentBuyer> rentBuyerList;
     private List<RentSeller> rentSellerList;
     private List<UserReservation> userReservationList;
-
 }

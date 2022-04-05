@@ -1,6 +1,5 @@
 package com.spring.sharepod.v1.dto.response.User;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -25,9 +24,7 @@ public class UserReservation {
     private LocalDate startRental;
     private LocalDate endRental;
     private String nickName;
-
     private String category;
     private Long reservationId;
     private Optional<Boolean> isLiked;
-
 }

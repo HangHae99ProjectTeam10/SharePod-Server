@@ -1,7 +1,5 @@
 package com.spring.sharepod.v1.service;
 
-
-
 import com.spring.sharepod.exception.CommonError.ErrorCode;
 import com.spring.sharepod.exception.CommonError.ErrorCodeException;
 import com.spring.sharepod.v1.repository.UserRepository;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class CustomUserDetailService implements UserDetailsService {
-
     private final UserRepository userRepository;
 
     @Override
@@ -23,7 +20,6 @@ public class CustomUserDetailService implements UserDetailsService {
         return userRepository.findByUsername(username).orElseThrow(
                 () -> new ErrorCodeException(ErrorCode.USER_NOT_FOUND));
     }
-
 
     // 해당하는 User 의 데이터가 존재한다면 UserDetails 객체로 만들어서 리턴
     private UserDetails createUserDetails(com.spring.sharepod.entity.User user) {

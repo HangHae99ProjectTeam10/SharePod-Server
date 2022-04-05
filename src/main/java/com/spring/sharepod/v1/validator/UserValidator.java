@@ -18,7 +18,6 @@ import static com.spring.sharepod.exception.CommonError.ErrorCode.*;
 @Component // 선언하지 않으면 사용할 수 없다!!!!!
 @RequiredArgsConstructor
 public class UserValidator {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -44,7 +43,6 @@ public class UserValidator {
         if(userRegisterRequestDto.getUserImg() == null){
             throw new ErrorCodeException(REGISTER_NULL_USERIMG);
         }
-
 
         // 유저네임(이메일) 중복 확인
         Optional<User> findEmail = userRepository.findByUsername(userRegisterRequestDto.getUsername());
@@ -77,16 +75,13 @@ public class UserValidator {
         if (!Objects.equals(userRegisterRequestDto.getPassword(), userRegisterRequestDto.getPasswordCheck())) {
             throw new ErrorCodeException(PASSWORD_COINCIDE);
         }
-
     }
 
-
-
+    //6.4번 회원 정보 수정하기
     //유저 id에 대한 user가 존재하는지에 대한 판단
     public User ValidByUserId(Long userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
-
     }
 
     //유저네임(이메일) 유무 확인
@@ -94,19 +89,14 @@ public class UserValidator {
         // 유저네임(이메일) 유무 확인
         userRepository.findByUsername(modifyRequestDTO.getUsername()).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
-
     }
-
 
     //회원 탈퇴
     public User ValidByUserDelete(Long userid, UserRequestDto.Login userLoginRequest) {
         //userid가 있는지 확인
         User user = userRepository.findById(userid).orElseThrow(
                 () -> new ErrorCodeException(USER_NOT_FOUND));
-
         //이메일이 맞는지 확인
-        System.out.println(user.getUsername());
-        System.out.println(userLoginRequest.getUsername());
         if(!Objects.equals(user.getUsername(), userLoginRequest.getUsername())){
             throw new ErrorCodeException(USER_NOT_FOUND);
         }
@@ -124,7 +114,6 @@ public class UserValidator {
             throw new ErrorCodeException(LOGIN_DATA_NOT_EXIST);
         }
     }
-
 }
 
 

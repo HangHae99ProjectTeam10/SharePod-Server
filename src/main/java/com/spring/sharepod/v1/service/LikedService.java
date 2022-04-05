@@ -1,14 +1,11 @@
 package com.spring.sharepod.v1.service;
 
-
-import com.spring.sharepod.v1.dto.request.LikeRequestDTO;
 import com.spring.sharepod.entity.Board;
 import com.spring.sharepod.entity.Liked;
 import com.spring.sharepod.entity.User;
+import com.spring.sharepod.v1.dto.request.LikeRequestDTO;
 import com.spring.sharepod.v1.dto.response.Liked.LikedResponseDto;
-import com.spring.sharepod.v1.repository.Board.BoardRepository;
 import com.spring.sharepod.v1.repository.Liked.LikedRepository;
-import com.spring.sharepod.v1.repository.UserRepository;
 import com.spring.sharepod.v1.validator.BoardValidator;
 import com.spring.sharepod.v1.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +17,10 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class LikedService {
     private final LikedRepository likedRepository;
-    private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
     private final BoardValidator boardValidator;
     private final UserValidator userValidator;
 
+    //16번 찜하기, 찜하기 취소
     @Transactional
     public LikedResponseDto.LikedPost islikeservice(Long boardid, LikeRequestDTO.Liked requestDTO) {
 
@@ -51,10 +47,10 @@ public class LikedService {
                     .build();
 
         }
+
         //like에 값이 존재하면 삭제
         else {
             likedRepository.deleteById(like.getId());
-
             return LikedResponseDto.LikedPost.builder()
                     .result("success")
                     .msg(board.getTitle()+ "찜하기 취소 완료")
@@ -62,7 +58,5 @@ public class LikedService {
                     .boardId(boardid)
                     .build();
         }
-
     }
-
 }
