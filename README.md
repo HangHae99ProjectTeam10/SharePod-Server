@@ -107,8 +107,8 @@
 
 ## 
 ###  💡 문제 해결과정
--  #### 로그인 너란 친구란 JWT - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/WIKI,-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EB%84%88%EB%9E%80-%EC%B9%9C%EA%B5%AC....-JWT" >WIKI</a>
-- #### 이미지 동영상 어디다가 올릴꺼인데? AWS S3,IAM JWT - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/WIKI,--%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%8F%99%EC%98%81%EC%83%81-%EC%96%B4%EB%94%94%EB%8B%A4%EA%B0%80-%EC%98%AC%EB%A6%B4%EA%BA%BC%EC%9D%B8%EB%8D%B0%3F-AWS-S3,IAM" >WIKI</a>
+-  #### 로그인 너란 친구란 JWT - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/WIKI,-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EB%84%88%EB%9E%80-%EC%B9%9C%EA%B5%AC%EB%9E%80-JWT" >WIKI</a>
+- #### 이미지 동영상 어디다가 올릴꺼인데? AWS S3,IAM - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/WIKI,--%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%8F%99%EC%98%81%EC%83%81-%EC%96%B4%EB%94%94%EB%8B%A4%EA%B0%80-%EC%98%AC%EB%A6%B4%EA%BA%BC%EC%9D%B8%EB%8D%B0%3F-AWS-S3,IAM" >WIKI</a>
 - #### DB에서 꺼내오자! Entity → DTO - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/WIKI,-DB%EC%97%90%EC%84%9C-%EA%BA%BC%EB%82%B4%EC%98%A4%EC%9E%90!-Entity-%E2%86%92-DTO" >WIKI</a>
 - #### where문에 null이...? 동적 쿼리 사용 - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/WIKI,-where%EB%AC%B8%EC%97%90-null%EC%9D%B4...%3F-%EB%8F%99%EC%A0%81-%EC%BF%BC%EB%A6%AC-%EC%82%AC%EC%9A%A9" >WIKI</a>
 - #### 메시지데이터 자동 삭제(CORN) - <a href="https://github.com/HangHae99ProjectTeam10/SharePod-Server/wiki/WIKI,-%EB%A9%94%EC%8B%9C%EC%A7%80%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%9E%90%EB%8F%99-%EC%82%AD%EC%A0%9C(CORN)" >WIKI</a>
