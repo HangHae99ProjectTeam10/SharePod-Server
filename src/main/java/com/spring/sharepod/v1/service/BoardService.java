@@ -278,7 +278,7 @@ public class BoardService {
                         .category(category)
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion)
-                                .startNum(startNum)
+                        .startNum(startNum)
                         .build());
                 boardLength = boardList.size();
                 break;
@@ -288,7 +288,7 @@ public class BoardService {
                         .category(category)
                         .searchTitle(searchTitle)
                         .boardRegion(boardRegion)
-                                .startNum(startNum)
+                        .startNum(startNum)
                         .build());
                 boardLength = boardList.size();
                 break;
