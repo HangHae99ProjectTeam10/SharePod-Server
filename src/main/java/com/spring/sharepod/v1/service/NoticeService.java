@@ -32,9 +32,9 @@ public class NoticeService {
     @Transactional
     public NoticeInfoResponseDto getNoticeList(Long userId) {
 
-        // userid에 의한 모든 경우 알림이 없다면 알림이 존재하지 않는다는 메시지를 호출한다.
-        int noticeExist = noticeValidator.ValidnoticeList(userId);
-        List<com.spring.sharepod.v1.dto.response.notice.Notice> noticeList = new ArrayList<>();
+        List<com.spring.sharepod.v1.dto.response.notice.Notice> noticeList = noticeRepository.noticeInfoList(userId);
+
+
         return NoticeInfoResponseDto.builder()
                 .result("success")
                 .msg("알림 목록 성공")

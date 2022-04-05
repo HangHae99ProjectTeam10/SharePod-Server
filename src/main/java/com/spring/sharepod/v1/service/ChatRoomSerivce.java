@@ -96,8 +96,10 @@ public class ChatRoomSerivce {
                         .chatRoomId(chatRoom.getId())
                         .otherImg(chatRoom.getSeller().getUserImg())
                         .boardImg(chatRoom.getBoard().getImgFiles().getFirstImgUrl())
+                        .boardTitle(chatRoom.getBoard().getTitle())
                         .otherNickName(chatRoom.getSeller().getNickName())
                         .otherRegion(chatRoom.getSeller().getUserRegion())
+                        .dailyRentalFee(chatRoom.getBoard().getAmount().getDailyRentalFee())
                         .modifiedAt(chatRoom.getModifiedAt())
                         .lastChat(lastChat)
                         .build();
@@ -113,8 +115,10 @@ public class ChatRoomSerivce {
                         .chatRoomId(chatRoom.getId())
                         .otherImg(chatRoom.getBuyer().getUserImg())
                         .boardImg(chatRoom.getBoard().getImgFiles().getFirstImgUrl())
+                        .boardTitle(chatRoom.getBoard().getTitle())
                         .otherNickName(chatRoom.getBuyer().getNickName())
                         .otherRegion(chatRoom.getBuyer().getUserRegion())
+                        .dailyRentalFee(chatRoom.getBoard().getAmount().getDailyRentalFee())
                         .modifiedAt(chatRoom.getModifiedAt())
                         .lastChat(lastChat)
                         .build();
@@ -143,8 +147,13 @@ public class ChatRoomSerivce {
             another = chatRoom.getBuyer();
         }
 
+        LocalDateTime lastDateTime = null;
         List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomOrderByModifiedAt(chatroomId,localDateTime);
         int resultCount = chatMessageList.size();
+
+        if(resultCount>=1){
+            lastDateTime = chatMessageList.get(resultCount-1).getModifiedAt();
+        }
 
         List<ChatRoomResponseDto.ChatMessageData> chatMessageDataList = new ArrayList<>();
         for (ChatMessage chatMessage : chatMessageList) {
@@ -158,6 +167,7 @@ public class ChatRoomSerivce {
                 .result("success")
                 .msg("해당 채팅방 채팅내용 반환성공")
                 .resultCount(resultCount)
+                .lastDatetime(lastDateTime)
                 .otherImg(another.getUserImg())
                 .otherNickName(another.getNickName())
                 .chatMessageDataList(chatMessageDataList)

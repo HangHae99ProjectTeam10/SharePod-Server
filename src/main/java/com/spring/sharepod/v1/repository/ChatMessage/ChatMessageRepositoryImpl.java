@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.spring.sharepod.entity.QBoard.board;
 import static com.spring.sharepod.entity.QChatMessage.chatMessage;
 
 @Repository
@@ -33,6 +32,6 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom{
     }
 
     private BooleanExpression startDate(LocalDateTime localDateTime) {
-        return localDateTime != null ? board.modifiedAt.lt(localDateTime) : null;
+        return localDateTime != null ? chatMessage.modifiedAt.lt(localDateTime) : null;
     }
 }

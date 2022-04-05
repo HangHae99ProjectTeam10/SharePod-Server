@@ -34,9 +34,11 @@ public class ChatRoomResponseDto {
         private Long chatRoomId;
         private String otherImg;
         private String boardImg;
+        private String boardTitle;
         private String otherNickName;
         private String lastChat;
         private String otherRegion;
+        private int dailyRentalFee;
         private LocalDateTime modifiedAt;
     }
 
@@ -69,6 +71,7 @@ public class ChatRoomResponseDto {
     public static class ChatMessageListData{
         private String result;
         private String msg;
+        private LocalDateTime lastDatetime;
         private String otherImg;
         private String otherNickName;
         private int resultCount;
