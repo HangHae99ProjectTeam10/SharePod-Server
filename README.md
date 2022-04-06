@@ -56,9 +56,11 @@
 <br>
 
 ## ⚒️ 기능 소개
-=> 썸네일, 영상 변경
-[![Video Label](.jpg)](https://youtu.be/)
-
+<div align="center"> 
+ 
+[![Video Label](https://user-images.githubusercontent.com/97426034/161919379-c62b9deb-1a57-4f73-876c-cf93aba171ad.png)](https://youtu.be/hSuQVkn54SQ)
+ 
+</div>
 <br>
 
 
