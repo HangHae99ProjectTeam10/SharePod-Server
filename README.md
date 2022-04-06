@@ -28,8 +28,8 @@
  <img src="https://img.shields.io/badge/Amazon S3-white?style=flat&logo=Amazon S3&logoColor=#white"/>
  <img src="https://img.shields.io/badge/Redis-white?style=flat&logo=Redis&logoColor=#DC382D"/>
  <img src="https://img.shields.io/badge/Socket.io-black?style=flat&logo=Socket.io&logoColor=#DC382D"/>
- <img src="https://img.shields.io/badge/POSTMAN-FF6C37?style=for-the-badge&logo=postman&logoColor=white">
- <img src="https://img.shields.io/badge/APACHE JMETER-D22128?style=for-the-badge&logo=apache jmeter&logoColor=white">
+ <img src="https://img.shields.io/badge/POSTMAN-FF6C37?style=flatbadge&logo=postman&logoColor=white">
+ <img src="https://img.shields.io/badge/APACHE JMETER-D22128?style=flatbadge&logo=apache jmeter&logoColor=white">
 </div>
 
 <br>
