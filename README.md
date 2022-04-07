@@ -42,17 +42,6 @@
 </div>
 
 
-## 팀 소개
- <div align="center">
- 
-|이름|깃허브|
-|:--------:|:--------:|
-|송민혁|https://github.com/thdals83|
-|이승수|https://github.com/leeseungsoo0701|
-|김도엽|https://github.com/kkamangdol|
- 
-</div>
-
 <br>
 
 ## ⚒️ 기능 소개
